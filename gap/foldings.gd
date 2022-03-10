@@ -18,7 +18,7 @@ DeclareRepresentation("IsWalkHomomorphism", IsComponentObjectRep and
                                               "VertexMap",
                                               "EdgeMap"]);
 DeclareOperation("WalkHomomorphism", [IsDigraph, IsDigraph, IsDenseList, IsDenseList]);
-DeclareOperation("IsDegenerateWalkHomomorphism", [IsWalkHomomorphism]);
+DeclareAttribute("IsDegenerateWalkHomomorphism", IsWalkHomomorphism);
 DeclareOperation("SynchronousWalkHomomorphism", [IsWalkHomomorphism]);
 DeclareOperation("R2toPhiFold", []);
 DeclareOperation("PhitoR2Fold", []);
@@ -31,7 +31,9 @@ DeclareOperation("ComposeWalkHomomorphisms", [IsWalkHomomorphism, IsWalkHomomorp
 DeclareOperation("LineDigraphWalkHomomorphism", [IsDigraph, IsInt, IsInt]);
 DeclareOperation("FoldingToLineFolding", [IsWalkHomomorphism]);
 DeclareOperation("TrimWalkHomomorphism", [IsWalkHomomorphism]);
-DeclareOperation("IsUDAFDigraph", [IsDigraph]);
-DeclareOperation("IsUDAFFolding", [IsWalkHomomorphism]);
-DeclareOperation("MaxFutureConeDepth", [IsWalkHomomorphism]);
-DeclareOperation("MaxHistoryConeDepth", [IsWalkHomomorphism]);
+DeclareAttribute("IsUDAFDigraph", IsDigraph);
+DeclareAttribute("IsUDAFFolding", IsWalkHomomorphism);
+DeclareAttribute("MaxFutureConeDepth", IsWalkHomomorphism);
+DeclareAttribute("MaxHistoryConeDepth", IsWalkHomomorphism);
+DeclareOperation("\*", [IsWalkHomomorphism, IsWalkHomomorphism]);
+DeclareOperation("\=", [IsWalkHomomorphism, IsWalkHomomorphism]);

@@ -116,7 +116,7 @@ function(T)
                   "the transducer must be UDAF invertible,");
   fi;
 
-   M := Objectify(NewType(NewFamily("ShiftMorphism"), IsShiftMorphism and
+   M := Objectify(NewType(NewFamily("UDAFIsomorphism"), IsUDAFIsomorphism and
                  IsAttributeStoringRep), rec(Digraph:= basedigraph,
                                              DomainDigraph := domdigraph,
                                              CoDomainDigraph := codomdigraph,
@@ -127,10 +127,38 @@ function(T)
 end);
 
 
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsWalkHomomorphism, IsWalkHomomorphism],
+function(f, g)
+  local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state,
+        l, domedgemap, codomedgemap;
+
+  if not IsUDAFFolding(f) and IsUDAFFolding(g) then
+  ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+                  "the walk homomorphisms must be UDAF foldings,");
+  fi;
+
+  if not (DigraphVertices(f!.DomainDigraph) = DigraphVertices(g!.DomainDigraph) and 
+          DigraphEdges(f!.DomainDigraph) = DigraphEdges(g!.DomainDigraph)) then
+    ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+                  "the walk homomorphisms must have the same domain,");
+  fi;
+
+   M := Objectify(NewType(NewFamily("UDAFIsomorphism"), IsUDAFIsomorphism and
+                 IsAttributeStoringRep), rec(Digraph:= f!.DomainDigraph,
+                                             DomainDigraph := f!.CoDomainDigraph,
+                                             CoDomainDigraph := g!.CoDomainDigraph,
+                                             DomainFolding := f,
+                                             CoDomainFolding := g));
+
+  return M;
+end);
+
+
 InstallMethod(ComposeUDAFIsomorphisms, "for a pair of compatible UDAF Isomorphisms",
 [IsUDAFIsomorphism, IsUDAFIsomorphism],
 function(f, g)
-  local Df2, Dg1;
+  local Df2, Dg1, pastadder, futureadder, fmodifier, gmodifier, fpast, ffuture, gpast, gfuture;
   Df2 := f!.CoDomainDigraph;
   Dg1 := g!.DomainDigraph;
 
@@ -141,8 +169,38 @@ function(f, g)
      ErrorNoReturn("autshift: ComposeUDAFIsorphisms: usage,\n",
                   "the transducers must be composable,");
   fi;
-
   
+  fmodifier := FoldingToLineFolding(f!.codomfold);
+  gmodifier := FoldingToLineFolding(g!.domfold);
+
+  fpast := MaxHistoryConeDepth(fmodifier[1]); 
+  ffuture := MaxFutureConeDepth(fmodifier[1]);
+  gpast := MaxHistoryConeDepth(gmodifier[1]);
+  gfuture := MaxFutureConeDepth(gmodifier[1]);
+
+  if fpast = -1 then
+    return UDAFIsomorphism(WalkHomomorphism(EmptyDigraph(0), f!.DomainDigraph, [], []),
+                           WalkHomomorphism(EmptyDigraph(0), g!.CoDomainDigraph, [], []));
+  fi;
+
+  if fpast < gpast then
+    pastadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, gpast - fpast, 0);
+    Apply(fmodifier, x-> pastadder * x);
+  fi;
+  if gpast < fpast then
+    pastadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, fpast - gpast, 0);
+    Apply(gmodifier, x-> pastadder * x);
+  fi;
+  if ffuture < gfuture then
+    futureadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, 0, gfuture - ffuture);
+    Apply(fmodifier, x-> futureadder * x);
+  fi;
+  if ffuture < gfuture then
+    futureadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, 0, ffuture - gfuture);
+    Apply(gmodifier, x-> futureadder * x);
+  fi;
+
+  return UDAFIsomorphism(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
 end);
 
 

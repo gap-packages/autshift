@@ -33,4 +33,5 @@ DeclareRepresentation("IsUDAFIsomorphism", IsComponentObjectRep and
                                               "CoDomainFolding"]);
 
 DeclareOperation("UDAFIsomorphism", [IsTransducer]);
+DeclareOperation("UDAFIsomorphism", [IsWalkHomomorphism, IsWalkHomomorphism]);
 DeclareOperation("ComposeUDAFIsomorphisms", [IsUDAFIsomorphism, IsUDAFIsomorphism]);

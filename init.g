@@ -8,10 +8,10 @@
 #############################################################################
 ##
 
+ReadPackage("autshift", "gap/foldings.gd");
 ReadPackage("autshift", "gap/transducer.gd");
 ReadPackage("autshift", "gap/rtransducer.gd");
 ReadPackage("autshift", "gap/shiftoperations.gd");
-ReadPackage("autshift", "gap/foldings.gd");
 ReadPackage("autshift", "gap/utils.gd");
 ReadPackage("autshift", "gap/UPG.gd");
 ReadPackage("autshift", "gap/2V.gd"); 

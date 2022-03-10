@@ -349,10 +349,17 @@ function(H)
   local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges, 
         out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
         historyinfo, outforwardimages, outbackwardimages;
-  sync := SynchronousWalkHomomorphism(H);
+  sync := TrimWalkHomomorphism(SynchronousWalkHomomorphism(H));
   S := sync[1];
   f2 := sync[2];
   R := DualWalkHomomorphism(S);
+
+  if DigraphNrVertices(S!.DomainDigraph) = 0 then
+    if DigraphNrVertices(TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CodomainDigraph(S)))!.DomainDigraph) = 0 then
+      return S;
+    fi;
+    return fail;
+  fi;
 
   for e1 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
     for e2 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
@@ -416,7 +423,7 @@ function(H)
     return fail;
   fi;
 
-  return Maximum(List(Concatenation(verteximages), x-> Size(x[1])));
+  return Maximum(Concatenation(List(Concatenation(verteximages), x-> Size(x[1])), [-1]));
 end);
 
 InstallMethod(MaxHistoryConeDepth, "for a walk homomorphism",
@@ -621,7 +628,6 @@ function(D, past, future)
                                      List(rightvertices, x-> [x]));
     fi;
   fi;
-
   if future > 0 then
     inductivestep := LineDigraphWalkHomomorphism(D, past, future - 1);
     return ComposeWalkHomomorphisms(LineDigraphWalkHomomorphism(inductivestep!.DomainDigraph, 0, 1), 
@@ -651,3 +657,26 @@ function(H)
                           List([1 .. DigraphNrEdges(D2)], x -> H!.EdgeMap[edges[x]])));  
   return true;
 end);
+
+
+InstallMethod(\*, "for a pair of walk homomorphisms",
+[IsWalkHomomorphism, IsWalkHomomorphism],
+function(f, g)
+  return ComposeWalkHomomorphisms(f, g);
+end);
+
+
+#note that this equality cares about the order of the edges in a digraph and this
+#not neccassarily shared by digraphs equal under =
+InstallMethod(\=, "for a pair of walk homomorphisms",
+[IsWalkHomomorphism, IsWalkHomomorphism],
+function(f, g)
+  return DigraphVertices(f!.DomainDigraph) = DigraphVertices(g!.DomainDigraph) and
+         DigraphEdges(f!.DomainDigraph) = DigraphEdges(g!.DomainDigraph) and
+         DigraphVertices(f!.CoDomainDigraph) = DigraphVertices(g!.CoDomainDigraph) and
+         DigraphEdges(f!.CoDomainDigraph) = DigraphEdges(g!.CoDomainDigraph) and
+         f!.VertexMap = g!.VertexMap and f!.EdgeMap = g!.EdgeMap;
+
+end);
+
+
