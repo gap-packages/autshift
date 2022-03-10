@@ -37,3 +37,6 @@ DeclareAttribute("MaxFutureConeDepth", IsWalkHomomorphism);
 DeclareAttribute("MaxHistoryConeDepth", IsWalkHomomorphism);
 DeclareOperation("\*", [IsWalkHomomorphism, IsWalkHomomorphism]);
 DeclareOperation("\=", [IsWalkHomomorphism, IsWalkHomomorphism]);
+DeclareOperation("RemoveIncompleteResponse", [IsWalkHomomorphism]);
+DeclareAttribute("IsSynchronousWalkHomomorphism", IsWalkHomomorphism);
+DeclareOperation("SynchronousRemoveIncompleteResponse", [IsWalkHomomorphism]);

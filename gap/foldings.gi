@@ -335,7 +335,7 @@ end);
 InstallMethod(IsUDAFFolding, "a walk homomorphism",
 [IsWalkHomomorphism],
 function(H)
-   if IsDegenerateWalkHomomorphism(H) then
+   if IsDegenerateWalkHomomorphism(H) or not IsUDAFDigraph(H!.CoDomainDigraph) then
      return false;
    fi;
    return not FoldingToLineFolding(H) = fail;
@@ -679,4 +679,97 @@ function(f, g)
 
 end);
 
+#This function "removes incomplete responce" meaning that it trims the folding and replaces the 
+#vertex of each domain vertex with the vertex at the end of the longest common
+# prefix of the image of the vertex
+# it the replaces the walk on each edge with the difference between (the longest
+# common prefix of the image of it's start vertex) and (the longest common
+# prefix of the infinite walks in the image of the edge).
+
+#This is useful because of the following claims
+#Claim1: removing incomplete responce from a trimmed UDAF folding doesn't change the induced
+#UDAF isomorphism
+#'Proof': Using the fact that the target is an UDAF digraph it follows that the new 
+#image of each infinite forward walk is the same as before with the longest common prefix 
+#of the image of it's start vertex removed. In particular the new walk homomorphism is not 
+#degerate
+#By viewing a biinfinite route as a limit of forwards infinite routes the result follows
+#
+#Claim2: If f_1 f_2:D1 to D2 are trimmed UDAF Foldings with complete responce which induce the
+#same UDAF ISomorphism then f_1 = f_2
+#'Proof': The UDAF isomorphism induces a map from the irrational backwards walks of D1
+#to the irrational backwards walks of D2. Thus we can deduce exactly which walk each edge
+#must map to
+InstallMethod(RemoveIncompleteResponse, "for a pair of walk homomorphisms",
+[IsWalkHomomorphism],
+function(input)
+  local H, prefixes, v, v2, edgetowalk;
+  H := TrimWalkHomomorphism(input);
+
+  prefixes := List(DigraphVertices(H!.DomainDigraph), x->ImageAsUnionOfCones(H, x));
+  for v in DigraphVertices(H!.DomainDigraph) do
+    Apply(prefixes[v], x->x[1]);
+    prefixes[v] := GreatestCommonPrefix(prefixes[v]); 
+    v2 := H!.VertexMap[v];
+    if not prefixes[v] = [] then
+      v2 := DigraphEdges(H!.CoDomainDigraph)[prefixes[v][Size(prefixes[v])][2]];
+    fi;
+    prefixes[v] := [prefixes[v], v2]; 
+  od;
+
+  edgetowalk := function(e)
+    local vertexprefix1, vertexprefix2, edgeprefix;
+    vertexprefix1 := prefixes[DigraphEdges(H!.DomainDigraph)[e][1]];
+    vertexprefix2 := prefixes[DigraphEdges(H!.DomainDigraph)[e][2]];
+    edgeprefix := Concatenation(H!.EdgeMap[e], vertexprefix2);
+    return Minus(edgeprefix, vertexprefix1);
+  end;
+
+  return WalkHomomorphism(H!.DomainDigraph, H!.CoDomainDigraph, 
+                          List([1 .. DigraphNrEdges(H!.DomainDigraph)], edgetowalk),
+                          List(prefixes, x-> x[2]));
+
+end);
+
+
+InstallMethod(IsSynchronousWalkHomomorphism, "for a walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  return ForAll(H!.EdgeMap, x-> Size(x) = 1);
+end);
+
+
+InstallMethod(SynchronousRemoveIncompleteResponse, "for a synchronous walk homorphism",
+[IsWalkHomomorphism],
+function(input)
+  local D, v, edges, H, e, nextvertex, n, edgemap;
+  H := TrimWalkHomomorphism(input);
+  if not IsSynchronousWalkHomomorphism(H) then
+    return fail;
+  fi;
+
+  D := H!.DomainDigraph;
+  edges := [];
+  e := 1;
+  for v in DigraphVertices(D) do
+    Add(edges, []);
+    for n in OutNeighbours(D)[v] do
+      Add(edges[Size(edges)], H!.EdgeMap[e]);
+      e := e+1;
+    od;
+    edges[Size(edges)] := Set(edges[Size(edges)]);
+    if not Size(edges[Size(edges)]) = 1 then
+      return H;
+    fi;
+    edges[Size(edges)] := edges[Size(edges)][1];
+  od;
+
+  nextvertex := List([1 .. DigraphNrVertices(D)], x-> OutNeighbours(D)[x][1]);
+  edgemap := List([1 .. DigraphNrEdges(D)], x->edges[DigraphEdges(D)[x][2]]);
+
+  return WalkHomomorphism(D, H!.CoDomainDigraph, 
+                          List(nextvertex, x->H!.VertexMap[x]),
+                          edgemap);
+  
+end);
 

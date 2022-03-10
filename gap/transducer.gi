@@ -1,4 +1,4 @@
-#############################################################################
+#########################################################################
 ##
 #W  transducer.gi
 #Y  Copyright (C) 2022                                 Luke Elliott
@@ -73,24 +73,24 @@ function(AlphSize)
   return ShiftMorphism(IdentityTransducer(AlphSize));
 end);
 
-InstallMethod(UDAFIsomorphism, "for a transducer",
+InstallMethod(UDAFTransducer, "for a transducer",
 [IsTransducer],
 function(T)
   local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state, 
         l, domedgemap, codomedgemap;
 
   if IsDegenerateTransducer(T) then
-  ErrorNoReturn("autshift: UDAFIsomorphism: usage,\n",
+  ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must not be degenerate,");
   fi;
 
   if not IsSynchronizingTransducer(T) then
-  ErrorNoReturn("autshift: UDAFIsomorphism: usage,\n",
+  ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be sychronizing,");
   fi;
 
   if not IsCoreTransducer(T) then
-  ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+  ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be core,");
   fi;
 
@@ -112,11 +112,11 @@ function(T)
   codomfold := WalkHomomorphism(basedigraph, codomdigraph, List(NrStates(T), x-> 1), codomedgemap);
 
   if not IsUDAFFolding(codomfold) then
-     ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+     ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be UDAF invertible,");
   fi;
 
-   M := Objectify(NewType(NewFamily("UDAFIsomorphism"), IsUDAFIsomorphism and
+   M := Objectify(NewType(NewFamily("UDAFTransducer"), IsUDAFTransducer and
                  IsAttributeStoringRep), rec(Digraph:= basedigraph,
                                              DomainDigraph := domdigraph,
                                              CoDomainDigraph := codomdigraph,
@@ -127,24 +127,24 @@ function(T)
 end);
 
 
-InstallMethod(UDAFIsomorphism, "for a transducer",
+InstallMethod(UDAFTransducer, "for a transducer",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(f, g)
   local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state,
         l, domedgemap, codomedgemap;
 
   if not IsUDAFFolding(f) and IsUDAFFolding(g) then
-  ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+  ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the walk homomorphisms must be UDAF foldings,");
   fi;
 
   if not (DigraphVertices(f!.DomainDigraph) = DigraphVertices(g!.DomainDigraph) and 
           DigraphEdges(f!.DomainDigraph) = DigraphEdges(g!.DomainDigraph)) then
-    ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+    ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the walk homomorphisms must have the same domain,");
   fi;
 
-   M := Objectify(NewType(NewFamily("UDAFIsomorphism"), IsUDAFIsomorphism and
+   M := Objectify(NewType(NewFamily("UDAFTransducer"), IsUDAFTransducer and
                  IsAttributeStoringRep), rec(Digraph:= f!.DomainDigraph,
                                              DomainDigraph := f!.CoDomainDigraph,
                                              CoDomainDigraph := g!.CoDomainDigraph,
@@ -155,8 +155,126 @@ function(f, g)
 end);
 
 
-InstallMethod(ComposeUDAFIsomorphisms, "for a pair of compatible UDAF Isomorphisms",
-[IsUDAFIsomorphism, IsUDAFIsomorphism],
+InstallMethod(MinimiseUDAFTransducer, "for an UDAF Isomorphism",
+[IsUDAFTransducer],
+function(t)
+  local Tedgesstartingwithvertex, T, e, v, domfix, D, f, g,  x, EqRelation, 
+        i, tuple, NewTuple, b, flag, n, class, Classes, 
+        fedgesstartingwithvertex, compatiblevertexpair, transitionbyedge,
+        newvertices, newfvertexmap, newgvertexmap, newedges, newfedgemap,
+        newgedgemap, newdigraph; 
+
+  f := t!.DomainFolding;
+  g := t!.CoDomainFolding;
+  domfix := FoldingToLineFolding(f);
+  f := domfix[1];
+  g := domfix[2] * g;
+  f := SynchronousRemoveIncompleteResponse(f);
+  g :=  RemoveIncompleteResponse(g);
+
+
+  T := UDAFTransducer(f, g);  
+
+  Tedgesstartingwithvertex := [];
+  e := 1;
+  for v in DigraphVertices(T!.Digraph) do
+     Add(Tedgesstartingwithvertex, []);
+     for n in OutNeighbours(T!.Digraph)[v] do
+       Add(Tedgesstartingwithvertex[Size(Tedgesstartingwithvertex)], e);
+       e:= e + 1;
+     od;
+  od;
+
+  compatiblevertexpair := function(p)
+    local outedgeinfo1, outedgeinfo2;
+    if not f!.VertexMap[p[1]] = f!.VertexMap[p[2]] then
+      return false;
+    fi; 
+    if not g!.VertexMap[p[1]] = g!.VertexMap[p[2]] then
+      return false;
+    fi;
+    outedgeinfo1 := List(Tedgesstartingwithvertex[p[1]], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
+    outedgeinfo2 := List(Tedgesstartingwithvertex[p[2]], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
+    Sort(outedgeinfo1);
+    Sort(outedgeinfo2);
+    return outedgeinfo1 = outedgeinfo2;
+  end;
+
+  fedgesstartingwithvertex := [];
+  e := 1;
+  for v in DigraphVertices(f!.CoDomainDigraph) do
+     Add(fedgesstartingwithvertex, []);
+     for n in OutNeighbours(f!.DoDomainDigraph)[v] do
+       Add(fedgesstartingwithvertex[Size(fedgesstartingwithvertex)], e);
+       e:= e + 1;
+     od;
+  od;
+
+  transitionbyedge := function(v, e)
+    local domedge;
+    for domedge in Tedgesstartingwithvertex[v] do
+      if f!.EdgeMap(domedge) = [e] then
+        return [domedge, DigraphEdges(T)[domedge][2]];
+      fi;
+    od;
+  end;
+
+  EqRelation := Filtered(UnorderedTuples(DigraphVertices(T!.Digraph), 2), compatiblevertexpair);
+  flag := true;
+  while flag do
+    flag := false;
+    for tuple in EqRelation do
+      for i in fedgesstartingwithvertex[f!.VertexMap[tuple[1]]] do
+        NewTuple := [transitionbyedge(tuple[1], i)[2],
+                     transitionbyedge(tuple[2], i)[2]];
+        Sort(NewTuple);
+        if not NewTuple in EqRelation then
+          Remove(EqRelation, Position(EqRelation,tuple));
+          flag := true;
+          break;
+        fi;
+      od;
+    od;
+  od;
+
+  Classes := ShallowCopy(EquivalenceRelationPartition(EquivalenceRelationByPairs(Domain(DigraphVertices(T!.Digraph)), EqRelation)));
+  class := function(q)
+        local j;
+        for j in [1 .. Length(Classes)] do
+                if q in Classes[j] then
+                        return j;
+                fi;
+        od;
+  end;
+
+  newvertices := [1 .. Size(Classes)];
+  newfvertexmap := List(newvertices, x-> f!.VertexMap[Classes[x][1]]);
+  newgvertexmap := List(newvertices, x-> g!.VertexMap[Classes[x][1]]);
+
+  newedges := [];
+  newfedgemap := [];
+  newgedgemap := [];
+  for v in newvertices do
+    Add(newedges, []);
+    for e in fedgesstartingwithvertex[newfvertexmap[v]] do
+      Add(newedges[Size(newedges)], class(transitionbyedge(v, e)[2]));
+      Add(newfedgemap, [e]);
+      Add(newgedgemap, g!.EdgeMap[transitionbyedge(v, e)[1]]);
+    od;
+  od;
+
+  newdigraph := Digraph(newedges);
+
+
+  f := WalkHomomorphism(newdigraph, f!.CoDomainDigraph, newfvertexmap, newfedgemap);
+  g := WalkHomomorphism(newdigraph, g!.CoDomainDigraph, newgvertexmap, newgedgemap);
+
+  return Transducer(f, g);
+end);
+
+
+InstallMethod(ComposeUDAFTransducers, "for a pair of compatible UDAF Isomorphisms",
+[IsUDAFTransducer, IsUDAFTransducer],
 function(f, g)
   local Df2, Dg1, pastadder, futureadder, fmodifier, gmodifier, fpast, ffuture, gpast, gfuture;
   Df2 := f!.CoDomainDigraph;
@@ -166,8 +284,12 @@ function(f, g)
 #edges are stored in the same order
   if not [DigraphVertices(Df2), DigraphEdges(Df2)] = 
          [DigraphVertices(Dg1), DigraphEdges(Dg1)] then
-     ErrorNoReturn("autshift: ComposeUDAFIsorphisms: usage,\n",
+     ErrorNoReturn("autshift: ComposeUDAFTransducer: usage,\n",
                   "the transducers must be composable,");
+  fi;
+
+  if f!.CoDomainFolding = g!.DomainFolding then
+    return UDAFTransducer(f!.DomainFolding, g!.CoDomainFolding);
   fi;
   
   fmodifier := FoldingToLineFolding(f!.codomfold);
@@ -179,7 +301,7 @@ function(f, g)
   gfuture := MaxFutureConeDepth(gmodifier[1]);
 
   if fpast = -1 then
-    return UDAFIsomorphism(WalkHomomorphism(EmptyDigraph(0), f!.DomainDigraph, [], []),
+    return UDAFTransducer(WalkHomomorphism(EmptyDigraph(0), f!.DomainDigraph, [], []),
                            WalkHomomorphism(EmptyDigraph(0), g!.CoDomainDigraph, [], []));
   fi;
 
@@ -200,8 +322,24 @@ function(f, g)
     Apply(gmodifier, x-> futureadder * x);
   fi;
 
-  return UDAFIsomorphism(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
+  return UDAFTransducer(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
 end);
+
+InstallMethod(\*, "for a pair of compatible UDAF Transducers",
+[IsUDAFTransducer, IsUDAFTransducer],
+function(f, g)
+  return ComposeUDAFTransducers(f, g);
+end);
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsUDAFTransducer, IsInt],
+function(T, n)
+  if not n = -1 then
+    return fail;
+  fi;
+  return UDAFTransducer(T!.CoDomainFolding, T!.DomainFolding);
+end);
+
 
 
 InstallMethod(IdentityShiftMorphism, "for a positive integer",

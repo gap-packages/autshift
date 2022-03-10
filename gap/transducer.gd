@@ -24,7 +24,7 @@ DeclareOperation("ShiftMorphism", [IsTransducer]);
 DeclareOperation("IdentityShiftMorphism", [IsPosInt]);
 DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
 
-DeclareRepresentation("IsUDAFIsomorphism", IsComponentObjectRep and
+DeclareRepresentation("IsUDAFTransducer", IsComponentObjectRep and
                       IsAttributeStoringRep,
                                              ["Digraph",
                                               "DomainDigraph",
@@ -32,6 +32,9 @@ DeclareRepresentation("IsUDAFIsomorphism", IsComponentObjectRep and
                                               "DomainFolding",
                                               "CoDomainFolding"]);
 
-DeclareOperation("UDAFIsomorphism", [IsTransducer]);
-DeclareOperation("UDAFIsomorphism", [IsWalkHomomorphism, IsWalkHomomorphism]);
-DeclareOperation("ComposeUDAFIsomorphisms", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
+DeclareOperation("UDAFTransducer", [IsTransducer]);
+DeclareOperation("UDAFTransducer", [IsWalkHomomorphism, IsWalkHomomorphism]);
+DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer, IsUDAFTransducer]);
+DeclareOperation("MinimiseUDAFTransducer", [IsUDAFTransducer]);
+DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
+DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
