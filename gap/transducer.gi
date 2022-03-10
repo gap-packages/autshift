@@ -50,9 +50,13 @@ function(T)
   ErrorNoReturn("aaa: ShiftMorphism: usage,\n",
                   "the transducer must be sychronous,");
   fi;
-#TODO check IsCore
 
-   M := Objectify(NewType(NewFamily("ShiftMorphism"), IsShiftMorphism and
+  if not IsCoreTransducer(T) then
+  ErrorNoReturn("aaa: ShiftMorphism: usage,\n",
+                  "the transducer must be core,");
+  fi;
+
+  M := Objectify(NewType(NewFamily("ShiftMorphism"), IsShiftMorphism and
                  IsAttributeStoringRep), rec(InputAlphabet := InputAlphabet(T),
                                              OutputAlphabet := OutputAlphabet(T),
                                              NrStates := NrStates(T),
@@ -69,4 +73,105 @@ function(AlphSize)
   return ShiftMorphism(IdentityTransducer(AlphSize));
 end);
 
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsTransducer],
+function(T)
+  local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state, 
+        l, domedgemap, codomedgemap;
 
+  if IsDegenerateTransducer(T) then
+  ErrorNoReturn("autshift: UDAFIsomorphism: usage,\n",
+                  "the transducer must not be degenerate,");
+  fi;
+
+  if not IsSynchronizingTransducer(T) then
+  ErrorNoReturn("autshift: UDAFIsomorphism: usage,\n",
+                  "the transducer must be sychronizing,");
+  fi;
+
+  if not IsCoreTransducer(T) then
+  ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+                  "the transducer must be core,");
+  fi;
+
+  
+  domdigraph := Digraph([List([1 .. NrInputSymbols(T)], x-> 1)]);
+  codomdigraph := Digraph([List([1 .. NrOutputSymbols(T)], x-> 1)]);
+  basedigraph := Digraph(TransitionFunction(T));
+  domedgemap := [];
+  codomedgemap :=[];
+  for state in [1 .. NrStates(T)] do
+    for l in [1 .. NrInputSymbols] do
+      Add(domedgemap, [l]);
+      Add(codomedgemap, List(OutputFunction(T)[state][l], x -> x+1));
+    od;
+  od;
+
+  
+  domfold := WalkHomomorphism(basedigraph, domdigraph, List(NrStates(T), x-> 1), domedgemap);
+  codomfold := WalkHomomorphism(basedigraph, codomdigraph, List(NrStates(T), x-> 1), codomedgemap);
+
+  if not IsUDAFFolding(codomfold) then
+     ErrorNoReturn("autshift: UDAFIsorphism: usage,\n",
+                  "the transducer must be UDAF invertible,");
+  fi;
+
+   M := Objectify(NewType(NewFamily("ShiftMorphism"), IsShiftMorphism and
+                 IsAttributeStoringRep), rec(Digraph:= basedigraph,
+                                             DomainDigraph := domdigraph,
+                                             CoDomainDigraph := codomdigraph,
+                                             DomainFolding := domfold,
+                                             CoDomainFolding := codomfold));
+
+  return M;
+end);
+
+
+InstallMethod(ComposeUDAFIsomorphisms, "for a pair of compatible UDAF Isomorphisms",
+[IsUDAFIsomorphism, IsUDAFIsomorphism],
+function(f, g)
+  local Df2, Dg1;
+  Df2 := f!.CoDomainDigraph;
+  Dg1 := g!.DomainDigraph;
+
+#note that this is stronger than insisting Df2 = Dg1 as it ensures the
+#edges are stored in the same order
+  if not [DigraphVertices(Df2), DigraphEdges(Df2)] = 
+         [DigraphVertices(Dg1), DigraphEdges(Dg1)] then
+     ErrorNoReturn("autshift: ComposeUDAFIsorphisms: usage,\n",
+                  "the transducers must be composable,");
+  fi;
+
+  
+end);
+
+
+InstallMethod(IdentityShiftMorphism, "for a positive integer",
+[IsPosInt],
+function(AlphSize)
+  return ShiftMorphism(IdentityTransducer(AlphSize));
+end);
+
+InstallMethod(DeBruijnTransducer, "returns a transducer",
+[IsPosInt, IsPosInt],
+function(Alph, WordLen)
+  local StateToLabel, LabelToState, state, letter, target, Pi, Lambda;
+  StateToLabel := function(n)
+     return List([0 .. (WordLen - 1)], x -> Int(RemInt(n - 1, Alph ^ (x + 1))
+                                                / (Alph ^ x)));
+  end;
+  LabelToState := function(l)
+    return 1 + Sum(List([0 .. WordLen - 1], y -> l[y + 1] * (Alph ^ y)));
+  end;
+  Pi := [];
+  for state in [1 .. Alph ^ WordLen] do
+    Add(Pi, []);
+    for letter in [0 .. Alph - 1] do
+      target := Concatenation(StateToLabel(state){[2 .. WordLen]}, [letter]);
+      Add(Pi[state], LabelToState(target));
+    od;
+  od;
+  Lambda := ListWithIdenticalEntries(Alph ^ WordLen,
+                                     List([0 .. Alph - 1], x -> [x]));
+  return Transducer(Alph, Alph, Pi, Lambda);
+end);

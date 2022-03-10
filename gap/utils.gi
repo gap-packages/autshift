@@ -21,6 +21,67 @@ function()
   return;
 end);
 
+InstallMethod(DotWalkHomomorphism, "for a walkhomomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local i, j, label, m, n, st, str, verts, D, e, D2, verts2, m2, label2;
+
+  D := H!.DomainDigraph;
+  verts := DigraphVertices(D);
+  m     := DigraphNrVertices(D);
+  str   := "//dot\n";
+  label := List(verts, x -> Concatenation("D", String(x)));
+
+  D2 := H!.CoDomainDigraph;
+  verts2 := DigraphVertices(D2);
+  m2     := DigraphNrVertices(D2);
+  label2 := List(verts2, x -> Concatenation("C", String(x)));
+
+
+  Append(str, "digraph finite_state_machine{\n");
+  Append(str, "rankdir=LR;\n");
+  Append(str, "node [shape=circle]\n");
+
+  for i in verts do
+    Append(str, Concatenation(label[i], "\n"));
+  od;
+  for i in verts2 do
+    Append(str, Concatenation(label2[i], "\n"));
+  od;
+
+  e := 1;
+  for i in verts do
+    n := 0;
+    for j in DigraphOutEdges(D, i) do
+      n := n + 1;
+      st := "";
+      Append(st, String(H!.EdgeMap[e]));
+      Append(str, Concatenation(label[i], " -> ", label[j[2]]));
+      Append(str, Concatenation(" [label=\"", st, "\"]"));
+      Append(str, "\n");
+      e := e + 1;
+    od;
+  od;
+
+  e := 1;
+  for i in verts2 do
+    n := 0;
+    for j in DigraphOutEdges(D2, i) do
+      n := n + 1;
+      st := "";
+      Append(st, String(e));
+      Append(str, Concatenation(label2[i], " -> ", label2[j[2]]));
+      Append(str, Concatenation(" [label=\"", st, "\"]"));
+      Append(str, "\n");
+      e := e + 1;
+    od;
+  od;
+
+
+  Append(str, "}\n");
+  return str;
+end);
+
 ################################################################################
 
 ################################################################################
