@@ -72,6 +72,27 @@ function(D1, D2, LV, LE)
 end);
 
 
+
+InstallMethod(ViewObj, "for a walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local domletters, targetletters;
+  if DigraphNrEdges(H!.DomainDigraph) = 1 then
+    domletters := "edge";
+  else
+    domletters := "edges";
+  fi;
+  if DigraphNrEdges(H!.CoDomainDigraph) = 1 then
+    targetletters := "edge";
+  else
+    targetletters := "edges";
+  fi;
+
+  Print("<walk homomorphism from a digraph with ", DigraphNrEdges(H!.DomainDigraph), " ", domletters,
+        " to a digraph with ",DigraphNrEdges(H!.CoDomainDigraph), " ", targetletters, ".>");
+end);
+
+
 InstallMethod(ComposeWalkHomomorphisms, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(H1, H2)
@@ -112,15 +133,16 @@ end);
 
 InstallMethod(IsUDAFDigraph, "for a digraph",
 [IsDigraph],
-function(D)
+function(input)
   local badverticesf, checkedverticesf, checkbadf, checkbadb, badverticesb, 
-        checkedverticesb, v;
+        checkedverticesb, v, D;
+  D := TrimWalkHomomorphism(IdentityWalkHomomorphism(input))!.DomainDigraph;
   checkedverticesf := List(DigraphVertices(D), x-> false);
   badverticesf := List(DigraphVertices(D), x-> false);
   checkbadf := function(v, currentdepth)
     if currentdepth > DigraphNrVertices(D) then
       checkedverticesf[v] := true;
-      badverticesf := true;
+      badverticesf[v] := true;
       return true;
     fi;
     if checkedverticesf[v] then
@@ -132,7 +154,6 @@ function(D)
       return false;
     fi;
 
-    checkedverticesf[v] := true;
     badverticesf[v] := checkbadf(OutNeighbours(D)[v][1], currentdepth + 1);
     return badverticesf[v];
   end;
@@ -143,7 +164,7 @@ function(D)
   checkbadb := function(v, currentdepth)
     if currentdepth > DigraphNrVertices(D) then
       checkedverticesb[v] := true;
-      badverticesb := true;
+      badverticesb[v] := true;
       return true;
     fi;
     if checkedverticesb[v] then
@@ -155,7 +176,6 @@ function(D)
       return false;
     fi;
 
-    checkedverticesb[v] := true;
     badverticesb[v] := checkbadb(InNeighbours(D)[v][1], currentdepth + 1);
     return badverticesb[v];
   end;
@@ -188,7 +208,7 @@ function(H)
 
   SWH := function(H, f)
     local newhom, BadEdge, oldedges, i, domvno, oldedgesandimage, 
-          newedgesandimage, out, EMa, vtarg, conversionhom;
+          newedgesandimage, out, EMa, vtarg, conversionvtarg, conversionhom;
  
     BadEdge := 0;
     domvno := DigraphNrVertices(H!.DomainDigraph);
@@ -215,6 +235,7 @@ function(H)
 
       #list of edge pairs together with the path the edge maps to and what number it is
       newedgesandimage := Concatenation(oldedgesandimage, [ [[domvno + 1, oldedges[BadEdge][2]], [EMa[BadEdge][Size(EMa[BadEdge])]], []] ]);
+      conversionvtarg := DigraphEdges(H!.DomainDigraph)[BadEdge][2];
       vtarg := DigraphEdges(H!.CoDomainDigraph)[Remove(newedgesandimage[BadEdge][2])][1];
       newedgesandimage[BadEdge][1][2] := domvno + 1;
       Sort(newedgesandimage);
@@ -229,9 +250,10 @@ function(H)
                                          List(newedgesandimage, x->x[1][1]),
                                          List(newedgesandimage, x->x[1][2])),
                              H!.DomainDigraph,
-                             Concatenation(ShallowCopy(DigraphVertices(H!.DomainDigraph)), [vtarg]),
+                             Concatenation(ShallowCopy(DigraphVertices(H!.DomainDigraph)), [conversionvtarg]),
                              List(newedgesandimage, x -> x[3]));
-      return [SynchronousWalkHomomorphism(newhom), ComposeWalkHomomorphisms(conversionhom, f)];
+
+      return SWH(newhom, conversionhom * f);
     fi;
 
     out := Filtered([1 .. Size(oldedges)], x->oldedges[x][1] = oldedges[BadEdge][2]);
@@ -246,13 +268,14 @@ function(H)
                              H!.CoDomainDigraph, 
                              H!.VertexMap, 
                              List(newedgesandimage, x->x[2]));
-    conversionhom := WalkHomomorphism(Digraph(domvno + 1,
+    conversionhom := WalkHomomorphism(Digraph(domvno,
                                          List(newedgesandimage, x->x[1][1]),
                                          List(newedgesandimage, x->x[1][2])),
                              H!.DomainDigraph,
                              ShallowCopy(DigraphVertices(H!.DomainDigraph)),
                              List(newedgesandimage, x->x[3]));
-    return SynchronousWalkHomomorphism(newhom, ComposeWalkHomomorphisms(conversionhom, f));
+    return SWH(newhom, conversionhom * f);
+
   end;
   return SWH(H, IdentityWalkHomomorphism(H!.DomainDigraph));
 end);
@@ -348,15 +371,16 @@ InstallMethod(FoldingToLineFolding, "for a walk homomorphism which is a folding"
 function(H)
   local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges, 
         out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
-        historyinfo, outforwardimages, outbackwardimages;
-  sync := TrimWalkHomomorphism(SynchronousWalkHomomorphism(H));
+        historyinfo, outforwardimages, outbackwardimages, containedincone;
+  sync := SynchronousWalkHomomorphism(H);
+  Apply(sync, TrimWalkHomomorphism);
   S := sync[1];
   f2 := sync[2];
   R := DualWalkHomomorphism(S);
 
   if DigraphNrVertices(S!.DomainDigraph) = 0 then
-    if DigraphNrVertices(TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CodomainDigraph(S)))!.DomainDigraph) = 0 then
-      return S;
+    if DigraphNrVertices(TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph))!.DomainDigraph) = 0 then
+      return [S, f2];
     fi;
     return fail;
   fi;
@@ -385,11 +409,24 @@ function(H)
   outforwardimages := List(DigraphVertices(out1!.DomainDigraph), x-> ImageAsUnionOfCones(out1, x));
   outbackwardimages := List(DigraphVertices(Rout1!.DomainDigraph), x-> ImageAsUnionOfCones(Rout1, x));
 
+  containedincone := function(deepcone, shallowcone, reversed)
+     if not shallowcone[1] = [] then
+       return IsPrefix(deepcone[1], shallowcone[1]);
+     fi;
+     if deepcone[1] = [] then
+       return shallowcone[2] = deepcone[2];
+     fi;
+     if reversed then
+       return shallowcone[2] = DigraphEdges(R!.DomainDigraph)[deepcone[1][1]][1];
+     fi;
+     return shallowcone[2] = DigraphEdges(S!.DomainDigraph)[deepcone[1][1]][1];
+  end;
+
   out2vertexmap := [];
   for v in DigraphVertices(out1!.DomainDigraph) do
     new := Filtered([1 .. DigraphNrVertices(S!.DomainDigraph)], 
-              x-> ForAny(vertexforwardimages[v], y-> IsPrefix(outforwardimages[v][1][1], y[1])) 
-              and ForAny(vertexbackwardimages[v], y-> IsPrefix(outbackwardimages[v][1][1], y[1])));
+              x-> ForAny(vertexforwardimages[x], y-> containedincone(outforwardimages[v][1], y, false))
+              and ForAny(vertexbackwardimages[x], y-> containedincone(outbackwardimages[v][1], y, true)));
     if not Size(new) = 1 then
       return fail;
     fi;
@@ -403,14 +440,14 @@ function(H)
       if DigraphEdges(S!.DomainDigraph)[e2] = 
          [out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][1]], 
           out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][2]]] then
-        if out1!.EdgeMap[e1] = S!.Edgemap[e2] then
+        if out1!.EdgeMap[e1] = S!.EdgeMap[e2] then
            Add(out2edgemap, [e2]);
            break;
         fi;
       fi;
     od;
   od;
-  return [out1, WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap)];
+  return [out1, WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap) * f2];
 end);
 
 
@@ -437,15 +474,17 @@ end);
 InstallMethod(ImageAsUnionOfCones, "for a walk homomorphism and a domain vertex",
 [IsWalkHomomorphism, IsInt],
 function(H, v)
-  local n, FullImageAutomatonStates, Verts, Outs, M, state, 
+  local n, FullImageAutomatonStates, Verts, Outs, M, state, targetvertex,
         vertex, A2, A, D, badvertices, goodverts, tempbadvertices,
-        goodedges, removebadedges, transmat, start, alphabet,
+        goodedges, removebadedges, transmat, start, alphabet, out,
         w, whatAshouldbe, coneprefixes, wordtoendstate, i, j, newtransmat,
-        wordtoconeautomaton, ending, goodedgesalph;
+        wordtoconeautomaton, ending, goodedgesalph, prefixmachine;
   
   if not v in DigraphVertices(H!.DomainDigraph) then
     return fail;
   fi;
+  
+  targetvertex := H!.VertexMap[v];
   A := MinimalAutomaton(WalkHomomorphismVertexImageAutomaton(H, v));  
   D := H!.CoDomainDigraph;
   badvertices := [];
@@ -479,7 +518,7 @@ function(H, v)
     A2:= CopyAutomaton(A);
     SetInitialStatesOfAutomaton(A2, state);
     M := MinimalAutomaton(A2);
-    for vertex in goodverts do
+    for vertex in [1 .. DigraphNrVertices(D)] do
       if M = Outs[vertex] then
         AddSet(FullImageAutomatonStates[state], vertex);
       fi;
@@ -491,7 +530,7 @@ function(H, v)
   transmat := TransitionMatrixOfAutomaton(A);
   start := InitialStatesOfAutomaton(A);
   ending := Filtered([1 .. NumberStatesOfAutomaton(A)], x-> not FullImageAutomatonStates[x] = []);
-  
+
   newtransmat := List(transmat, x-> ShallowCopy(x));
   for i in [1 .. Size(newtransmat)] do
     for j in ending do;
@@ -499,7 +538,14 @@ function(H, v)
     od;
   od;
 
-  coneprefixes := FiniteRegularLanguageToListOfWords(Automaton("det", n, alphabet, newtransmat, start, ending));
+  prefixmachine := Automaton("det", n, alphabet, newtransmat, start, ending);
+  if IsEmptyLang(prefixmachine) then
+    coneprefixes := [];
+  elif AlphabetOfAutomaton(prefixmachine) = 0 then
+    coneprefixes := [[]];
+  else
+    coneprefixes := FiniteRegularLanguageToListOfWords(prefixmachine);
+  fi;
 
   wordtoendstate := function(w)
     if w = [] then
@@ -509,13 +555,19 @@ function(H, v)
   end;
 
   wordtoconeautomaton := function(w)
-    local properprefixes, prefixA, wA, P;
+    local properprefixes, prefixA, wA, P, newtrans;
     properprefixes := List([0 .. Size(w) - 1], x-> List([1 .. x], y-> w[y]));
     prefixA := ListOfWordsToAutomaton(goodedges, properprefixes);
     wA := ListOfWordsToAutomaton(goodedges, [w]);
     P := ProductOfLanguages(wA, Outs[wordtoendstate(w)]);
+    newtrans := TransitionMatrixOfAutomaton(P);
+    #the fact the the next few lines are neccasary suggests that there is a
+    #problem with the automata package
+    if AlphabetOfAutomaton(wA) = 0 and AlphabetOfAutomaton(P) = 1 then
+      newtrans := [];
+    fi;
     P := Automaton("det", NumberStatesOfAutomaton(P), goodedges, 
-                          TransitionMatrixOfAutomaton(P), 
+                          newtrans, 
                           InitialStatesOfAutomaton(P), 
                           FinalStatesOfAutomaton(P));
     return MinimalAutomaton(UnionAutomata(prefixA, P));
@@ -527,11 +579,17 @@ function(H, v)
     whatAshouldbe := MinimalAutomaton(UnionAutomata(whatAshouldbe, wordtoconeautomaton(w)));
   od;
 
-  if not A= whatAshouldbe then
+  if not A = MinimalAutomaton(whatAshouldbe) then
     return fail;
   fi;
 
-  return List(coneprefixes, x-> [x, wordtoendstate(w)]);
+  out := List(coneprefixes, x-> [List(x, y->y), wordtoendstate(w)]);
+  for w in out do
+    if w[1] = [] then
+      w[2] := targetvertex;
+    fi;
+  od;
+  return out;
 end);
 
 
@@ -592,7 +650,6 @@ function(D, n)
 end);
 
 
-
 InstallMethod(LineDigraphWalkHomomorphism, "for a digraph and two integers",
 [IsDigraph, IsInt, IsInt],
 function(D, past, future)
@@ -651,7 +708,7 @@ function(H)
   fi;
   D2 := InducedSubdigraph(D, goodvertices);
   edges := Filtered(edges, x-> x[1][1] in goodvertices and x[1][2] in goodvertices);
-  edges := List(edges, x-> x[3]);
+  edges := List(edges, x-> x[2]);
   return TrimWalkHomomorphism(WalkHomomorphism(D2, H!.CoDomainDigraph, 
                           List([1 .. DigraphNrVertices(D2)], x -> H!.VertexMap[goodvertices[x]]),
                           List([1 .. DigraphNrEdges(D2)], x -> H!.EdgeMap[edges[x]])));  
@@ -703,31 +760,54 @@ end);
 InstallMethod(RemoveIncompleteResponse, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism],
 function(input)
-  local H, prefixes, v, v2, edgetowalk;
-  H := TrimWalkHomomorphism(input);
+  local edges, flag, H, prefixes, v, v2, edgetowalk, pair;
 
+  if not IsUDAFDigraph(input!.CoDomainDigraph) then
+   return fail;
+  fi;
+  H := TrimWalkHomomorphism(input);
   prefixes := List(DigraphVertices(H!.DomainDigraph), x->ImageAsUnionOfCones(H, x));
+  
+  #we need to write each cone as a cone whose associated vertex has
+  #at least two edges coming out of it
+  flag := true;
+  while flag do
+    flag := false;
+    for v in DigraphVertices(H!.DomainDigraph) do
+      for pair in [1 .. Size(prefixes[v])] do
+        edges := Filtered([1 .. DigraphNrEdges(H!.DomainDigraph)], 
+                       x-> DigraphEdges(H!.DomainDigraph)[x][1] =prefixes[v][pair][2]);
+        if Size(edges) = 1 then
+          flag := true;
+          Append(prefixes[v][pair][1], H!.EdgeMap[edges[1]]);
+          prefixes[v][pair][2] := DigraphEdges(H!.DomainDigraph)[edges[1]][2];
+        fi;
+      od;
+    od;
+  od;
+
   for v in DigraphVertices(H!.DomainDigraph) do
     Apply(prefixes[v], x->x[1]);
     prefixes[v] := GreatestCommonPrefix(prefixes[v]); 
     v2 := H!.VertexMap[v];
     if not prefixes[v] = [] then
-      v2 := DigraphEdges(H!.CoDomainDigraph)[prefixes[v][Size(prefixes[v])][2]];
+      v2 := DigraphEdges(H!.CoDomainDigraph)[prefixes[v][Size(prefixes[v])]][2];
     fi;
     prefixes[v] := [prefixes[v], v2]; 
   od;
 
   edgetowalk := function(e)
     local vertexprefix1, vertexprefix2, edgeprefix;
-    vertexprefix1 := prefixes[DigraphEdges(H!.DomainDigraph)[e][1]];
-    vertexprefix2 := prefixes[DigraphEdges(H!.DomainDigraph)[e][2]];
+    vertexprefix1 := prefixes[DigraphEdges(H!.DomainDigraph)[e][1]][1];
+    vertexprefix2 := prefixes[DigraphEdges(H!.DomainDigraph)[e][2]][1];
     edgeprefix := Concatenation(H!.EdgeMap[e], vertexprefix2);
     return Minus(edgeprefix, vertexprefix1);
   end;
 
-  return WalkHomomorphism(H!.DomainDigraph, H!.CoDomainDigraph, 
-                          List([1 .. DigraphNrEdges(H!.DomainDigraph)], edgetowalk),
-                          List(prefixes, x-> x[2]));
+  return WalkHomomorphism(H!.DomainDigraph, H!.CoDomainDigraph,
+                          List(prefixes, x-> x[2]),
+                          List([1 .. DigraphNrEdges(H!.DomainDigraph)], 
+                                                           edgetowalk));
 
 end);
 
