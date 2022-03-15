@@ -15,26 +15,52 @@ InstallMethod(ViewObj, "for a morphism of the shift",
 [IsShiftMorphism],
 function(T)
   local state, sym1, sym2;
-  if T!.States = 1 then
+  if T!.NrStates = 1 then
     state := "state";
   else
     state := "states";
   fi;
-  if T!.InputAlphabet = 1 then
+  if Size(T!.InputAlphabet) = 1 then
     sym1 := "symbol";
   else
     sym1 := "symbols";
   fi;
-  if T!.OutputAlphabet = 1 then
+  if Size(T!.OutputAlphabet) = 1 then
     sym2 := "symbol";
   else
     sym2 := "symbols";
   fi;
 
-  Print("<morphism with input alphabet on ", T!.InputAlphabet, " ", sym1,
-        ", output alphabet on ", T!.OutputAlphabet, " ", sym2, ", and ",
-        T!.States, " ", state, ".>");
+  Print("<morphism with input alphabet on ", Size(T!.InputAlphabet), " ", sym1,
+        ", output alphabet on ", Size(T!.OutputAlphabet), " ", sym2, ", and ",
+        T!.NrStates, " ", state, ".>");
 end);
+
+InstallMethod(ViewObj, "for a morphism of the shift",
+[IsUDAFTransducer],
+function(T)
+  local state, sym1, sym2;
+  if DigraphNrVertices(T!.Digraph) = 1 then
+    state := "state";
+  else
+    state := "states";
+  fi;
+  if DigraphNrEdges(T!.DomainDigraph) = 1 then
+    sym1 := "edge";
+  else
+    sym1 := "edges";
+  fi;
+  if DigraphNrEdges(T!.CoDomainDigraph) = 1 then
+    sym2 := "edge";
+  else
+    sym2 := "edges";
+  fi;
+
+  Print("<UDAF Transducer whose domain digraph has ", DigraphNrEdges(T!.DomainDigraph), " ", sym1,
+        ", whose codomain digraph has ", DigraphNrEdges(T!.CoDomainDigraph), " ", sym2, ", and which has ",
+        DigraphNrVertices(T!.Digraph), " ", state, ".>");
+end);
+
 
 InstallMethod(ShiftMorphism, "for a transducer",
 [IsTransducer],
@@ -101,15 +127,21 @@ function(T)
   domedgemap := [];
   codomedgemap :=[];
   for state in [1 .. NrStates(T)] do
-    for l in [1 .. NrInputSymbols] do
+    for l in [1 .. NrInputSymbols(T)] do
       Add(domedgemap, [l]);
       Add(codomedgemap, List(OutputFunction(T)[state][l], x -> x+1));
     od;
   od;
 
   
-  domfold := WalkHomomorphism(basedigraph, domdigraph, List(NrStates(T), x-> 1), domedgemap);
-  codomfold := WalkHomomorphism(basedigraph, codomdigraph, List(NrStates(T), x-> 1), codomedgemap);
+  domfold := WalkHomomorphism(basedigraph, 
+                              domdigraph, 
+                              List([1 .. NrStates(T)], x-> 1), 
+                              domedgemap);
+  codomfold := WalkHomomorphism(basedigraph, 
+                                codomdigraph, 
+                                List([1 .. NrStates(T)], x-> 1), 
+                                codomedgemap);
 
   if not IsUDAFFolding(codomfold) then
      ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
@@ -133,7 +165,7 @@ function(f, g)
   local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state,
         l, domedgemap, codomedgemap;
 
-  if not IsUDAFFolding(f) and IsUDAFFolding(g) then
+  if not (IsUDAFFolding(f) and IsUDAFFolding(g)) then
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the walk homomorphisms must be UDAF foldings,");
   fi;
@@ -204,7 +236,7 @@ function(t)
   e := 1;
   for v in DigraphVertices(f!.CoDomainDigraph) do
      Add(fedgesstartingwithvertex, []);
-     for n in OutNeighbours(f!.DoDomainDigraph)[v] do
+     for n in OutNeighbours(f!.CoDomainDigraph)[v] do
        Add(fedgesstartingwithvertex[Size(fedgesstartingwithvertex)], e);
        e:= e + 1;
      od;
@@ -213,8 +245,8 @@ function(t)
   transitionbyedge := function(v, e)
     local domedge;
     for domedge in Tedgesstartingwithvertex[v] do
-      if f!.EdgeMap(domedge) = [e] then
-        return [domedge, DigraphEdges(T)[domedge][2]];
+      if f!.EdgeMap[domedge] = [e] then
+        return [domedge, DigraphEdges(T!.Digraph)[domedge][2]];
       fi;
     od;
   end;
@@ -269,7 +301,13 @@ function(t)
   f := WalkHomomorphism(newdigraph, f!.CoDomainDigraph, newfvertexmap, newfedgemap);
   g := WalkHomomorphism(newdigraph, g!.CoDomainDigraph, newgvertexmap, newgedgemap);
 
-  return Transducer(f, g);
+  return UDAFTransducer(f, g);
+end);
+
+InstallMethod(IdentityUDAFTransducer, "for an UDAF digraph",
+[IsDigraph],
+function(D)
+  return UDAFTransducer(IdentityWalkHomomorphism(D), IdentityWalkHomomorphism(D));  
 end);
 
 
@@ -292,8 +330,8 @@ function(f, g)
     return UDAFTransducer(f!.DomainFolding, g!.CoDomainFolding);
   fi;
   
-  fmodifier := FoldingToLineFolding(f!.codomfold);
-  gmodifier := FoldingToLineFolding(g!.domfold);
+  fmodifier := FoldingToLineFolding(f!.CoDomainFolding);
+  gmodifier := FoldingToLineFolding(g!.DomainFolding);
 
   fpast := MaxHistoryConeDepth(fmodifier[1]); 
   ffuture := MaxFutureConeDepth(fmodifier[1]);
@@ -307,19 +345,24 @@ function(f, g)
 
   if fpast < gpast then
     pastadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, gpast - fpast, 0);
-    Apply(fmodifier, x-> pastadder * x);
+    fmodifier[1] := pastadder * fmodifier[1];
+    fmodifier[2] := pastadder * fmodifier[2];
   fi;
   if gpast < fpast then
     pastadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, fpast - gpast, 0);
-    Apply(gmodifier, x-> pastadder * x);
+    gmodifier[1] := pastadder * gmodifier[1];
+    gmodifier[2] := pastadder * gmodifier[2];
   fi;
   if ffuture < gfuture then
     futureadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, 0, gfuture - ffuture);
-    Apply(fmodifier, x-> futureadder * x);
+    fmodifier[1] := futureadder * fmodifier[1];
+    fmodifier[2] := futureadder * fmodifier[2];
   fi;
-  if ffuture < gfuture then
+  if gfuture < ffuture then
     futureadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, 0, ffuture - gfuture);
-    Apply(gmodifier, x-> futureadder * x);
+    gmodifier[1] := pastadder * gmodifier[1];
+    gmodifier[2] := pastadder * gmodifier[2];
+
   fi;
 
   return UDAFTransducer(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
@@ -341,12 +384,12 @@ function(T, n)
 end);
 
 
-
-InstallMethod(IdentityShiftMorphism, "for a positive integer",
-[IsPosInt],
-function(AlphSize)
-  return ShiftMorphism(IdentityTransducer(AlphSize));
+InstallMethod(\=, "for a pair of compatible UDAF Transducers",
+[IsUDAFTransducer, IsUDAFTransducer],
+function(T1, T2)
+  return T1!.DomainFolding = T2!.DomainFolding and T1!.CoDomainFolding = T2!.CoDomainFolding;
 end);
+
 
 InstallMethod(DeBruijnTransducer, "returns a transducer",
 [IsPosInt, IsPosInt],

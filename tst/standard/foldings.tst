@@ -304,3 +304,104 @@ gap> WalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);
 gap> WalksOfGivenLength(Digraph([[1, 1]]), 3);        
 [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ], 
   [ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ]
+
+# LineDigraphWalkHomomorphism
+gap> LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);       
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> L00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> MaxHistoryConeDepth(L00);
+0
+gap> MaxFutureConeDepth(L00); 
+0
+gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> MaxHistoryConeDepth(L01);                                   
+0
+gap> MaxFutureConeDepth(L01); 
+1
+gap> L00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> MaxHistoryConeDepth(L00);                                        
+0
+gap> MaxFutureConeDepth(L00);
+0
+gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);
+<walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.>
+gap> MaxHistoryConeDepth(L01);                                        
+0
+gap> MaxFutureConeDepth(L10);
+0
+gap> MaxHistoryConeDepth(L10);
+1
+gap> L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);
+<walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>
+gap> MaxHistoryConeDepth(L23);                                        
+2
+gap> MaxFutureConeDepth(L23);
+3
+
+# TrimWalkHomomorphism
+gap> W := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),
+> [1, 1, 1], [[1], [1]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> TrimWalkHomomorphism(W);
+<walk homomorphism from a digraph with 0 edges to a digraph with 2 edges.>
+gap> TrimWalkHomomorphism(PhitoR2Fold());
+<walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.>
+
+# * and =
+gap> W := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),
+> [1, 1, 1], [[1], [1]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> H := WalkHomomorphism(Digraph([[], [3, 1], []]), Digraph([[1, 1]]),
+> [1, 1, 1], [[1], [1]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> W=H;
+false
+gap> H := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),
+> [1, 1, 1], [[1], [1]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> W=H;                                                               
+true
+gap> LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> L02 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 2);
+<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
+gap> H := LineDigraphWalkHomomorphism(L01!.DomainDigraph, 0, 1);
+<walk homomorphism from a digraph with 8 edges to a digraph with 4 edges.>
+gap> L02 = H * L01;
+true
+
+# RemoveIncompleteResponce
+gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> R := RemoveIncompleteResponse(H);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> R= WalkHomomorphism(Digraph([[2], [1, 2]]), Digraph([[2], [1, 2]]),
+> [2, 2], [[], [2, 1], [3]]);
+true
+
+# IsSynchronousWalkHomomorphism
+gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> R := RemoveIncompleteResponse(H);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsSynchronousWalkHomomorphism(H);
+true
+gap> IsSynchronousWalkHomomorphism(R);
+false
+
+# SynchronousRemoveIncompleteResponse
+gap> L40 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 4, 0);
+<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
+gap> L13 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 3);
+<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
+gap> H := SynchronousRemoveIncompleteResponse(L13);
+<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
+gap> H  = L40;
+true
+gap> L13 = L40;
+false

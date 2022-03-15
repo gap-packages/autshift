@@ -38,3 +38,5 @@ DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer, IsUDAFTransducer])
 DeclareOperation("MinimiseUDAFTransducer", [IsUDAFTransducer]);
 DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
+#DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
+DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);

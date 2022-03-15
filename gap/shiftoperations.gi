@@ -521,7 +521,7 @@ function(T)
   local SLen;
   SLen := TransducerSynchronizingLength(T);
   if SLen = infinity then
-    ErrorNoReturn("aaa: TransducerCore: usage,\n",
+    ErrorNoReturn("autshift: TransducerCore: usage,\n",
                   "the transducer must be synchronizing ");
   fi;
   if IsTransducer(T) then
@@ -553,7 +553,7 @@ function(T)
   local A, NrS, Pairs, Alph, Cones, GoodStates, TMat, Word, StatePath,
         letter, pos, target;
   if IsDegenerateTransducer(T) then
-    ErrorNoReturn("aaa: ImageAsUnionOfCones: usage,\n",
+    ErrorNoReturn("autshift: ImageAsUnionOfCones: usage,\n",
                   "the given transducer must be nondegenerate ");
   fi;
   Alph := OutputAlphabet(T);

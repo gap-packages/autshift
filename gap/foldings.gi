@@ -847,9 +847,10 @@ function(input)
   nextvertex := List([1 .. DigraphNrVertices(D)], x-> OutNeighbours(D)[x][1]);
   edgemap := List([1 .. DigraphNrEdges(D)], x->edges[DigraphEdges(D)[x][2]]);
 
-  return WalkHomomorphism(D, H!.CoDomainDigraph, 
+  return SynchronousRemoveIncompleteResponse(WalkHomomorphism(D, 
+                          H!.CoDomainDigraph, 
                           List(nextvertex, x->H!.VertexMap[x]),
-                          edgemap);
+                          edgemap));
   
 end);
 
