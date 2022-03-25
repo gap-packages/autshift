@@ -15,30 +15,30 @@ gap> STOP_TEST("autshift package: standard/foldings.tst");
 
 
 # WalkHomomorphism
-gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1],  
+gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1],
 > [[1], [2], []]);
 <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.>
-gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1],   
+gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1],
 > [[1], [2], []]);
 Error, AutShift: WalkHomomorphism: usage,
 the third input must have one entry for each vertex of
  the first input,
 gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1],
-> [[2], [1]]);    
+> [[2], [1]]);
 Error, AutShift: WalkHomomorphism: usage,
 the fourth input must have one entry for each edge of
  the first input,
 gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 0],
-> [[1], [1], []]);                                                   
+> [[1], [1], []]);
 Error, AutShift: WalkHomomorphism: usage,
 the third input must be a list of vertices of the second
 input,
 gap> WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1],
-> [[1], [0], []]); 
+> [[1], [0], []]);
 Error, AutShift: WalkHomomorphism: usage,
 the fourth input must be a list of edge walks in the second
 input,
-gap> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1],   
+gap> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1],
 > [[1], [2, 3]]);
 <walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.>
 gap> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1],
@@ -53,9 +53,9 @@ gap> H!.DomainDigraph;
 <immutable multidigraph with 1 vertex, 2 edges>
 gap> H!.CoDomainDigraph;
 <immutable digraph with 2 vertices, 3 edges>
-gap> H!.VertexMap;      
+gap> H!.VertexMap;
 [ 1 ]
-gap> H!.EdgeMap;  
+gap> H!.EdgeMap;
 [ [ 1 ], [ 2, 3 ] ]
 
 # PhitoR2Fold and R2toPhiFold
@@ -65,13 +65,13 @@ gap> H!.DomainDigraph;
 <immutable digraph with 2 vertices, 3 edges>
 gap> H!.CoDomainDigraph;
 <immutable multidigraph with 1 vertex, 2 edges>
-gap> H!.VertexMap;      
+gap> H!.VertexMap;
 [ 1, 1 ]
-gap> H!.EdgeMap;  
+gap> H!.EdgeMap;
 [ [ 1 ], [ 2 ], [  ] ]
 gap> H2 := R2toPhiFold();
 <walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.>
-gap> H2!.DomainDigraph;  
+gap> H2!.DomainDigraph;
 <immutable multidigraph with 1 vertex, 2 edges>
 gap> H2!.CoDomainDigraph;
 <immutable digraph with 2 vertices, 3 edges>
@@ -87,13 +87,13 @@ gap> H!.DomainDigraph;
 <immutable digraph with 2 vertices, 3 edges>
 gap> H!.CoDomainDigraph;
 <immutable digraph with 2 vertices, 3 edges>
-gap> H!.VertexMap;      
+gap> H!.VertexMap;
 [ 1, 1 ]
-gap> H!.EdgeMap;  
+gap> H!.EdgeMap;
 [ [ 1 ], [ 2, 3 ], [  ] ]
-gap> H2 := R2toPhiFold() * PhitoR2Fold();                         
+gap> H2 := R2toPhiFold() * PhitoR2Fold();
 <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-gap> H2!.DomainDigraph;                  
+gap> H2!.DomainDigraph;
 <immutable multidigraph with 1 vertex, 2 edges>
 gap> H2!.CoDomainDigraph;
 <immutable multidigraph with 1 vertex, 2 edges>
@@ -105,17 +105,17 @@ gap> H2!.EdgeMap;
 # IsDegenerateWalkHomomorphism
 gap> IsDegenerateWalkHomomorphism(PhitoR2Fold());
 false
-gap> IsDegenerateWalkHomomorphism(                                       
+gap> IsDegenerateWalkHomomorphism(
 > WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1]]), [1], [[1], []]));
 true
 gap> IsDegenerateWalkHomomorphism(
-> WalkHomomorphism(Digraph([[2], [1]]), Digraph([[1]]), [1, 1], [[], []])); 
+> WalkHomomorphism(Digraph([[2], [1]]), Digraph([[1]]), [1, 1], [[], []]));
 true
 
 # IsUDAFDigraph
 gap> IsUDAFDigraph(Digraph([[1, 1]]));
 true
-gap> IsUDAFDigraph(Digraph([[1]]));   
+gap> IsUDAFDigraph(Digraph([[1]]));
 false
 gap> IsUDAFDigraph(Digraph([[], []]));
 true
@@ -135,15 +135,15 @@ gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));
 false
 
 # SynchronousWalkHomomorphism
-gap> SynchronousWalkHomomorphism(                               
-> WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));  
+gap> SynchronousWalkHomomorphism(
+> WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));
 [ <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.>, 
   <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ]
-gap> SynchronousWalkHomomorphism(                               
+gap> SynchronousWalkHomomorphism(
 > WalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));
 Error, AutShift: SynchronousWalkHomomorphism: usage,
 the given homomorphism must be non-degenerate
-gap> SynchronousWalkHomomorphism(                             
+gap> SynchronousWalkHomomorphism(
 > WalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));
 Error, AutShift: SynchronousWalkHomomorphism: usage,
 the target digraph must be an UDAF Digraph
@@ -154,14 +154,14 @@ gap> IsSynchronousWalkHomomorphism(P[1]);
 true
 gap> H := P[2] * PhitoR2Fold();
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
-gap> RemoveIncompleteResponse(H) = RemoveIncompleteResponse(P[1]);
+gap> RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];
 true
 gap> P := SynchronousWalkHomomorphism(R2toPhiFold());
 [ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>, 
   <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.> ]
 gap> H := P[2] * R2toPhiFold();
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-gap> RemoveIncompleteResponse(H) = RemoveIncompleteResponse(P[1]);
+gap> RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];
 true
 
 # WalkHomomorphismImageAutomaton
@@ -186,16 +186,16 @@ gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,3], []])));
 false
 gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,2, 3], []])));
 true
-gap> IsUDAFFolding(                                                           
-> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []])); 
+gap> IsUDAFFolding(
+> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []]));
 false
-gap> IsUDAFFolding(                                                
+gap> IsUDAFFolding(
 > WalkHomomorphism(Digraph([[1, 1], [2, 2]]), Digraph([[1, 1]]),
 > [1, 1], [[1], [2], [1], [2]]));
 false
-gap> IsUDAFFolding(                                                
-> WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),     
-> [1], [[1], [2], [1]]));        
+gap> IsUDAFFolding(
+> WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),
+> [1], [[1], [2], [1]]));
 false
 
 #FoldingToLineFolding
@@ -207,12 +207,12 @@ gap> P := FoldingToLineFolding(R2toPhiFold());
   <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.> ]
 gap> H := P[2] * R2toPhiFold();
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-gap> RemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);
+gap> RemoveIncompleteResponse(P[1])[1] = RemoveIncompleteResponse(H)[1];
 true
-gap> P := FoldingToLineFolding(PhitoR2Fold());                    
+gap> P := FoldingToLineFolding(PhitoR2Fold());
 [ <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
   <walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ]
-gap> H := P[2] * PhitoR2Fold(); 
+gap> H := P[2] * PhitoR2Fold();
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> RemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);
 true
@@ -221,23 +221,23 @@ gap> f := WalkHomomorphism(Digraph([[], []]), Digraph([[2], []]), [2, 1], []);
 gap> P := FoldingToLineFolding(f);
 [ <walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.>, 
   <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ]
-gap> H := P[2] * f;            
+gap> H := P[2] * f;
 <walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.>
 gap> RemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);
 true
 
 # MaxFutureConeDepth and MaxHistoryConeDepth
-gap> MaxFutureConeDepth(                                 
+gap> MaxFutureConeDepth(
 > WalkHomomorphism(Digraph([]), Digraph([]), [], []));
 -1
-gap> MaxHistoryConeDepth(                                
+gap> MaxHistoryConeDepth(
 > WalkHomomorphism(Digraph([]), Digraph([]), [], []));
 -1
 gap> MaxFutureConeDepth(R2toPhiFold());
 0
-gap> MaxHistoryConeDepth(R2toPhiFold());                 
+gap> MaxHistoryConeDepth(R2toPhiFold());
 0
-gap> MaxFutureConeDepth(PhitoR2Fold()); 
+gap> MaxFutureConeDepth(PhitoR2Fold());
 0
 gap> MaxHistoryConeDepth(R2toPhiFold());
 0
@@ -245,7 +245,7 @@ gap> f := SynchronousWalkHomomorphism(PhitoR2Fold())[1];
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> MaxFutureConeDepth(f);
 0
-gap> MaxHistoryConeDepth(f);         
+gap> MaxHistoryConeDepth(f);
 1
 gap> f := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], [1]]);
 <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
@@ -279,13 +279,13 @@ gap> ImageAsUnionOfCones(IdentityWalkHomomorphism(Digraph([[], [1]])), 2);
 [ [ [  ], 2 ] ]
 
 # DualWalkHomomorphism
-gap> DualWalkHomomorphism(R2toPhiFold());                  
+gap> DualWalkHomomorphism(R2toPhiFold());
 <walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.>
 gap> DualWalkHomomorphism(PhitoR2Fold());
 <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.>
 gap> L12 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 2);
 <walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
-gap> L21 := DualWalkHomomorphism(L12);                           
+gap> L21 := DualWalkHomomorphism(L12);
 <walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
 gap> MaxFutureConeDepth(L21);
 1
@@ -301,34 +301,34 @@ gap> WalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);
   [ 2, 3, 2 ], [ 2, 4, 1 ], [ 2, 4, 2 ], [ 3, 1, 3 ], [ 3, 1, 4 ], 
   [ 3, 2, 3 ], [ 3, 2, 4 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 3 ], 
   [ 4, 2, 4 ] ]
-gap> WalksOfGivenLength(Digraph([[1, 1]]), 3);        
+gap> WalksOfGivenLength(Digraph([[1, 1]]), 3);
 [ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ], 
   [ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ]
 
 # LineDigraphWalkHomomorphism
-gap> LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);       
+gap> LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);
 <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
 gap> L00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);
 <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
 gap> MaxHistoryConeDepth(L00);
 0
-gap> MaxFutureConeDepth(L00); 
+gap> MaxFutureConeDepth(L00);
 0
 gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
-gap> MaxHistoryConeDepth(L01);                                   
+gap> MaxHistoryConeDepth(L01);
 0
-gap> MaxFutureConeDepth(L01); 
+gap> MaxFutureConeDepth(L01);
 1
 gap> L00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-gap> MaxHistoryConeDepth(L00);                                        
+gap> MaxHistoryConeDepth(L00);
 0
 gap> MaxFutureConeDepth(L00);
 0
 gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);
 <walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.>
-gap> MaxHistoryConeDepth(L01);                                        
+gap> MaxHistoryConeDepth(L01);
 0
 gap> MaxFutureConeDepth(L10);
 0
@@ -336,7 +336,7 @@ gap> MaxHistoryConeDepth(L10);
 1
 gap> L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);
 <walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>
-gap> MaxHistoryConeDepth(L23);                                        
+gap> MaxHistoryConeDepth(L23);
 2
 gap> MaxFutureConeDepth(L23);
 3
@@ -362,7 +362,7 @@ false
 gap> H := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),
 > [1, 1, 1], [[1], [1]]);
 <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-gap> W=H;                                                               
+gap> W=H;
 true
 gap> LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
@@ -379,8 +379,9 @@ true
 gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
 gap> R := RemoveIncompleteResponse(H);
-<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-gap> R= WalkHomomorphism(Digraph([[2], [1, 2]]), Digraph([[2], [1, 2]]),
+[ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>, 
+  [ [ [ 1 ], 2 ], [ [  ], 2 ] ] ]
+gap> R[1] = WalkHomomorphism(Digraph([[2], [1, 2]]), Digraph([[2], [1, 2]]),
 > [2, 2], [[], [2, 1], [3]]);
 true
 
@@ -388,10 +389,11 @@ true
 gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
 gap> R := RemoveIncompleteResponse(H);
-<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+[ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>, 
+  [ [ [ 1 ], 2 ], [ [  ], 2 ] ] ]
 gap> IsSynchronousWalkHomomorphism(H);
 true
-gap> IsSynchronousWalkHomomorphism(R);
+gap> IsSynchronousWalkHomomorphism(R[1]);
 false
 
 # SynchronousRemoveIncompleteResponse
@@ -400,8 +402,9 @@ gap> L40 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 4, 0);
 gap> L13 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 3);
 <walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
 gap> H := SynchronousRemoveIncompleteResponse(L13);
-<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
-gap> H  = L40;
+[ <walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>,
+  3 ]
+gap> H[1]  = L40;
 true
 gap> L13 = L40;
 false

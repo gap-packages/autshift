@@ -75,10 +75,10 @@ gap> OutputFunction(T);
   [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ] ]
 
 # IdentityShiftMorphism
-gap> IdentityShiftMorphism(3);
+gap> IdentityShiftIsomorphism(3);
 <morphism with input alphabet on 3 symbols, output alphabet on 3 symbols, and 
 1 state.>
-gap> IdentityShiftMorphism(2);
+gap> IdentityShiftIsomorphism(2);
 <morphism with input alphabet on 2 symbols, output alphabet on 2 symbols, and 
 1 state.>
 
@@ -133,7 +133,7 @@ gap> T := UDAFTransducer(L01, PhitoR2Fold());
 Error, autshift: UDAFTransducer: usage,
 the walk homomorphisms must have the same domain,
 
-# MinimiseUDAFTransducer
+# MinimalUDAFTransducer
 gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
@@ -141,14 +141,14 @@ gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
 gap> T := UDAFTransducer(L01, L10);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 2 states.>
-gap> M := MinimiseUDAFTransducer(T);
+gap> M := MinimalUDAFTransducer(T);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 1 state.>
 gap> M = IdentityUDAFTransducer(Digraph([[1, 1]]));
 true
 
 # ComposeUDAFTransducers
-gap> L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);               
+gap> L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1); 
 <walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
 gap> L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);
 <walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
@@ -186,3 +186,25 @@ gap> T * T = ComposeUDAFTransducers(T, T);
 true
 gap> T^-1 = UDAFTransducer(L11, L20);
 true
+
+# ResizeZeroStringTransducer (and BlockCodeTransducer as this is used in
+# zero string)
+gap> T := ResizeZeroStringTransducer(3, 1, 2);
+<transducer with input alphabet on 3 symbols, output alphabet on 
+3 symbols, and 4 states.>
+gap> TransitionFunction(T);
+[ [ 1, 2, 2 ], [ 3, 2, 2 ], [ 4, 2, 2 ], [ 1, 2, 2 ] ]
+gap> OutputFunction(T);
+[ [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], [ [  ], [ 0, 1 ], [ 2 ] ],
+  [ [ 0, 0 ], [ 1 ], [ 0, 2 ] ] ]
+gap> T := ResizeZeroStringTransducer(2, 2, 3);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 5 states.>
+gap> TransitionFunction(T);
+[ [ 1, 2 ], [ 3, 2 ], [ 4, 2 ], [ 5, 2 ], [ 1, 2 ] ]
+gap> OutputFunction(T);
+[ [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [  ], [ 0, 1 ] ], 
+  [ [ 0, 0 ], [ 1 ] ] ]
+gap> ResizeZeroStringTransducer(1, 2, 3);
+Error, autshift: BlockCodeTransducer: usage,
+the alphabet must have at least two letters,

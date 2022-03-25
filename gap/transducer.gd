@@ -12,17 +12,15 @@
 # that of objects that relate to this package. The appropiate ViewObj functions
 # are defined in the transducer.gi file.
 
-DeclareRepresentation("IsShiftMorphism", IsComponentObjectRep and
-                      IsAttributeStoringRep,
-                                             ["InputAlphabet",
-                                              "OutputAlphabet",
-                                              "NrStates",
-                                              "TransitionFunction",
-                                              "OutputFunction",
-                                              "TransducerFunction"]);
-DeclareOperation("ShiftMorphism", [IsTransducer]);
-DeclareOperation("IdentityShiftMorphism", [IsPosInt]);
-DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
+DeclareRepresentation("IsShiftIsomorphism", IsComponentObjectRep and
+                      IsAttributeStoringRep, ["Digraph",
+                                              "DomainDigraph",
+                                              "CoDomainDigraph",
+                                              "DomainFolding",
+                                              "CoDomainFolding",
+                                              "SynchronousUDAFTransducer",
+                                              "MinimalUDAFTransducer",
+                                              "Annotation"]);
 
 DeclareRepresentation("IsUDAFTransducer", IsComponentObjectRep and
                       IsAttributeStoringRep,
@@ -31,12 +29,28 @@ DeclareRepresentation("IsUDAFTransducer", IsComponentObjectRep and
                                               "CoDomainDigraph",
                                               "DomainFolding",
                                               "CoDomainFolding"]);
-
+DeclareOperation("ShiftIsomorphism", [IsTransducer]);
+DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
+DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer, IsDenseList]);
+DeclareOperation("ComposeShiftIsomorphisms", [IsShiftIsomorphism, 
+                                              IsShiftIsomorphism]);
+DeclareOperation("IdentityShiftIsomorphism", [IsPosInt]);
+DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
 DeclareOperation("UDAFTransducer", [IsTransducer]);
 DeclareOperation("UDAFTransducer", [IsWalkHomomorphism, IsWalkHomomorphism]);
 DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer, IsUDAFTransducer]);
-DeclareOperation("MinimiseUDAFTransducer", [IsUDAFTransducer]);
+DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
+DeclareAttribute("IsMinimalUDAFTransducer", IsUDAFTransducer);
+DeclareOperation("AreIsomorphicUDAFTransducers", [IsUDAFTransducer,
+                                                  IsUDAFTransducer]);
+DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
+DeclareAttribute("UDAFNrStates", IsUDAFTransducer);
 #DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);
+DeclareOperation("BlockCodeTransducer", [IsPosInt, IsInt, IsFunction]);
+DeclareOperation("SynchronousDomainCombineEquivalentStates", [IsUDAFTransducer]);
+DeclareOperation("ResizeZeroStringTransducer", [IsPosInt, IsPosInt, IsPosInt]);
+DeclareOperation("IsValidAnnotatedTransducer", [IsUDAFTransducer, IsDenseList]);
+DeclareOperation("DeterministicDomainCombineEquivalentStates", [IsUDAFTransducer]);

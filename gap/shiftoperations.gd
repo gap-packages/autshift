@@ -14,6 +14,6 @@
 DeclareOperation("IsLipschitzTransducer", [IsTransducer]);
 DeclareOperation("TransducerCore", [IsTransducer]);
 DeclareOperation("IsCoreTransducer", [IsTransducer]);
-DeclareOperation("ImageAsUnionOfCones", [IsTransducer]);
-DeclareOperation("HasClopenImage", [IsTransducer]);
+#DeclareOperation("ImageAsUnionOfCones", [IsTransducer]);
+#DeclareOperation("HasClopenImage", [IsTransducer]);
 

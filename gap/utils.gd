@@ -12,3 +12,12 @@
 
 DeclareGlobalFunction("AutshiftMakeDoc");
 DeclareOperation("DotWalkHomomorphism", [IsWalkHomomorphism]);
+DeclareOperation("DotUDAFTransducer", [IsUDAFTransducer]);
+DeclareOperation("DotUDAFTransducerWithVertexLabels", [IsUDAFTransducer, IsDenseList]);
+DeclareOperation("DotShiftIsomorphism", [IsShiftIsomorphism]);
+DeclareOperation("DotShiftIsomorphismAnnotatedUDAF", [IsShiftIsomorphism]);
+DeclareOperation("Draw", [IsWalkHomomorphism]);
+DeclareOperation("Draw", [IsShiftIsomorphism]);
+DeclareOperation("DrawAnnotatedUDAF", [IsShiftIsomorphism]);
+DeclareOperation("Draw", [IsUDAFTransducer]);
+#DeclareOperation("Draw", [IsUDAFIsomorphism]);

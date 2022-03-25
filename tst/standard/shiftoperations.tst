@@ -93,5 +93,3 @@ gap> T := DeBruijnTransducer(3, 2);;
 gap> IsCoreTransducer(T);
 true
 
-#TODO image as union of cones
-#TODO has clopen image
