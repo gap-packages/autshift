@@ -212,7 +212,7 @@ function(H)
 
     BadEdge := 0;
     domvno := DigraphNrVertices(H!.DomainDigraph);
-    EMa := H!.EdgeMap;
+    EMa := List(H!.EdgeMap, x->ShallowCopy(x));
     oldedges :=DigraphEdges(H!.DomainDigraph);
     oldedgesandimage := List([1 .. Size(oldedges)], x->[ShallowCopy(oldedges[x]), EMa[x], [x]]);
     for i in [1 .. Size(EMa)] do
@@ -365,7 +365,7 @@ InstallMethod(FoldingToLineFolding, "for a walk homomorphism which is a folding"
 function(H)
   local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges,
         out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
-        historyinfo, outforwardimages, outbackwardimages, containedincone;
+        historyinfo, outforwardimages, outbackwardimages, containedincone, out2;
   sync := SynchronousWalkHomomorphism(H);
   Apply(sync, TrimWalkHomomorphism);
   S := sync[1];
@@ -441,7 +441,11 @@ function(H)
       fi;
     od;
   od;
-  return [out1, WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap) * f2];
+  
+  out2 := WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap) * f2;
+  SetIsUDAFFolding(out1, true);
+  SetIsUDAFFolding(out2, true);
+  return [out1, out2];
 end);
 
 
@@ -575,7 +579,8 @@ function(H, v)
     return fail;
   fi;
 
-  out := List(coneprefixes, x-> [List(x, y->y), wordtoendstate(w)]);
+  
+  out := List(coneprefixes, x -> [x, wordtoendstate(w)]);
   for w in out do
     if w[1] = [] then
       w[2] := targetvertex;
@@ -708,7 +713,13 @@ end);
 InstallMethod(\*, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(f, g)
-  return ComposeWalkHomomorphisms(f, g);
+  local c;
+  c := ComposeWalkHomomorphisms(f, g);
+  if Tester(IsUDAFFolding)(f) and Tester(IsUDAFFolding)(f) and 
+    IsUDAFFolding(f) and IsUDAFFolding(g) then
+    SetIsUDAFFolding(c, true);
+  fi;
+  return c;
 end);
 
 
@@ -749,7 +760,7 @@ end);
 InstallMethod(RemoveIncompleteResponse, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism],
 function(input)
-  local edges, flag, H, prefixes, v, v2, edgetowalk, pair;
+  local edges, flag, H, prefixes, v, v2, edgetowalk, pair, out;
 
   if not IsUDAFDigraph(input!.CoDomainDigraph) then
    return fail;
@@ -783,6 +794,11 @@ function(input)
       v2 := DigraphEdges(H!.CoDomainDigraph)[prefixes[v][Size(prefixes[v])]][2];
     fi;
     prefixes[v] := [prefixes[v], v2];
+    # I don't really know what causes this to be a periodic list sometimes
+    # but is it is then the tests will fail (maybe its GreatestCommonPrefix?)
+    if IsPeriodicList(prefixes[v][1]) then
+      prefixes[v][1]:= PrePeriod(prefixes[v][1]);
+    fi;
   od;
 
   edgetowalk := function(e)
@@ -793,11 +809,16 @@ function(input)
     return Minus(edgeprefix, vertexprefix1);
   end;
 
-  return [WalkHomomorphism(H!.DomainDigraph, H!.CoDomainDigraph,
+  out := [WalkHomomorphism(H!.DomainDigraph, H!.CoDomainDigraph,
                           List(prefixes, x-> x[2]),
                           List([1 .. DigraphNrEdges(H!.DomainDigraph)],
                                                            edgetowalk)),
                           prefixes];
+  if Tester(IsUDAFFolding)(input) and IsUDAFFolding(input) then
+      SetIsUDAFFolding(out[1], IsUDAFFolding(input));
+  fi;
+  return out;           
+                          
 end);
 
 
@@ -837,13 +858,15 @@ function(H)
     edge := DigraphEdges(H!.DomainDigraph)[e];
     Add(domainoutedges[edge[1]], H!.EdgeMap[e]);
   od;
-  Apply(domainoutedges, Sort);
+  for v in [1 .. Size(domainoutedges)] do
+    Sort(domainoutedges[v]);
+  od;
   for e in [1 .. DigraphNrEdges(H!.CoDomainDigraph)] do
     edge := DigraphEdges(H!.CoDomainDigraph)[e];
     Add(rangeoutedges[edge[1]], [e]);
   od;
   for v in [1 .. DigraphNrVertices(H!.DomainDigraph)] do
-    if not domainoutedges[v] = rangeoutedges[H!.Vertexmap[v]] then
+    if not domainoutedges[v] = rangeoutedges[H!.VertexMap[v]] then
       return false;
     fi;
   od;
@@ -931,11 +954,11 @@ function(H, state, position)
       for e in [1 .. Size(edges)] do
         if not output[edges[e][1]] = "n/a" then
            madeprogress := madeprogress or (output[edges[e][2]] = "n/a");
-           output[edges[e][2]] := output[edges[e][1]] + Size(H!.EdgeMap[e]);
+           output[edges[e][2]] := output[edges[e][1]] + Size(H!.EdgeMap[e]) - 1;
         fi;
         if not output[edges[e][2]] = "n/a" then
-           madeprogress := madeprogress or (output[edges[e][2]] = "n/a");
-           output[edges[e][1]] := output[edges[e][2]] + Size(H!.EdgeMap[e]);
+           madeprogress := madeprogress or (output[edges[e][1]] = "n/a");
+           output[edges[e][1]] := output[edges[e][2]] - Size(H!.EdgeMap[e]) + 1;
         fi;
       od;
     od;
@@ -947,7 +970,7 @@ end);
 InstallMethod(WalkHomomorphismAnnotation, "for a walk homomorphism a state and an integer",
 [IsWalkHomomorphism, IsInt],
 function(H, position)
-  return WalkHomomorphismAnnotation(H, 0, position);
+  return WalkHomomorphismAnnotation(H, 1, position);
 end);
 
 InstallMethod(WalkHomomorphismAnnotation, "for a walk homomorphism a state and an integer",
@@ -960,7 +983,7 @@ end);
 InstallMethod(SynchronousRemoveIncompleteResponse, "for a synchronous walk homorphism",
 [IsWalkHomomorphism],
 function(input)
-  local H, recursionfunc;
+  local H, recursionfunc, out;
    H := TrimWalkHomomorphism(input);
    if not IsSynchronousWalkHomomorphism(H) then
      return fail;
@@ -992,7 +1015,13 @@ function(input)
                           List(nextvertex, x->H!.VertexMap[x]),
                           edgemap), count + 1);
   end;
-  return recursionfunc(input, 0);
+  
+  out := recursionfunc(input, 0);
+  if Tester(IsUDAFFolding)(input) and IsUDAFFolding(input) then
+    SetIsUDAFFolding(out[1], IsUDAFFolding(input));
+    SetIsUDAFFolding(out[2], IsUDAFFolding(input));
+  fi;
+  return out;
 end);
 
 

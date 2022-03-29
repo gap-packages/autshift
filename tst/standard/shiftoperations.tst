@@ -65,6 +65,12 @@ gap> OutputFunction(C);
 [ [ [ 1, 0 ], [  ] ], [ [ 0 ], [ 1, 1 ] ], [ [ 0 ], [ 1 ] ] ]
 gap> TransitionFunction(C);
 [ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
+gap> T := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 2 states.>
+gap> TransducerCore(T);
+Error, autshift: TransducerCore: usage,
+the transducer must be synchronizing 
 
 #T# IsCoreTransducer(T);
 gap> T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
@@ -92,4 +98,3 @@ true
 gap> T := DeBruijnTransducer(3, 2);;
 gap> IsCoreTransducer(T);
 true
-

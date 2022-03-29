@@ -524,13 +524,9 @@ function(T)
     ErrorNoReturn("autshift: TransducerCore: usage,\n",
                   "the transducer must be synchronizing ");
   fi;
-  if IsTransducer(T) then
-    return RemoveInaccessibleStates(CopyTransducerWithInitialState(T,
-              TransducerFunction(T, ListWithIdenticalEntries(SLen, 0), 1)[2]));
-  else
-    return CopyTransducerWithInitialState(T,
-              TransducerFunction(T, ListWithIdenticalEntries(SLen, 0), 1)[2]);
-  fi;
+  
+  return RemoveInaccessibleStates(CopyTransducerWithInitialState(T,
+          TransducerFunction(T, ListWithIdenticalEntries(SLen, 0), 1)[2]));
 end);
 
 InstallMethod(IsCoreTransducer, "for a transducer",

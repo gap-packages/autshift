@@ -408,3 +408,30 @@ gap> H[1]  = L40;
 true
 gap> L13 = L40;
 false
+
+# WalkHomomorphismAnnotation and IsAnnotatableWalkHomomorphism
+gap> H := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),
+> [1], [[1], [1, 2]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> IsAnnotatableWalkHomomorphism(H);                          
+false
+gap> S := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),
+> [1], [[2], [1]]);   
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> IsAnnotatableWalkHomomorphism(S);
+true
+gap> WalkHomomorphismAnnotation(H);
+Error, AutShift: WalkHomomorphismAnnotation: usage,
+the given walk homomorphism is not annotatable,
+gap> WalkHomomorphismAnnotation(S);
+[ 0 ]
+gap> D := Digraph([[2], [2, 2, 3], [], [2]]);;
+gap> H := WalkHomomorphism(D, D, [1, 2, 2, 4],
+> [[1, 3], [2], [3], [3, 2], [5, 2]]);
+<walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.>
+gap> WalkHomomorphismAnnotation(H);
+[ 0, 1, 2, 0 ]
+gap> WalkHomomorphismAnnotation(H, 3);
+[ 3, 4, 5, 3 ]
+gap> WalkHomomorphismAnnotation(H, 2, 3);
+[ 0, 1, 2, 0 ]

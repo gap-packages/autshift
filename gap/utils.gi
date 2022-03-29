@@ -29,7 +29,7 @@ function(T)
 end);
 
 
-InstallMethod(Draw, 
+InstallMethod(DrawSynchronous, 
 "for a shift isomorphism",
 [IsShiftIsomorphism],
 function(T)
@@ -45,12 +45,12 @@ function(T)
 end);
 
 
-InstallMethod(DrawAnnotatedUDAF, 
+InstallMethod(Draw, 
 "for an UDAF transducer",
 [IsShiftIsomorphism],
 function(T)
-  return DotUDAFTransducerWithVertexLabels(T!.MinimumUDAFTransducer, 
-               List(T!.Annotation, x-> String(x)));
+  Splash(DotUDAFTransducerWithVertexLabels(T!.MinimalUDAFTransducer, 
+               List(T!.Annotation, x-> String(x))));
 end);
 
 

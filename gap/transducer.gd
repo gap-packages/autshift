@@ -16,8 +16,6 @@ DeclareRepresentation("IsShiftIsomorphism", IsComponentObjectRep and
                       IsAttributeStoringRep, ["Digraph",
                                               "DomainDigraph",
                                               "CoDomainDigraph",
-                                              "DomainFolding",
-                                              "CoDomainFolding",
                                               "SynchronousUDAFTransducer",
                                               "MinimalUDAFTransducer",
                                               "Annotation"]);
@@ -38,14 +36,22 @@ DeclareOperation("IdentityShiftIsomorphism", [IsPosInt]);
 DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
 DeclareOperation("UDAFTransducer", [IsTransducer]);
 DeclareOperation("UDAFTransducer", [IsWalkHomomorphism, IsWalkHomomorphism]);
-DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer, IsUDAFTransducer]);
+DeclareOperation("ComposeUDAFTransducersSlow", [IsUDAFTransducer, 
+                                                IsUDAFTransducer,
+                                                IsBool]);
 DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
 DeclareAttribute("IsMinimalUDAFTransducer", IsUDAFTransducer);
+DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
+                                                         IsUDAFTransducer,
+                                                         IsDenseList,
+                                                         IsDenseList]);
 DeclareOperation("AreIsomorphicUDAFTransducers", [IsUDAFTransducer,
                                                   IsUDAFTransducer]);
 DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
+DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
+DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
 DeclareAttribute("UDAFNrStates", IsUDAFTransducer);
 #DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);

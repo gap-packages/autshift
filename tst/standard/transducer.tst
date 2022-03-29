@@ -74,13 +74,16 @@ gap> OutputFunction(T);
   [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], 
   [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ] ]
 
-# IdentityShiftMorphism
+# IdentityShiftIsomorphism
 gap> IdentityShiftIsomorphism(3);
-<morphism with input alphabet on 3 symbols, output alphabet on 3 symbols, and 
-1 state.>
+<shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 1 state.>
 gap> IdentityShiftIsomorphism(2);
-<morphism with input alphabet on 2 symbols, output alphabet on 2 symbols, and 
-1 state.>
+<shift isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
+
+# ShiftIsomorphism
+gap> 
 
 # UDAFTransducer with GNS transducer input
 gap> T := Transducer(2, 2, [[1, 1]], [[[], []]]);
@@ -155,10 +158,10 @@ gap> L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);
 gap> T := UDAFTransducer(L11, L20);                              
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
-gap> ComposeUDAFTransducers(T, T);
+gap> ComposeUDAFTransducersSlow(T, T, true);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 8 states.>
-gap> T2 := ComposeUDAFTransducers(T, T);
+gap> T2 := ComposeUDAFTransducersSlow(T, T, true);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 8 states.>
 gap> f := T2!.DomainFolding;
@@ -182,7 +185,7 @@ gap> L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);
 gap> T := UDAFTransducer(L20, L11);           
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
-gap> T * T = ComposeUDAFTransducers(T, T);
+gap> T * T = ComposeUDAFTransducersSlow(T, T, false);
 true
 gap> T^-1 = UDAFTransducer(L11, L20);
 true
@@ -208,3 +211,94 @@ gap> OutputFunction(T);
 gap> ResizeZeroStringTransducer(1, 2, 3);
 Error, autshift: BlockCodeTransducer: usage,
 the alphabet must have at least two letters,
+
+#ShiftIsomorphism
+gap> T := IdentityShiftIsomorphism(3);
+<shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 1 state.>
+gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));
+<shift isomorphism whose domain digraph has 
+4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
+gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+> [-1]);
+<shift isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+> [1]); 
+<shift isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+> [1]); 
+<shift isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+gap> S!.Annotation;
+[ 1 ]
+gap> (S^3)!.Annotation;
+[ 3 ]
+gap> (S^-2)!.Annotation;
+[ -2 ]
+gap> Sm4 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+> [-4]);
+<shift isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 16 states.>
+gap> Sm4 = S^-4;
+true
+gap> Sm4 = S^4; 
+false
+
+#Speed
+gap> T := ResizeZeroStringTransducer(3, 1, 2);;       
+gap> U := UDAFTransducer(T);
+<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
+3 edges, and which has 4 states.>
+gap> T := ResizeZeroStringTransducer(3, 1, 2);
+<transducer with input alphabet on 3 symbols, output alphabet on 
+3 symbols, and 4 states.>
+gap> U := UDAFTransducer(T);
+<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
+3 edges, and which has 4 states.>
+gap> I := U^-1;
+<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
+3 edges, and which has 4 states.>
+gap> I = U;
+false
+gap> M := MinimalUDAFTransducer(I);
+<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
+3 edges, and which has 4 states.>
+gap> M = U;
+true
+gap> R := ResizeZeroStringTransducer(2, 2, 3);          
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 5 states.>
+gap> R := ResizeZeroStringTransducer(2, 2, 3);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 5 states.>
+gap> R2 := ResizeZeroStringTransducer(2, 1, 3);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 5 states.>
+gap> R3 := ResizeZeroStringTransducer(2, 1, 2);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 4 states.>
+gap> U := UDAFTransducer(R);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> U2 := UDAFTransducer(R2);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> U3 := UDAFTransducer(R3);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 4 states.>
+gap> MinimalUDAFTransducer(U2^-1);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> MinimalUDAFTransducer(U2^-1) = U2;
+true
+gap> M := MinimalUDAFTransducer(U * U2);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> P := M * U;
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 16 states.>
+gap> M := MinimalUDAFTransducer(P);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 4 states.>
