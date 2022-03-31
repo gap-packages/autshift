@@ -246,7 +246,36 @@ true
 gap> Sm4 = S^4; 
 false
 
-#Speed
+#UDAFIsomorphism
+gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> T := UDAFIsomorphism(L01, L10);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 1 state.>
+gap> M := T^0;    
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 1 state.>
+gap> T = M;
+true
+gap> R := ResizeZeroStringTransducer(2, 2, 3);
+<transducer with input alphabet on 2 symbols, output alphabet on 
+2 symbols, and 5 states.>
+gap> U := UDAFIsomorphism(R);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> U^2;
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 1 state.>
+gap> R := ResizeZeroStringTransducer(3, 1, 3);
+<transducer with input alphabet on 3 symbols, output alphabet on 
+3 symbols, and 5 states.>
+gap> U := UDAFIsomorphism(R);                 
+<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
+3 edges, and which has 5 states.>
+
+#the above line currently takes 27327m3 with profiler on Speed
 gap> T := ResizeZeroStringTransducer(3, 1, 2);;       
 gap> U := UDAFTransducer(T);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
@@ -260,12 +289,12 @@ gap> U := UDAFTransducer(T);
 gap> I := U^-1;
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 3 edges, and which has 4 states.>
-gap> I = U;
+gap> AreIsomorphicUDAFTransducers(I, U);
 false
 gap> M := MinimalUDAFTransducer(I);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 3 edges, and which has 4 states.>
-gap> M = U;
+gap> AreIsomorphicUDAFTransducers(M, U);
 true
 gap> R := ResizeZeroStringTransducer(2, 2, 3);          
 <transducer with input alphabet on 2 symbols, output alphabet on 
@@ -291,7 +320,7 @@ gap> U3 := UDAFTransducer(R3);
 gap> MinimalUDAFTransducer(U2^-1);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 5 states.>
-gap> MinimalUDAFTransducer(U2^-1) = U2;
+gap> AreIsomorphicUDAFTransducers(MinimalUDAFTransducer(U2^-1), U2);
 true
 gap> M := MinimalUDAFTransducer(U * U2);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 

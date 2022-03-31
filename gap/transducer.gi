@@ -62,6 +62,11 @@ function(T)
         DigraphNrVertices(T!.Digraph), " ", state, ".>");
 end);
 
+InstallMethod(ViewObj, "for an UDAF isomorphism",
+[IsUDAFIsomorphism],
+function(T)
+  ViewObj(T!.MinimalUDAFTransducer);
+end);
 
 # this function convertes a non-empty walk
 # given as a list of edges to the corresponding
@@ -124,7 +129,7 @@ function(T, annotation)
   R := DualWalkHomomorphism(f);
   oldR := DualWalkHomomorphism(oldf);
   oldfstatetopast := List([1 .. DigraphNrVertices(oldf!.DomainDigraph)],
-                           x -> ImageAsUnionOfCones(R, x)[1]);
+                           x -> ShallowCopy(ImagesAsUnionsOfCones(R)[x][1]));
   for i in [1 .. Size(oldfstatetopast)] do
     oldfstatetopast[i][1] := dualedgewalktoedgewalk(oldf!.DomainDigraph, oldfstatetopast[i][1]);
   od;
@@ -208,9 +213,9 @@ function(T, annotation)
   fstatetopastfuture := [];
   R := DualWalkHomomorphism(f);
   for i in [1 .. DigraphNrVertices(f!.DomainDigraph)] do
-    block := [ImageAsUnionOfCones(R, i)[1][1],
+    block := [ShallowCopy(ImagesAsUnionsOfCones(R)[i][1][1]),
               f!.VertexMap[i],
-              ImageAsUnionOfCones(f, i)[1][1]];
+              ShallowCopy(ImagesAsUnionsOfCones(f)[i][1][1])];
     if not block[1] = [] then
       block[1] := dualedgewalktoedgewalk(f!.CoDomainDigraph, block[1]);
       block[1] := edgesequecetoedgevertexsequence(f!.CoDomainDigraph, block[1]);
@@ -457,11 +462,43 @@ function(T1, T2, L1, L2)
   return IsIsomorphicDigraph(D1[1], D2[1], D1[2], D2[2]);
 end);
 
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsUDAFTransducer],
+function(T)
+  local mintrans;
+  mintrans := MinimalUDAFTransducer(T);
+  return Objectify(NewType(NewFamily("UDAFIsomorphism"), IsUDAFIsomorphism and
+                IsAttributeStoringRep), rec(Digraph:= mintrans!.Digraph,
+                                            DomainDigraph := mintrans!.DomainDigraph,
+                                            CoDomainDigraph := mintrans!.CoDomainDigraph,
+                                            DomainFolding := mintrans!.DomainFolding,
+                                            CoDomainFolding := mintrans!.CoDomainFolding,
+                                            MinimalUDAFTransducer := mintrans));
+end);
+
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsTransducer],
+function(T)
+  return UDAFIsomorphism(UDAFTransducer(T));
+end);
+
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsWalkHomomorphism, IsWalkHomomorphism],
+function(f, g)
+  return UDAFIsomorphism(UDAFTransducer(f, g));
+end);
+
+InstallMethod(UDAFIsomorphism, "for a transducer",
+[IsShiftIsomorphism],
+function(T)
+  return UDAFIsomorphism(T!.MinimalUDAFTransducer);
+end);
+
 InstallMethod(UDAFTransducer, "for a transducer",
 [IsTransducer],
 function(T)
   local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state,
-        l, domedgemap, codomedgemap, temp;
+        l, domedgemap, codomedgemap, temp, i;
 
   if IsDegenerateTransducer(T) then
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
@@ -477,7 +514,6 @@ function(T)
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be core,");
   fi;
-
 
   domdigraph := Digraph([List([1 .. NrInputSymbols(T)], x-> 1)]);
   codomdigraph := Digraph([List([1 .. NrOutputSymbols(T)], x-> 1)]);
@@ -563,7 +599,6 @@ function(T)
         newvertices, newfvertexmap, newgvertexmap, newedges, newfedgemap,
         newgedgemap, newdigraph;
 
-
   f := T!.DomainFolding;
   g := T!.CoDomainFolding;
   domfix := FoldingToLineFolding(f);
@@ -582,7 +617,8 @@ function(T)
         i, tuple, NewTuple, b, flag, n, class, Classes,
         fedgesstartingwithvertex, compatiblevertexpair, transitionbyedge,
         newvertices, newfvertexmap, newgvertexmap, newedges, newfedgemap,
-        newgedgemap, newdigraph, domv;
+        newgedgemap, newdigraph, domv, f1, f1v, f1img, buckets, f2, newbuckets,
+        key, keytonumber, count;
 
   f := T!.DomainFolding;
   if not IsDeterministicWalkHomomorphism(f) then
@@ -636,25 +672,59 @@ function(T)
     od;
   end;
 
-  EqRelation := Filtered(UnorderedTuples(DigraphVertices(T!.Digraph), 2), compatiblevertexpair);
-  flag := true;
-  while flag do
-    flag := false;
-    for tuple in EqRelation do
-      for i in fedgesstartingwithvertex[f!.VertexMap[tuple[1]]] do
-        NewTuple := [transitionbyedge(tuple[1], i)[2],
-                     transitionbyedge(tuple[2], i)[2]];
-        Sort(NewTuple);
-        if not NewTuple in EqRelation then
-          Remove(EqRelation, Position(EqRelation,tuple));
-          flag := true;
-          break;
+  f1 := [];
+  for v in DigraphVertices(T!.Digraph) do
+    f1v := [, ];
+    f1v[1] := [f!.VertexMap[v], g!.VertexMap[v]];
+    f1v[2] := List(Tedgesstartingwithvertex[v], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
+    Add(f1, f1v);
+  od;
+  f1img := Set(f1);
+  Apply(f1, x-> Position(f1img, x));
+  buckets := List(f1img, x->HashSet(DigraphNrVertices(T!.Digraph)));
+  for v in DigraphVertices(T!.Digraph) do
+    AddSet(buckets[f1[v]], v);
+  od;
+  
+  #this will stop via a break statement which occurs when we stop refining 
+  #our partition
+  while true do
+    f2 := EmptyPlist(DigraphNrVertices(T!.Digraph));
+    newbuckets := HashMap();
+    for b in [1 .. Size(buckets)] do
+      for v in buckets[b] do
+        key := [b];
+        for e in fedgesstartingwithvertex[f!.VertexMap[v]] do
+          Add(key, f1[transitionbyedge(v, e)[2]]);
+        od;
+        if not IsBound(newbuckets[key]) then
+          newbuckets[key] := HashSet(1);
         fi;
+        AddSet(newbuckets[key], v);
+        f2[v] := key;     
       od;
     od;
+    if Size(Set(f2)) = Size(Set(f1)) then
+      break;
+    fi;
+    
+    #work done for this iteratino so we tidy the buckets
+    #in prep for the next iteration
+    buckets := [];
+    keytonumber := HashMap();
+    count := 0;
+    for key in Keys(newbuckets) do
+      count := count + 1;
+      keytonumber[key] := count;
+      Add(buckets, newbuckets[key]);
+    od;
+    for v in [1 .. Size(f2)] do
+      f2[v] := keytonumber[f2[v]];
+    od;
+    f1 := f2;
   od;
-
-  Classes := ShallowCopy(EquivalenceRelationPartition(EquivalenceRelationByPairs(Domain(DigraphVertices(T!.Digraph)), EqRelation)));
+  
+  Classes := List(buckets, x-> Set(x));
   class := function(q)
         local j;
         for j in [1 .. Length(Classes)] do
@@ -692,6 +762,9 @@ function(T)
   f := WalkHomomorphism(newdigraph, f!.CoDomainDigraph, newfvertexmap, newfedgemap);
   g := WalkHomomorphism(newdigraph, g!.CoDomainDigraph, newgvertexmap, newgedgemap);
 
+  SetIsUDAFFolding(f, true);
+  SetIsUDAFFolding(g, true);
+
   return [UDAFTransducer(f, g), Classes];
 end);
 
@@ -700,6 +773,7 @@ InstallMethod(IdentityUDAFTransducer, "for an UDAF digraph",
 function(D)
   return UDAFTransducer(IdentityWalkHomomorphism(D), IdentityWalkHomomorphism(D));
 end);
+
 
 InstallMethod(IdentityShiftIsomorphism, "for an UDAF digraph",
 [IsPosInt],
@@ -789,54 +863,67 @@ function(f, g)
   return ComposeUDAFTransducersSlow(f, g, false);
 end);
 
+InstallMethod(\*, "for a pair of compatible UDAF Isomorphisms",
+[IsUDAFIsomorphism, IsUDAFIsomorphism],
+function(f, g)
+  return UDAFIsomorphism(f!.MinimalUDAFTransducer * g!.MinimalUDAFTransducer);
+end);
+
 InstallMethod(\*, "for a pair of compatible ShiftIsomorphisms",
 [IsShiftIsomorphism, IsShiftIsomorphism],
 function(f, g)
   return ComposeShiftIsomorphisms(f, g);
 end);
 
-InstallMethod(\^, "for a pair of compatible UDAF Transducers",
-[IsUDAFTransducer, IsInt],
-function(T, n)
+
+AUTSHIFT_POW := function(T, n)
   if n = 1 then
     return T;
   fi;
   if n = -1 then
-    return UDAFTransducer(T!.CoDomainFolding, T!.DomainFolding);
+    if IsUDAFTransducer(T) then
+      return UDAFTransducer(T!.CoDomainFolding, T!.DomainFolding);
+    elif IsUDAFIsomorphism(T) then
+      return UDAFIsomorphism(T!.MinimalUDAFTransducer ^ -1);
+    elif IsShiftIsomorphism(T) then
+      return ShiftIsomorphism(T!.SynchronousUDAFTransducer^(-1));
+    fi;
   fi;
   if(DigraphVertices(T!.DomainDigraph) <> DigraphVertices(T!.CoDomainDigraph)) or
     (DigraphEdges(T!.DomainDigraph) <> DigraphEdges(T!.CoDomainDigraph)) then
     return fail;
   fi;
   if n = 0 then
-    return IdentityUDAFTransducer(T!.DomainDigraph);
+    if IsUDAFTransducer(T) then
+      return IdentityUDAFTransducer(T!.DomainDigraph);
+    elif IsUDAFIsomorphism(T) then
+      UDAFIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
+    elif IsShiftIsomorphism(T) then
+      ShiftIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
+    fi;
   fi;
   if n < 0 then
     return (T^-1)^-n;
   fi;
   return T^(n - 1) * T;
+end;
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsUDAFTransducer, IsInt],
+function(T, n)
+  return AUTSHIFT_POW(T, n);
+end);
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsUDAFIsomorphism, IsInt],
+function(T, n)
+  return AUTSHIFT_POW(T, n);
 end);
 
 InstallMethod(\^, "for a pair of compatible UDAF Transducers",
 [IsShiftIsomorphism, IsInt],
 function(T, n)
-  if n = -1 then
-    return ShiftIsomorphism(T!.SynchronousUDAFTransducer^(-1));
-  fi;
-  if n = 1 then
-    return T;
-  fi;
-  if(DigraphVertices(T!.DomainDigraph) <> DigraphVertices(T!.CoDomainDigraph)) or
-    (DigraphEdges(T!.DomainDigraph) <> DigraphEdges(T!.CoDomainDigraph)) then
-    return fail;
-  fi;
-  if n = 0 then
-    return ShiftIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
-  fi;
-  if n < 0 then
-    return (T^-1)^-n;
-  fi;
-  return T^(n - 1) * T;
+  return AUTSHIFT_POW(T, n);
 end);
 
 
@@ -844,6 +931,13 @@ InstallMethod(\=, "for a pair of compatible UDAF Transducers",
 [IsUDAFTransducer, IsUDAFTransducer],
 function(T1, T2)
   return T1!.DomainFolding = T2!.DomainFolding and T1!.CoDomainFolding = T2!.CoDomainFolding;
+end);
+
+InstallMethod(\=, "for a pair of compatible UDAF Transducers",
+[IsUDAFIsomorphism, IsUDAFIsomorphism],
+function(T1, T2)
+  return AreIsomorphicUDAFTransducers(T1!.MinimalUDAFTransducer, 
+                                      T2!.MinimalUDAFTransducer);
 end);
 
 

@@ -23,6 +23,15 @@ end);
 
 InstallMethod(Draw, 
 "for an UDAF transducer",
+[IsUDAFIsomorphism],
+function(T)
+  Draw(T!.MinimalUDAFTransducer);
+end);
+
+
+
+InstallMethod(Draw, 
+"for an UDAF transducer",
 [IsUDAFTransducer],
 function(T)
   Splash(DotUDAFTransducer(T));

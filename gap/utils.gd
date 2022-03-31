@@ -20,4 +20,4 @@ DeclareOperation("Draw", [IsWalkHomomorphism]);
 DeclareOperation("Draw", [IsShiftIsomorphism]);
 DeclareOperation("DrawSynchronous", [IsShiftIsomorphism]);
 DeclareOperation("Draw", [IsUDAFTransducer]);
-#DeclareOperation("Draw", [IsUDAFIsomorphism]);
+DeclareOperation("Draw", [IsUDAFIsomorphism]);
