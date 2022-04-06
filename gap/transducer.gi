@@ -314,6 +314,7 @@ function(T, annotation)
   return M;
 end);
 
+
 InstallMethod(UDAFNrStates, "for an UDAF transducer",
 [IsUDAFTransducer],
 function(T)
@@ -997,7 +998,7 @@ end);
 
 
 # returns the transducer on alphabet out which reads blocks of length WordLen
-# and write in accordence with the function f
+# and writes in accordence with the function f
 InstallMethod(BlockCodeTransducer, "for a positive integer and a block code function", [IsPosInt, IsInt, IsFunction],
 function(Alph, WordLen, f)
   local StateToLabel, LabelToState, state, letter, target, Pi, Lambda;
@@ -1055,6 +1056,30 @@ function(AlphSize, i, j)
   end;
 
   B := BlockCodeTransducer(AlphSize, Maximum(i, j) + 1, itoj);
-
   return TransducerCore(MinimalTransducer(B));
+end);
+
+
+InstallMethod(OneSidedShiftIsomorphism, "for a pair of walk homomorphisms",
+[IsUDAFTransducer],
+function(T)
+  return OneSidedShiftIsomorphism(T!.DomainFolding, T!.CoDomainFolding);
+end);
+
+InstallMethod(OneSidedShiftIsomorphism, "for a pair of walk homomorphisms",
+[IsWalkHomomorphism, IsWalkHomomorphism],
+function(f, g)
+  local T, M;
+  if not (IsOneSidedFolding(f) and IsOneSidedFolding(g)) then
+    ErrorNoReturn("autshift: OneSidedShiftIsomorphism: usage,\n",
+                 "the given walk homomorphisms must be one sided foldings,");
+  fi;
+  T := DeterministicDomainCombineEquivalentStates(UDAFTransducer(f, g));
+  M := Objectify(NewType(NewFamily("OneSidedShiftIsomorphism"), 
+                   IsOneSidedShiftIsomorphism and
+                   IsAttributeStoringRep), rec(Digraph:= f!.DomainDigraph,
+                                               DomainDigraph := f!.CoDomainDigraph,
+                                               CoDomainDigraph := g!.CoDomainDigraph,
+                                               MinimalTransducer := T));
+  return M;
 end);

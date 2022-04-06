@@ -275,7 +275,7 @@ gap> U := UDAFIsomorphism(R);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 3 edges, and which has 5 states.>
 
-#the above line currently takes 27327m3 with profiler on Speed
+#Speed
 gap> T := ResizeZeroStringTransducer(3, 1, 2);;       
 gap> U := UDAFTransducer(T);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
@@ -331,3 +331,46 @@ gap> P := M * U;
 gap> M := MinimalUDAFTransducer(P);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
+gap> U := UDAFIsomorphism(U);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> U2 := UDAFIsomorphism(U2);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 5 states.>
+gap> U3 := UDAFIsomorphism(U3);
+<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+2 edges, and which has 4 states.>
+gap> U*U2*U3 = U2; 
+true
+
+# IsOneSidedFolding
+gap> H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[1]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> I := IdentityWalkHomomorphism(Digraph([[1, 1]]));
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> IsOneSidedFolding(H);         
+true
+gap> IsOneSidedFolding(I);                                                   
+true
+gap> H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[2]]);
+<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+gap> IsOneSidedFolding(H);
+false
+gap> D := Digraph([[1, 2, 2], []]);
+<immutable multidigraph with 2 vertices, 3 edges>
+gap> W := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsOneSidedFolding(W);
+true
+gap> W := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsOneSidedFolding(W);                                
+false
+gap> W := WalkHomomorphism(D, D, [1, 2], [[1], [1, 3], [2]]);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsOneSidedFolding(W);                                   
+false
+gap> W := WalkHomomorphism(D, D, [1, 2], [[], [1, 3], [2]]); 
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsOneSidedFolding(W);                                  
+false

@@ -11,6 +11,29 @@
 # This file contains methods that relate to the objects in this package,
 # including appropiate ViewObj functions.
 
+
+#THe following seems inefficient
+TRIMING_WALK_HOMOMORPHISMS := function(H, back, forward)
+  local D, badvertices, edges, goodvertices, D2;
+  D := H!.DomainDigraph;
+  edges := List([1 .. DigraphNrEdges(D)], x-> [DigraphEdges(D)[x], x]);
+  goodvertices := Filtered([1 .. DigraphNrVertices(D)], x-> 
+                          ((not forward) or (OutNeighbours(D)[x] <> [])) and 
+                          ((not back) or (InNeighbours(D)[x] <> [])));
+  if Size(goodvertices) = DigraphNrVertices(D) then
+    return H;
+  fi;
+  D2 := InducedSubdigraph(D, goodvertices);
+  edges := Filtered(edges, x-> x[1][1] in goodvertices and x[1][2] in goodvertices);
+  edges := List(edges, x-> x[2]);
+  return TrimWalkHomomorphism(WalkHomomorphism(D2, H!.CoDomainDigraph,
+                          List([1 .. DigraphNrVertices(D2)], x -> H!.VertexMap[goodvertices[x]]),
+                          List([1 .. DigraphNrEdges(D2)], x -> H!.EdgeMap[edges[x]])));
+  return true;
+end;
+
+
+
 # O(concatenation of edge input)
 InstallMethod(WalkHomomorphism, "for a digraph, a digraph, a list, and a list",
 [IsDigraph, IsDigraph, IsDenseList, IsDenseList],
@@ -737,7 +760,7 @@ function(H)
       return [[List(w[1], x-> A[1]!.EdgeMap[x][1]), A[1]!.VertexMap[w[2]]]];
     fi;
     if Size(w[1]) > 0 and (Position(w[1], w[1][Size(w[1])]) < Size(w[1])) then
-      return [fail];
+      return fail;
     fi;
     return Concatenation(List(OutEdgesAtVertex(A[1]!.DomainDigraph)[w[2]], 
                         x-> imageofwalk([Concatenation(w[1], [x[1]]), x[2]])));
@@ -902,21 +925,9 @@ end);
 InstallMethod(TrimWalkHomomorphism, "for a walk homomorphism",
 [IsWalkHomomorphism],
 function(H)
-  local D, badvertices, edges, goodvertices, D2;
-  D := H!.DomainDigraph;
-  edges := List([1 .. DigraphNrEdges(D)], x-> [DigraphEdges(D)[x], x]);
-  goodvertices := Filtered([1 .. DigraphNrVertices(D)], x-> OutNeighbours(D)[x] <> [] and InNeighbours(D)[x] <> []);
-  if Size(goodvertices) = DigraphNrVertices(D) then
-    return H;
-  fi;
-  D2 := InducedSubdigraph(D, goodvertices);
-  edges := Filtered(edges, x-> x[1][1] in goodvertices and x[1][2] in goodvertices);
-  edges := List(edges, x-> x[2]);
-  return TrimWalkHomomorphism(WalkHomomorphism(D2, H!.CoDomainDigraph,
-                          List([1 .. DigraphNrVertices(D2)], x -> H!.VertexMap[goodvertices[x]]),
-                          List([1 .. DigraphNrEdges(D2)], x -> H!.EdgeMap[edges[x]])));
-  return true;
+  return TRIMING_WALK_HOMOMORPHISMS(H, true, true);
 end);
+
 
 
 InstallMethod(\*, "for a pair of walk homomorphisms",
@@ -1080,8 +1091,27 @@ function(H)
       return false;
     fi;
   od;
+  SetIsSynchronousWalkHomomorphism(H, true);
   return true;
 end);
+
+InstallMethod(IsOneSidedFolding, "for a walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local R, Cones;
+  if not IsDeterministicWalkHomomorphism(H) then
+    return false;
+  fi;
+  R := DualWalkHomomorphism(TRIMING_WALK_HOMOMORPHISMS(H, true, false));
+  Cones := ImagesAsUnionsOfCones(R);
+  if fail in Cones then
+    return false;
+  fi;
+  SetIsUDAFFolding(H, true);
+  return true;
+  
+end);
+
 
 InstallMethod(IsAnnotatableWalkHomomorphism, "for a walk homomorphism",
 [IsWalkHomomorphism],

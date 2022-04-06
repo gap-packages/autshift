@@ -51,3 +51,4 @@ DeclareAttribute("IsAnnotatableWalkHomomorphism", IsWalkHomomorphism);
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism, IsInt, IsInt]);
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism, IsInt]);
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism]);
+DeclareAttribute("IsOneSidedFolding", IsWalkHomomorphism);
