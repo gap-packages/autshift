@@ -60,13 +60,13 @@ ArchiveFormats := ".tar.gz",
 Status := "dev",
 
 AbstractHTML :=  
-   "The <span class=\"pkgname\">aaa</span> package, is a package for \
+   "The <span class=\"pkgname\">autshift</span> package, is a package for \
    building and using transducers as described in the paper entitled \
    'Automata, Dynamical Systems, and Groups' of R. I. Grigorchuk, \
    V. V. Nekrashevich, and V. I. Sushchanskii. Previous similar packages \
    such as <span class=\"pkgname\">fr</span> and \
    <span class=\"pkgname\">AutomGrp</span> have had a focus on synchronous \
-   transducers. Hence the name <span class=\"pkgname\">aaa</span> which \
+   transducers. Hence the name <span class=\"pkgname\">autshift</span> which \
    stands for \"asynchronous automata algorithms\".",
 
 PackageDoc := rec(
