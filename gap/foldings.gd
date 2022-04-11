@@ -31,7 +31,7 @@ DeclareOperation("DualWalkHomomorphism", [IsWalkHomomorphism]);
 DeclareOperation("WalksOfGivenLength", [IsDigraph, IsInt]);
 DeclareAttribute("OutEdgesAtVertex", IsDigraph);
 DeclareOperation("IdentityWalkHomomorphism", [IsDigraph]);
-#DeclareOperation("ImageAsUnionOfCones", [IsWalkHomomorphism, IsInt]);
+DeclareOperation("ImageAsUnionOfCones", [IsWalkHomomorphism, IsInt]);
 DeclareAttribute("ImagesAsUnionsOfCones", IsWalkHomomorphism);
 DeclareOperation("ComposeWalkHomomorphisms", [IsWalkHomomorphism, IsWalkHomomorphism]);
 DeclareOperation("LineDigraphWalkHomomorphism", [IsDigraph, IsInt, IsInt]);

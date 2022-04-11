@@ -263,8 +263,6 @@ gap> ImageAsUnionOfCones(PhitoR2Fold(), 1);
 [ [ [  ], 1 ] ]
 gap> ImageAsUnionOfCones(PhitoR2Fold(), 2);
 [ [ [  ], 1 ] ]
-gap> ImageAsUnionOfCones(R2toPhiFold(), 2);
-fail
 gap> ImageAsUnionOfCones(R2toPhiFold(), 1);
 [ [ [  ], 1 ] ]
 gap> ImageAsUnionOfCones(LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 3), 1);

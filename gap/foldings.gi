@@ -12,6 +12,16 @@
 # including appropiate ViewObj functions.
 
 
+
+COPY := function(x)
+  if IsList(x) then
+    return List(x, y-> COPY(y));
+  fi;
+  return x;
+end;
+
+
+
 #THe following seems inefficient
 TRIMING_WALK_HOMOMORPHISMS := function(H, back, forward)
   local D, badvertices, edges, goodvertices, D2;
@@ -29,7 +39,6 @@ TRIMING_WALK_HOMOMORPHISMS := function(H, back, forward)
   return TrimWalkHomomorphism(WalkHomomorphism(D2, H!.CoDomainDigraph,
                           List([1 .. DigraphNrVertices(D2)], x -> H!.VertexMap[goodvertices[x]]),
                           List([1 .. DigraphNrEdges(D2)], x -> H!.EdgeMap[edges[x]])));
-  return true;
 end;
 
 
@@ -477,7 +486,7 @@ function(H, v)
 
   A := WalkHomomorphismImageAutomaton(H);
   SetInitialStatesOfAutomaton(A, v);
-  return MinimalizedAut(A);
+  return A;
 end);
 
 InstallMethod(IsUDAFFolding, "a walk homomorphism",
@@ -597,6 +606,11 @@ function(H)
   return MaxFutureConeDepth(DualWalkHomomorphism(H));
 end);
 
+InstallMethod(ImageAsUnionOfCones, "for a walk homomorphism and a domain vertex",
+[IsWalkHomomorphism, IsInt],
+function(H, v)
+  return ImagesAsUnionsOfCones(H)[v];
+end);
 
 #this function is a old version of another one which seems to be superior
 #InstallMethod(ImageAsUnionOfCones, "for a walk homomorphism and a domain vertex",
@@ -729,19 +743,50 @@ end);
 InstallMethod(ImagesAsUnionsOfCones, "for a walk homomorphism and a domain vertex",
 [IsWalkHomomorphism],
 function(H)
-  local A, isgood, imageofwalk, isgoodvertex, out;
-
+  local iswalkstarttarg, iswalkstart, A, isgood, imageofwalk, isgoodvertex, out;
+  
   A := ImageFinderWalkHomomorphism(H);
+  
+  iswalkstarttarg := BlistList([1 .. DigraphNrVertices(A[1]!.CoDomainDigraph)], []);
+  iswalkstart := function(v, currentsafevertices)
+    local check;
+    if iswalkstarttarg[v] or (v in currentsafevertices) then
+      return true;
+    fi;
+    if Size(OutNeighbours(A[1]!.CoDomainDigraph)[v]) = 0 then
+       return false;
+    fi;
+    AddSet(currentsafevertices, v);
+    check := ForAll(OutNeighbours(A[1]!.CoDomainDigraph)[v], 
+                    x-> iswalkstart(x, currentsafevertices));
+    if check then
+      iswalkstarttarg[v] := true;
+      return true;
+    else
+      return false;
+    fi;
+  end;
+  
   
   #here good means full image
   isgoodvertex := BlistList([1 .. DigraphNrVertices(A[1]!.DomainDigraph)], []);
   isgood := function(v, currentsafevertices)
-    local check;
+    local check, i, mappedtoedges, needededges;
     if isgoodvertex[v] or (v in currentsafevertices) then
       return true;
     fi;
-    if Size(OutEdgesAtVertex(A[1]!.DomainDigraph)[v]) <> 
-       Size(OutEdgesAtVertex(A[1]!.CoDomainDigraph)[A[1]!.VertexMap[v]]) then
+    
+    mappedtoedges := List(OutEdgesAtVertex(A[1]!.DomainDigraph)[v], 
+                           x->A[1]!.EdgeMap[x[1]][1]); 
+    mappedtoedges := Set(mappedtoedges);
+    mappedtoedges := Filtered(mappedtoedges, 
+                      x-> iswalkstart(DigraphEdges(A[1]!.CoDomainDigraph)[x][2], []));
+    
+    needededges := List(OutEdgesAtVertex(A[1]!.CoDomainDigraph)[A[1]!.VertexMap[v]], x->x[1]);
+    needededges := Set(needededges);
+    needededges := Filtered(needededges, 
+                      x-> iswalkstart(DigraphEdges(A[1]!.CoDomainDigraph)[x][2], []));   
+    if needededges <> mappedtoedges then
        return false;
     fi;
     AddSet(currentsafevertices, v);
@@ -756,19 +801,24 @@ function(H)
   end;
   
   imageofwalk := function(w)
+    local outputs;
     if isgood(w[Size(w)], []) then
       return [[List(w[1], x-> A[1]!.EdgeMap[x][1]), A[1]!.VertexMap[w[2]]]];
     fi;
     if Size(w[1]) > 0 and (Position(w[1], w[1][Size(w[1])]) < Size(w[1])) then
       return fail;
     fi;
-    return Concatenation(List(OutEdgesAtVertex(A[1]!.DomainDigraph)[w[2]], 
-                        x-> imageofwalk([Concatenation(w[1], [x[1]]), x[2]])));
+    outputs := List(OutEdgesAtVertex(A[1]!.DomainDigraph)[w[2]], 
+                        x-> imageofwalk([Concatenation(w[1], [x[1]]), x[2]]));
+    if fail in outputs then
+      return fail;
+    fi;
+    return Concatenation(outputs);
   end;
   
   
   out := List(A[2], x-> imageofwalk([[], x]));
-  return out;
+  return COPY(out);
 end);
 
 InstallMethod(DualWalkHomomorphism,
@@ -986,8 +1036,7 @@ function(input)
    return fail;
   fi;
   H := TrimWalkHomomorphism(input);
-  prefixes := List(DigraphVertices(H!.DomainDigraph), 
-  x->ShallowCopy(ImagesAsUnionsOfCones(H)[x]));
+  prefixes := COPY(ImagesAsUnionsOfCones(H));
 
   #we need to write each cone as a cone whose associated vertex has
   #at least two edges coming out of it
@@ -1277,7 +1326,7 @@ function(H)
   edges := [];
   emap := [];
   
-  usedsubsets := HashMap(DigraphNrVertices(H!.DomainDigraph));
+  usedsubsets := HashMap(DigraphNrVertices(H!.DomainDigraph) + 1);
   for i in [1 .. DigraphNrVertices(H!.DomainDigraph)] do
     usedsubsets[[i]] := i;
     Add(vmap, H!.VertexMap[i]);
