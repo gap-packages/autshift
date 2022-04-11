@@ -19,7 +19,6 @@ DeclareRepresentation("IsWalkHomomorphism", IsComponentObjectRep and
                                               "EdgeMap"]);
 DeclareOperation("WalkHomomorphism", [IsDigraph, IsDigraph, IsDenseList, IsDenseList]);
 DeclareAttribute("IsDegenerateWalkHomomorphism", IsWalkHomomorphism);
-DeclareOperation("SynchronousWalkHomomorphism2", [IsWalkHomomorphism]);
 DeclareOperation("SynchronousWalkHomomorphism", [IsWalkHomomorphism]);
 DeclareOperation("R2toPhiFold", []);
 DeclareOperation("PhitoR2Fold", []);
