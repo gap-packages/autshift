@@ -9,7 +9,7 @@ if [ "$SUITE" != "test" ] ; then
 fi
 
 GAPSH="$GAPROOT/bin/gap.sh"
-mv ../aaa $HOME/aaa
+mv ../autshift $HOME/autshift
 
 ################################################################################
 # Install software necessary for tests and coverage: GAP and packages
