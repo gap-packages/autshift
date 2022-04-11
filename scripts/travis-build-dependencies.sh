@@ -19,7 +19,7 @@ mv ../aaa $HOME/aaa
 # Install GAP
 echo -e "\nInstalling GAP..."
 if [ "$GAP" == "required" ]; then
-  GAP=v`grep "GAPVERS" $HOME/aaa/PackageInfo.g | awk -F'"' '{print $2}'`
+  GAP=v`grep "GAPVERS" $HOME/autshift/PackageInfo.g | awk -F'"' '{print $2}'`
 fi
 GAPROOT="$HOME/gap"
 echo -e "\nInstalling GAP $GAP into $GAPROOT..."
