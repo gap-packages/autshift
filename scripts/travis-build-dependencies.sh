@@ -43,7 +43,7 @@ rm packages-required-master.tar.gz
 
 ################################################################################
 # Copy Aaa to its proper location
-mv $HOME/aaa $GAPROOT/pkg/aaa
+mv $HOME/autshift $GAPROOT/pkg/autshift
 
 # Install PackageMan
 cd $GAPROOT/pkg
