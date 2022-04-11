@@ -16,7 +16,7 @@ jobs:
       fail-fast: false
       matrix:
         gap-branch:
-          - main
+          - master
 
     steps:
       - uses: actions/checkout@v2
