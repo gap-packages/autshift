@@ -9,9 +9,9 @@ touch $GAPROOT/testlog.txt
 TESTLOG="$GAPROOT/testlog.txt"
 GAPSH="$GAPROOT/bin/gap.sh"
 
-cd $GAPROOT/pkg/aaa
-echo -e "\nRunning Aaa package tests..."
-echo "LoadPackage(\"aaa\"); TestDirectory(\"tst/standard\"); QUIT;" |
+cd $GAPROOT/pkg/autshift
+echo -e "\nRunning Autshift package tests..."
+echo "LoadPackage(\"autshift\"); TestDirectory(\"tst/standard\"); QUIT;" |
   $GAPSH -A -x 80 -m 768m -o 1g -T 2>&1 | tee -a $TESTLOG
 
 echo -e "\nSuite complete." # AppVeyor needs some extra command here (like this)
