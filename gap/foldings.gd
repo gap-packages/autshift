@@ -51,3 +51,9 @@ DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism, IsInt, IsInt
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism, IsInt]);
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism]);
 DeclareAttribute("IsOneSidedFolding", IsWalkHomomorphism);
+DeclareAttribute("IsTwoSidedFolding", IsWalkHomomorphism);
+DeclareAttribute("ReduceSynchronizingLength", IsWalkHomomorphism);
+DeclareAttribute("SynchronizingSequenceConnections", IsWalkHomomorphism);
+DeclareAttribute("SynchronizingSequence", IsWalkHomomorphism);
+DeclareOperation("OneSidedDigraphMinimise", [IsDigraph]);
+DeclareAttribute("WalkHomomorphismInputString", IsWalkHomomorphism);

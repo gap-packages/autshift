@@ -19,5 +19,6 @@ DeclareOperation("DotShiftIsomorphismAnnotatedUDAF", [IsShiftIsomorphism]);
 DeclareOperation("Draw", [IsWalkHomomorphism]);
 DeclareOperation("Draw", [IsShiftIsomorphism]);
 DeclareOperation("DrawSynchronous", [IsShiftIsomorphism]);
+DeclareOperation("Draw", [IsOneSidedShiftIsomorphism]);
 DeclareOperation("Draw", [IsUDAFTransducer]);
 DeclareOperation("Draw", [IsUDAFIsomorphism]);

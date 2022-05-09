@@ -60,6 +60,7 @@ DeclareOperation("ComposeUDAFTransducersSlow", [IsUDAFTransducer,
                                                 IsBool]);
 DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
 DeclareAttribute("IsMinimalUDAFTransducer", IsUDAFTransducer);
+DeclareSynonymAttr("IsMinimal", IsMinimalUDAFTransducer);
 DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
                                                          IsUDAFTransducer,
                                                          IsDenseList,
@@ -67,12 +68,17 @@ DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
 DeclareOperation("AreIsomorphicUDAFTransducers", [IsUDAFTransducer,
                                                   IsUDAFTransducer]);
 DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
+DeclareOperation("\*", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
 DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("\*", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
 DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
+DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsInt]);
 DeclareOperation("\^", [IsUDAFIsomorphism, IsInt]);
+DeclareOperation("\^", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
+DeclareOperation("\^", [IsShiftIsomorphism, IsShiftIsomorphism]);
+DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
 DeclareAttribute("UDAFNrStates", IsUDAFTransducer);
 #DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);
@@ -84,3 +90,10 @@ DeclareOperation("DeterministicDomainCombineEquivalentStates", [IsUDAFTransducer
 DeclareOperation("OneSidedShiftIsomorphism", [IsUDAFTransducer]);
 DeclareOperation("OneSidedShiftIsomorphism", [IsWalkHomomorphism, 
                                               IsWalkHomomorphism]);
+DeclareAttribute("OneSidedTorsionDecomposition", IsOneSidedShiftIsomorphism);
+DeclareSynonymAttr("TorsionDecomposition", OneSidedTorsionDecomposition);
+DeclareSynonymAttr("TorsionDecomp", OneSidedTorsionDecomposition);
+DeclareSynonymAttr("TorDecomp", OneSidedTorsionDecomposition);
+DeclareSynonymAttr("FiniteOrderDecomp", OneSidedTorsionDecomposition);
+DeclareSynonymAttr("FiniteOrderDecomposition", OneSidedTorsionDecomposition);
+DeclareOperation("RandomOneSidedAut", [IsDigraph]);

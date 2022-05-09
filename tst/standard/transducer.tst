@@ -252,31 +252,31 @@ gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);
 gap> L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> T := UDAFIsomorphism(L01, L10);
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 1 state.>
-gap> M := T^0;    
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 1 state.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
+gap> M := T^0;
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 gap> T = M;
 true
 gap> R := ResizeZeroStringTransducer(2, 2, 3);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
 gap> U := UDAFIsomorphism(R);
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 5 states.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
 gap> U^2;
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 1 state.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 gap> R := ResizeZeroStringTransducer(3, 1, 3);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 5 states.>
 gap> U := UDAFIsomorphism(R);                 
-<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
-3 edges, and which has 5 states.>
+<UDAF Isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 5 states.>
 
 #Speed
-gap> T := ResizeZeroStringTransducer(3, 1, 2);;       
+gap> T := ResizeZeroStringTransducer(3, 1, 2);;
 gap> U := UDAFTransducer(T);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 3 edges, and which has 4 states.>
@@ -332,14 +332,14 @@ gap> M := MinimalUDAFTransducer(P);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
 gap> U := UDAFIsomorphism(U);
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 5 states.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
 gap> U2 := UDAFIsomorphism(U2);
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 5 states.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
 gap> U3 := UDAFIsomorphism(U3);
-<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 4 states.>
+<UDAF Isomorphism whose domain digraph has 
+2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
 gap> U*U2*U3 = U2; 
 true
 
@@ -374,3 +374,53 @@ gap> W := WalkHomomorphism(D, D, [1, 2], [[], [1, 3], [2]]);
 <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
 gap> IsOneSidedFolding(W);                                  
 false
+
+# OneSidedTorsionDecomposition
+gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+> Digraph([[1, 1, 1]]),
+> [1, 1, 1],
+> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
+<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+> Digraph([[1, 1, 1]]),
+> [1, 1, 1],
+> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
+<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+gap>  Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);      
+<one sided shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+gap>  L := OneSidedTorsionDecomposition(Fig5);         
+[ <one sided shift isomorphism whose domain digraph has 
+    3 edges, whose codomain digraph has 3 edges, and which has 1 state.>, 
+  <one sided shift isomorphism whose domain digraph has 
+    3 edges, whose codomain digraph has 3 edges, and which has 2 states.> ]
+gap> L[1] * L[2] = Fig5;
+true
+gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+> [ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],
+> [ 2 ] ]);
+<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+gap> g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+> [ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], 
+> [ 1 ], [ 2 ] ]);
+<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+gap> T := OneSidedShiftIsomorphism(f, g);
+<one sided shift isomorphism whose domain digraph has 
+4 edges, whose codomain digraph has 4 edges, and which has 6 states.>
+gap> S := OneSidedTorsionDecomposition(T);
+[ <one sided shift isomorphism whose domain digraph has 
+    4 edges, whose codomain digraph has 4 edges, and which has 3 states.>, 
+  <one sided shift isomorphism whose domain digraph has 
+    4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ]
+gap> S[1] * S[2] = T;
+true
+
+# RandomOneSidedAut
+gap> T := RandomOneSidedAut(Digraph([[1, 1, 1]]));;
+gap> T := RandomOneSidedAut(Digraph([[1, 1]]));;   
+gap> T := RandomOneSidedAut(Digraph([[1, 2], [1, 2]]));;
+gap> T := RandomOneSidedAut(Digraph([[1, 2], [1]]));;   
+gap> T := RandomOneSidedAut(Digraph([[1, 1, 2], [1]]));;
+gap> T := RandomOneSidedAut(Digraph([[2, 2], [1, 1]]));;

@@ -197,6 +197,13 @@ gap> IsUDAFFolding(
 > WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),
 > [1], [[1], [2], [1]]));
 false
+gap> f:= WalkHomomorphism(Digraph([ [ 1, 2, 3 ], [ 1, 4, 1 ], [ 1, 2, 3 ], 
+> [ 1, 4, 1 ] ]), Digraph([ [ 3 ], [ 3 ], [ 3, 3, 3 ] ]), [ 3, 3, 3, 3 ], 
+> [ [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], 
+> [ 4 ], [ 5 ] ]);
+<walk homomorphism from a digraph with 12 edges to a digraph with 5 edges.>
+gap> IsUDAFFolding(f);
+true
 
 #FoldingToLineFolding
 gap> FoldingToLineFolding(R2toPhiFold());
@@ -407,6 +414,21 @@ true
 gap> L13 = L40;
 false
 
+#SynchronizingSequence
+gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);
+<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+gap> S := SynchronizingSequence(H);
+[ <walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>,
+  <walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>, 
+  <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
+  <walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ]
+gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 1);
+<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
+gap> ReduceSynchronizingLength(H);
+fail
+gap> S[2] = LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);
+true
+
 # WalkHomomorphismAnnotation and IsAnnotatableWalkHomomorphism
 gap> H := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),
 > [1], [[1], [1, 2]]);
@@ -433,3 +455,5 @@ gap> WalkHomomorphismAnnotation(H, 3);
 [ 3, 4, 5, 3 ]
 gap> WalkHomomorphismAnnotation(H, 2, 3);
 [ 0, 1, 2, 0 ]
+
+#OneSidedDigraphMinimise

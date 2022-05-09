@@ -11,6 +11,7 @@
 # This file contains methods that relate to the objects in this package,
 # including appropiate ViewObj functions.
 
+
 InstallMethod(ViewObj, "for an isomorphism of the shift",
 [IsShiftIsomorphism],
 function(input)
@@ -65,32 +66,57 @@ end);
 InstallMethod(ViewObj, "for an UDAF isomorphism",
 [IsUDAFIsomorphism],
 function(T)
-  ViewObj(T!.MinimalUDAFTransducer);
+  local state, sym1, sym2;
+  if DigraphNrVertices((T!.MinimalUDAFTransducer)!.Digraph) = 1 then
+    state := "state";
+  else
+    state := "states";
+  fi;
+  if DigraphNrEdges((T!.MinimalUDAFTransducer)!.DomainDigraph) = 1 then
+    sym1 := "edge";
+  else
+    sym1 := "edges";
+  fi;
+  if DigraphNrEdges((T!.MinimalUDAFTransducer)!.CoDomainDigraph) = 1 then
+    sym2 := "edge";
+  else
+    sym2 := "edges";
+  fi;
+
+  Print("<UDAF Isomorphism whose domain digraph has ", 
+        DigraphNrEdges((T!.MinimalUDAFTransducer)!.DomainDigraph), " ", sym1,
+        ", whose codomain digraph has ", 
+        DigraphNrEdges((T!.MinimalUDAFTransducer)!.CoDomainDigraph), " ", sym2, 
+        ", and which has ",
+        DigraphNrVertices((T!.MinimalUDAFTransducer)!.Digraph), " ", state, ".>");
 end);
 
-# this function convertes a non-empty walk
-# given as a list of edges to the corresponding
-# vertex->edge->vertex->edge->vertex ... walk
-edgesequecetoedgevertexsequence := function(D, edges)
-  local out;
-  out := List(edges, x-> [DigraphEdges(D)[x][1], x]);
-  Add(out, [DigraphEdges(D)[edges[Size(edges)]][2]]);
-  return Concatenation(out);
-end;
+InstallMethod(ViewObj, "for an isomorphism of the shift",
+[IsOneSidedShiftIsomorphism],
+function(input)
+  local state, sym1, sym2, T;
+  T := input!.MinimalTransducer;
+  if DigraphNrVertices(T!.Digraph) = 1 then
+    state := "state";
+  else
+    state := "states";
+  fi;
+  if DigraphNrEdges(T!.DomainDigraph) = 1 then
+    sym1 := "edge";
+  else
+    sym1 := "edges";
+  fi;
+  if DigraphNrEdges(T!.CoDomainDigraph) = 1 then
+    sym2 := "edge";
+  else
+    sym2 := "edges";
+  fi;
 
+  Print("<one sided shift isomorphism whose domain digraph has ", DigraphNrEdges(T!.DomainDigraph), " ", sym1,
+        ", whose codomain digraph has ", DigraphNrEdges(T!.CoDomainDigraph), " ", sym2, ", and which has ",
+        DigraphNrVertices(T!.Digraph), " ", state, ".>");
+end);
 
-# this function convertes an edge walk in the dual of a digraph
-# to the corresponding edge walk
-dualedgewalktoedgewalk := function(D, walk)
-   local edgeperm, i;
-   edgeperm := List([1 .. DigraphNrEdges(D)], x->[ShallowCopy(DigraphEdges(D)[x]), x]);
-   for i in [1 .. DigraphNrEdges(D)] do
-     edgeperm[i][1] := [edgeperm[i][1][2], edgeperm[i][1][1]];
-   od;
-   Sort(edgeperm);
-   edgeperm := List(edgeperm, x-> x[2]);
-   return Reversed(List(walk, x-> Position(edgeperm, x)));
-end;
 
 #this could be made way faster
 InstallMethod(IsMinimalUDAFTransducer, "for an UDAF transducer",
@@ -594,9 +620,9 @@ end);
 InstallMethod(MinimalUDAFTransducer, "for an UDAF Isomorphism",
 [IsUDAFTransducer],
 function(T)
-  local Tedgesstartingwithvertex, e, v, domfix, D, f, g,  x, EqRelation,
+  local e, v, domfix, D, f, g,  x, EqRelation,
         i, tuple, NewTuple, b, flag, n, class, Classes,
-        fedgesstartingwithvertex, compatiblevertexpair, transitionbyedge,
+         transitionbyedge,
         newvertices, newfvertexmap, newgvertexmap, newedges, newfedgemap,
         newgedgemap, newdigraph;
 
@@ -614,12 +640,11 @@ end);
 InstallMethod(DeterministicDomainCombineEquivalentStates, "for an UDAF Isomorphism",
 [IsUDAFTransducer],
 function(T)
-  local Tedgesstartingwithvertex, e, v, domfix, D, f, g,  x, EqRelation,
-        i, tuple, NewTuple, b, flag, n, class, Classes,
-        fedgesstartingwithvertex, compatiblevertexpair, transitionbyedge,
-        newvertices, newfvertexmap, newgvertexmap, newedges, newfedgemap,
-        newgedgemap, newdigraph, domv, f1, f1v, f1img, buckets, f2, newbuckets,
-        key, keytonumber, count;
+  local e, v, domfix, D, f, g,  x, EqRelation, i, tuple, NewTuple, b, flag, n, 
+        class, Classes, transitionbyedge, newvertices, 
+        newfvertexmap, newgvertexmap, newedges, 
+        newfedgemap, newgedgemap, newdigraph, domv, f1, f1v, f1img, buckets,
+        f2, newbuckets, key, keytonumber, count;
 
   f := T!.DomainFolding;
   if not IsDeterministicWalkHomomorphism(f) then
@@ -629,46 +654,11 @@ function(T)
 
   g := T!.CoDomainFolding;
 
-  Tedgesstartingwithvertex := [];
-  e := 1;
-  for v in DigraphVertices(T!.Digraph) do
-     Add(Tedgesstartingwithvertex, []);
-     for n in OutNeighbours(T!.Digraph)[v] do
-       Add(Tedgesstartingwithvertex[Size(Tedgesstartingwithvertex)], e);
-       e:= e + 1;
-     od;
-  od;
-
-  compatiblevertexpair := function(p)
-    local outedgeinfo1, outedgeinfo2;
-    if not f!.VertexMap[p[1]] = f!.VertexMap[p[2]] then
-      return false;
-    fi;
-    if not g!.VertexMap[p[1]] = g!.VertexMap[p[2]] then
-      return false;
-    fi;
-    outedgeinfo1 := List(Tedgesstartingwithvertex[p[1]], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
-    outedgeinfo2 := List(Tedgesstartingwithvertex[p[2]], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
-    Sort(outedgeinfo1);
-    Sort(outedgeinfo2);
-    return outedgeinfo1 = outedgeinfo2;
-  end;
-
-  fedgesstartingwithvertex := [];
-  e := 1;
-  for v in DigraphVertices(f!.CoDomainDigraph) do
-     Add(fedgesstartingwithvertex, []);
-     for n in OutNeighbours(f!.CoDomainDigraph)[v] do
-       Add(fedgesstartingwithvertex[Size(fedgesstartingwithvertex)], e);
-       e:= e + 1;
-     od;
-  od;
-
   transitionbyedge := function(v, e)
     local domedge;
-    for domedge in Tedgesstartingwithvertex[v] do
-      if f!.EdgeMap[domedge] = [e] then
-        return [domedge, DigraphEdges(T!.Digraph)[domedge][2]];
+    for domedge in OutEdgesAtVertex(T!.Digraph)[v] do
+      if f!.EdgeMap[domedge[1]] = [e] then
+        return domedge;
       fi;
     od;
   end;
@@ -677,7 +667,7 @@ function(T)
   for v in DigraphVertices(T!.Digraph) do
     f1v := [, ];
     f1v[1] := [f!.VertexMap[v], g!.VertexMap[v]];
-    f1v[2] := List(Tedgesstartingwithvertex[v], x-> [f!.EdgeMap[x], g!.EdgeMap[x]]);
+    f1v[2] := SortedList(List(OutEdgesAtVertex(T!.Digraph)[v], x-> [f!.EdgeMap[x[1]], g!.EdgeMap[x[1]]]));
     Add(f1, f1v);
   od;
   f1img := Set(f1);
@@ -689,14 +679,15 @@ function(T)
   
   #this will stop via a break statement which occurs when we stop refining 
   #our partition
+  flag := 10;
   while true do
     f2 := EmptyPlist(DigraphNrVertices(T!.Digraph));
     newbuckets := HashMap();
     for b in [1 .. Size(buckets)] do
       for v in buckets[b] do
         key := [b];
-        for e in fedgesstartingwithvertex[f!.VertexMap[v]] do
-          Add(key, f1[transitionbyedge(v, e)[2]]);
+        for e in OutEdgesAtVertex(f!.CoDomainDigraph)[f!.VertexMap[v]] do
+          Add(key, f1[transitionbyedge(v, e[1])[2]]);
         od;
         if not IsBound(newbuckets[key]) then
           newbuckets[key] := HashSet(1);
@@ -709,7 +700,7 @@ function(T)
       break;
     fi;
     
-    #work done for this iteratino so we tidy the buckets
+    #work done for this iteration so we tidy the buckets
     #in prep for the next iteration
     buckets := [];
     keytonumber := HashMap();
@@ -733,13 +724,8 @@ function(T)
                         return j;
                 fi;
         od;
-        Add(Classes, [q]);
-        return(Size(Classes));
   end;
 
-  for i in DigraphVertices(T!.Digraph) do
-    class(i);
-  od;
   newvertices := [1 .. Size(Classes)];
   newfvertexmap := List(newvertices, x-> f!.VertexMap[Classes[x][1]]);
   newgvertexmap := List(newvertices, x-> g!.VertexMap[Classes[x][1]]);
@@ -749,11 +735,11 @@ function(T)
   newgedgemap := [];
   for v in newvertices do
     Add(newedges, []);
-    for e in fedgesstartingwithvertex[newfvertexmap[v]] do
+    for e in OutEdgesAtVertex(f!.CoDomainDigraph)[newfvertexmap[v]] do
       domv := Classes[v][1];
-      Add(newedges[Size(newedges)], class(transitionbyedge(domv, e)[2]));
-      Add(newfedgemap, [e]);
-      Add(newgedgemap, g!.EdgeMap[transitionbyedge(domv, e)[1]]);
+      Add(newedges[Size(newedges)], class(transitionbyedge(domv, e[1])[2]));
+      Add(newfedgemap, [e[1]]);
+      Add(newgedgemap, g!.EdgeMap[transitionbyedge(domv, e[1])[1]]);
     od;
   od;
 
@@ -781,7 +767,7 @@ InstallMethod(IdentityShiftIsomorphism, "for an UDAF digraph",
 function(n)
   if not (n >1) then
     ErrorNoReturn("autshift: IdentityShiftIsomorphism: usage,\n",
-                 "the iteger must be at least 2,");
+                 "the integer must be at least 2,");
   fi;
   return ShiftIsomorphism(IdentityTransducer(n));
 end);
@@ -864,6 +850,14 @@ function(f, g)
   return ComposeUDAFTransducersSlow(f, g, false);
 end);
 
+InstallMethod(\*, "for a pair of compatible UDAF Transducers",
+[IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
+function(f, g)
+  return OneSidedShiftIsomorphism(
+                ComposeUDAFTransducersSlow(f!.MinimalTransducer, 
+                                           g!.MinimalTransducer, true));
+end);
+
 InstallMethod(\*, "for a pair of compatible UDAF Isomorphisms",
 [IsUDAFIsomorphism, IsUDAFIsomorphism],
 function(f, g)
@@ -888,6 +882,8 @@ AUTSHIFT_POW := function(T, n)
       return UDAFIsomorphism(T!.MinimalUDAFTransducer ^ -1);
     elif IsShiftIsomorphism(T) then
       return ShiftIsomorphism(T!.SynchronousUDAFTransducer^(-1));
+    elif IsOneSidedShiftIsomorphism(T) then
+      return OneSidedShiftIsomorphism(T!.MinimalTransducer^(-1));
     fi;
   fi;
   if(DigraphVertices(T!.DomainDigraph) <> DigraphVertices(T!.CoDomainDigraph)) or
@@ -898,15 +894,20 @@ AUTSHIFT_POW := function(T, n)
     if IsUDAFTransducer(T) then
       return IdentityUDAFTransducer(T!.DomainDigraph);
     elif IsUDAFIsomorphism(T) then
-      UDAFIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
+      return UDAFIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
     elif IsShiftIsomorphism(T) then
-      ShiftIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
+      return ShiftIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
+    elif IsOneSidedShiftIsomorphism(T) then
+      return OneSidedShiftIsomorphism(IdentityUDAFTransducer(T!.DomainDigraph));
     fi;
   fi;
   if n < 0 then
     return (T^-1)^-n;
   fi;
-  return T^(n - 1) * T;
+  if IsOddInt(n) or n = 2 then
+    return T^(n - 1) * T;
+  fi;
+  return (T^(n/2))^2;
 end;
 
 InstallMethod(\^, "for a pair of compatible UDAF Transducers",
@@ -927,6 +928,29 @@ function(T, n)
   return AUTSHIFT_POW(T, n);
 end);
 
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsOneSidedShiftIsomorphism, IsInt],
+function(T, n)
+  return AUTSHIFT_POW(T, n);
+end);
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
+function(A, B)
+  return B^-1 * A * B;
+end);
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsUDAFIsomorphism, IsUDAFIsomorphism],
+function(A, B)
+  return B^-1 * A * B;
+end);
+
+InstallMethod(\^, "for a pair of compatible UDAF Transducers",
+[IsShiftIsomorphism, IsShiftIsomorphism],
+function(A, B)
+  return B^-1 * A * B;
+end);
 
 InstallMethod(\=, "for a pair of compatible UDAF Transducers",
 [IsUDAFTransducer, IsUDAFTransducer],
@@ -951,6 +975,12 @@ function(T1, T2)
                                              T2!.Annotation);
 end);
 
+InstallMethod(\=, "for a pair of shift isomorphisms",
+[IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
+function(T1, T2)
+  return AreIsomorphicUDAFTransducers(T1!.MinimalTransducer,
+                                      T2!.MinimalTransducer);
+end);
 
 InstallMethod(DeBruijnTransducer, "returns a transducer",
 [IsPosInt, IsPosInt],
@@ -1066,6 +1096,16 @@ function(T)
   return OneSidedShiftIsomorphism(T!.DomainFolding, T!.CoDomainFolding);
 end);
 
+BACK_TRIMING_UDAF_TRANSDUCER := function(T)
+  local trim, f, g;
+  trim := TRIMING_WALK_HOMOMORPHISMS(IdentityWalkHomomorphism(T!.Digraph), true, false);
+  f := T!.DomainFolding;
+  g := T!.CoDomainFolding;
+  SetIsOneSidedFolding(trim, true);
+  SetIsUDAFFolding(trim, true);
+  return UDAFTransducer(trim * f, trim * g); 
+end;
+
 InstallMethod(OneSidedShiftIsomorphism, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(f, g)
@@ -1074,12 +1114,233 @@ function(f, g)
     ErrorNoReturn("autshift: OneSidedShiftIsomorphism: usage,\n",
                  "the given walk homomorphisms must be one sided foldings,");
   fi;
-  T := DeterministicDomainCombineEquivalentStates(UDAFTransducer(f, g));
+  T := BACK_TRIMING_UDAF_TRANSDUCER(UDAFTransducer(f, g));
+  T := DeterministicDomainCombineEquivalentStates(T)[1];
   M := Objectify(NewType(NewFamily("OneSidedShiftIsomorphism"), 
                    IsOneSidedShiftIsomorphism and
-                   IsAttributeStoringRep), rec(Digraph:= f!.DomainDigraph,
-                                               DomainDigraph := f!.CoDomainDigraph,
-                                               CoDomainDigraph := g!.CoDomainDigraph,
+                   IsAttributeStoringRep), rec(Digraph:= T!.Digraph,
+                                               DomainDigraph := T!.DomainDigraph,
+                                               CoDomainDigraph := T!.CoDomainDigraph,
                                                MinimalTransducer := T));
   return M;
+end);
+
+
+#see https://arxiv.org/pdf/2004.08478v4.pdf page 27 for details of the following
+#algorithm (in the case of a full shift)
+NICE_TARGET_ONESIDED_TORSION := function(T0)
+  local A, B, Bsync, A1, p, q, lambdap, lambdaq, alpha, e, temp, notdone, 
+      edge1, edge2, i, h, newedgemap, j, newe, taualpha, R, HBiTA, nexth;
+  #A1 Let T0 ∈ Hn. Let A and B be the underlying automata of T0 and T −10 respectively.
+  A := (T0!.MinimalTransducer)!.DomainFolding;
+  B := (T0!.MinimalTransducer)!.CoDomainFolding;
+  
+  #A2 If T0 has only one state, then it represents a permutation, and so there is a finite order single state
+  #transducer that we can multiply against T0 to produce the identity element (in this case, go to the
+  #final step of the algorithm with this finite order factor in hand). Otherwise, proceed to the next step.
+  
+  #instead of a single state we have whatever the target digraph is but by the same logic
+  #we have an automorphism of that which must have finite order
+  if A!.DomainDigraph = A!.CoDomainDigraph then
+    return [T0];
+  fi;
+
+  #A3 Compute the synchronizing sequence (Bi)i∈N for B = B0.
+  Bsync := SynchronizingSequence(B);
+
+  #A4 Compute the first step A1 of the synchronizing sequence of A = A0.
+  A1 := ReduceSynchronizingLength(A);
+
+  #A5 Find a pair (p, q) of distinct states of A which belong to the same state of A1.
+  for p in [1 .. DigraphNrVertices(A!.DomainDigraph)] do
+    for q in [p + 1 .. DigraphNrVertices(A!.DomainDigraph)] do
+      if A1[1]!.VertexMap[p] = A1[1]!.VertexMap[q] then
+        break;
+      fi;
+    od;
+    if A1[1]!.VertexMap[p] = A1[1]!.VertexMap[q] then
+      break;
+    fi;
+  od;
+  #note that because our target graph is assumed to be minimal, the vertices p, q
+  #must have the same image under B as their images have the same outneighbours
+  
+  #A6 Find the non-identity permutation α of the output labels such that λ (·, q) ◦ α : Xn → Xn is precisely
+  #λ (·, p) : Xn → Xn. Determine the disjoint cycle decomposition of the permutation α.
+  lambdaq := List(OutEdgesAtVertex(B!.DomainDigraph)[q], x-> B!.EdgeMap[x[1]][1]);
+  lambdap := List(OutEdgesAtVertex(B!.DomainDigraph)[p], x-> B!.EdgeMap[x[1]][1]);
+  alpha := HashMap(Size(lambdaq));
+  for e in [1 .. Size(lambdaq)] do
+    alpha[lambdaq[e]] := lambdap[e];
+  od;
+
+  #A7 There is a smallest index i so that the state [q] of the automaton Bi has the following properties:
+  #• The states [q] and [p] remain distinct states of Bi, and
+  #• For all x, y ∈ Xn belonging to the same disjoint cycle in the cycle decomposition of α, the
+  #edges labelled x and y from [q] are parallel edges.
+  #Now determine the isomorphism τα of Bi which fixes all vertices and induces the permutation α
+  #on the edges leaving [q].)
+ 
+  #note that this i is also the largest i such that The states [q] and [p] remain distinct states of Bi
+ 
+  i := 1;
+  h := IdentityWalkHomomorphism(B!.DomainDigraph);
+  nexth := h * SynchronizingSequenceConnections(B)[i];
+  while nexth!.VertexMap[q] <>  nexth!.VertexMap[p]  do
+    h := nexth;
+    i := i+1;
+    nexth := nexth * SynchronizingSequenceConnections(B)[i];
+  od;
+
+  newedgemap := List([1 .. DigraphNrEdges(SynchronizingSequence(B)[i]!.DomainDigraph)], x->[x]);
+  for j in [1 .. DigraphNrEdges(SynchronizingSequence(B)[i]!.DomainDigraph)] do
+    e := DigraphEdges(SynchronizingSequence(B)[i]!.DomainDigraph)[j];
+    if e[1] = h!.VertexMap[q] then
+      for newe in OutEdgesAtVertex(SynchronizingSequence(B)[i]!.DomainDigraph)[e[1]] do
+        if e[2] = newe[2] and 
+          SynchronizingSequence(B)[i]!.EdgeMap[newe[1]][1] = 
+          alpha[SynchronizingSequence(B)[i]!.EdgeMap[j][1]] then
+          newedgemap[j] := [newe[1]];
+        fi;
+      od;
+    fi;
+  od;
+  taualpha := WalkHomomorphism(SynchronizingSequence(B)[i]!.DomainDigraph,
+                       SynchronizingSequence(B)[i]!.DomainDigraph,
+                       [1 .. DigraphNrVertices(SynchronizingSequence(B)[i]!.DomainDigraph)],
+                       newedgemap);
+  #A8 Build the transducer H(Bi, τα ). This is a factor of finite order in a product sequence that will
+  #eventually trivialize T0.
+  HBiTA := OneSidedShiftIsomorphism(SynchronizingSequence(B)[i], 
+                           taualpha * SynchronizingSequence(B)[i]);
+
+  #A9 Compute the product R = core(T ∗ H(Bi, τα )). This product has the same underlying graph as T
+  #but is not minimal. The states corresponding to p and q in this product are ω-equivalent, and will
+  #be identified by minimizing the result R to produce a new element T1 with fewer states than T0.
+  R := T0 * HBiTA;
+
+  #A10 Repeat this process from the beginning, remembering the list of finite factors found so far.
+  return Concatenation(NICE_TARGET_ONESIDED_TORSION(R), [HBiTA^(-1)]);
+
+  #A11 The transducer T now factors as the product in reverse order of the inverses of the finite order
+  #factors found above.
+end;
+
+
+InstallMethod(OneSidedTorsionDecomposition, "for an automorphism of the one sided shift",
+[IsOneSidedShiftIsomorphism],
+function(A)
+  local conjugator, ans;
+  if A!.DomainDigraph <> A!.CoDomainDigraph then
+    return fail;
+  fi;
+  conjugator := OneSidedShiftIsomorphism(IdentityWalkHomomorphism(A!.CoDomainDigraph), 
+                                         OneSidedDigraphMinimise(A!.CoDomainDigraph));
+                                         
+  ans := List(NICE_TARGET_ONESIDED_TORSION(A^conjugator), x-> x^(conjugator^-1));
+  if ans[1]=ans[1]^0 then
+    Remove(ans, 1);
+  fi;
+  return ans;
+end);
+
+COMBINABLE_VERTICES := function(H)
+    local i, j, pairs;
+    pairs := [];
+    for i in [1 .. DigraphNrVertices(H!.DomainDigraph)] do
+      for j in [i + 1 .. DigraphNrVertices(H!.DomainDigraph)] do
+        if OutNeighbours(H!.DomainDigraph)[i] = OutNeighbours(H!.DomainDigraph)[j] and
+          List(OutEdgesAtVertex(H!.DomainDigraph)[i], x-> H!.EdgeMap[x[1]]) = 
+          List(OutEdgesAtVertex(H!.DomainDigraph)[j], x-> H!.EdgeMap[x[1]]) then
+          Add(pairs, [i, j]);
+        fi;
+      od;
+    od;
+    return Random(pairs);
+end;
+
+
+RANDOM_FINITE_ORDER_ONESIDED := function(D)
+  local n, B, new, B2, vmap, emap, Autgrp, i, j, k, P1, P2, bound, emap2, temp,
+        emap21, emap22;
+
+  bound := Maximum(List(OutNeighbours(D), x-> Size(x)));
+  n := 1;
+  while Random(List([1 .. n], x-> (n >= (n - x)^2))) and (bound ^ n < 100) do
+    n := n + 1;
+  od;
+
+
+  B := LineDigraphWalkHomomorphism(D, n, 0);
+  n := Random([0 .. DigraphNrVertices(B!.DomainDigraph) - DigraphNrVertices(D)]);
+  i := 0;
+  while (i < n or not IsMultiDigraph(B!.DomainDigraph)) and 
+    (DigraphNrVertices(B!.DomainDigraph) > DigraphNrVertices(D)) do
+    new := COMBINE_ALMOST_SYNCHRONISED_VERTICES_DIGRAPH(B!.DomainDigraph, COMBINABLE_VERTICES(B));
+    B := MAKE_WALK_HOM(new!.CoDomainDigraph, D, 
+                      List([1 .. DigraphNrVertices(new!.CoDomainDigraph)], x->B!.VertexMap[Position(new!.VertexMap, x)]),
+                      List([1 .. DigraphNrEdges(new!.CoDomainDigraph)], x->B!.EdgeMap[Position(new!.EdgeMap, [x])]));
+    i := i + 1;
+  od;
+  
+
+  Autgrp := AutomorphismGroup(B!.DomainDigraph);
+  if IsMultiDigraph(B!.DomainDigraph) then
+    P1 := Projection(Autgrp, 1);
+    P2 := Projection(Autgrp, 2);
+    vmap := Random(List(Image(P1)));
+    emap := Random(List(Image(P2)));
+    while emap = IdentityTransformation and Random([1 .. 200]) > 1 do
+      emap := Random(List(Image(P2)));
+    od;
+  else
+    if Random([1 .. 50]) > 1 then
+      return RANDOM_FINITE_ORDER_ONESIDED(D);
+    fi;
+    vmap := Random(List(Autgrp));
+    emap := IdentityTransformation;
+  fi;
+  
+#  emap2 := List([1 .. DigraphNrVertices(B!.DomainDigraph)], 
+#                       x-> COPY(OutEdgesAtVertex(B!.DomainDigraph)[x^vmap]));
+#  for i in [1 .. Size(emap2)] do
+#    Apply(emap2[i], x-> [x[1], x[2]^vmap]);    
+#  od;
+
+#  emap2 := Concatenation(emap2);
+  emap21 := List([1 .. DigraphNrEdges(B!.DomainDigraph)], 
+                          x-> [DigraphEdges(B!.DomainDigraph)[x][1], 
+                               DigraphEdges(B!.DomainDigraph)[x][2], 
+                               x]);
+  emap22 := List([1 .. DigraphNrEdges(B!.DomainDigraph)], 
+                            x-> [DigraphEdges(B!.DomainDigraph)[x][1]^(vmap^(-1)), 
+                                 DigraphEdges(B!.DomainDigraph)[x][2]^(vmap^(-1)), 
+                                 x]);
+  Sort(emap21);
+  Sort(emap22);
+  emap2 := HashMap(DigraphNrEdges(B!.DomainDigraph));
+  for i in [1 .. Size(emap21)] do
+    emap2[emap21[i][3]] := emap22[i][3]^emap;
+  od;
+  B2 := MAKE_WALK_HOM(B!.DomainDigraph,
+                      B!.CoDomainDigraph,
+                      List([1 .. DigraphNrVertices(B!.DomainDigraph)], 
+                         x-> B!.VertexMap[x^vmap]),
+                      List([1 .. DigraphNrEdges(B!.DomainDigraph)], 
+                         x-> B!.EdgeMap[emap2[x]]));
+  return OneSidedShiftIsomorphism(B, B2);
+end;
+
+InstallMethod(RandomOneSidedAut, "for an UDAF Digraph",
+[IsDigraph],
+function(D)
+  local out;
+  if not IsUDAFDigraph(D) then
+    return fail;
+  fi;
+  out := RANDOM_FINITE_ORDER_ONESIDED(D);
+  while Random([1 .. 3]) > 1 do
+    out := out * RANDOM_FINITE_ORDER_ONESIDED(D);
+  od;
+  return out;
 end);

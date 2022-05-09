@@ -20,9 +20,22 @@ COPY := function(x)
   return x;
 end;
 
+ARE_COMPARIBLE_CONES := function(cone1, cone2, D)
+  if cone1 = [] then
+    if cone2 = [] then
+      return cone1 = cone2;
+    fi;
+    return DigraphEdges(D)[cone2[1][1]][1] = cone1[2];
+  fi;
+  if cone2 = [] then
+    return DigraphEdges(D)[cone1[1][1]][1] = cone2[2];
+  fi;
+  return IsPrefix(cone1[1], cone2[1]) or IsPrefix(cone2[1], cone1[1]);
+end;
 
 
-#THe following seems inefficient
+
+#The following seems inefficient
 TRIMING_WALK_HOMOMORPHISMS := function(H, back, forward)
   local D, badvertices, edges, goodvertices, D2;
   D := H!.DomainDigraph;
@@ -42,6 +55,37 @@ TRIMING_WALK_HOMOMORPHISMS := function(H, back, forward)
 end;
 
 
+MAKE_WALK_HOM := function(D1, D2, LV, LE)
+  return  Objectify(NewType(NewFamily("WalkHomomorphism"), IsWalkHomomorphism and IsAttributeStoringRep),
+                                             rec(DomainDigraph := D1,
+                                             CoDomainDigraph := D2,
+                                             VertexMap := LV,
+                                             EdgeMap := LE));
+end;
+
+# this function convertes a non-empty walk
+# given as a list of edges to the corresponding
+# vertex->edge->vertex->edge->vertex ... walk
+edgesequecetoedgevertexsequence := function(D, edges)
+  local out;
+  out := List(edges, x-> [DigraphEdges(D)[x][1], x]);
+  Add(out, [DigraphEdges(D)[edges[Size(edges)]][2]]);
+  return Concatenation(out);
+end;
+
+
+# this function convertes an edge walk in the dual of a digraph
+# to the corresponding edge walk
+dualedgewalktoedgewalk := function(D, walk)
+   local edgeperm, i;
+   edgeperm := List([1 .. DigraphNrEdges(D)], x->[ShallowCopy(DigraphEdges(D)[x]), x]);
+   for i in [1 .. DigraphNrEdges(D)] do
+     edgeperm[i][1] := [edgeperm[i][1][2], edgeperm[i][1][1]];
+   od;
+   Sort(edgeperm);
+   edgeperm := List(edgeperm, x-> x[2]);
+   return Reversed(List(walk, x-> Position(edgeperm, x)));
+end;
 
 # O(concatenation of edge input)
 InstallMethod(WalkHomomorphism, "for a digraph, a digraph, a list, and a list",
@@ -96,12 +140,7 @@ function(D1, D2, LV, LE)
                   " the vertices in the third input,");
   fi;
 
-  M := Objectify(NewType(NewFamily("WalkHomomorphism"), IsWalkHomomorphism and IsAttributeStoringRep),
-                                             rec(DomainDigraph := D1,
-                                             CoDomainDigraph := D2,
-                                             VertexMap := LV,
-                                             EdgeMap := LE));
-  return M;
+  return MAKE_WALK_HOM(D1, D2, LV, LE);
 end);
 
 
@@ -129,14 +168,23 @@ end);
 InstallMethod(ComposeWalkHomomorphisms, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(H1, H2)
-  local newLV, newLE, oldLV1, oldLV2, oldLE1, oldLE2;
+  local newLV, newLE, oldLV1, oldLV2, oldLE1, oldLE2, c;
   oldLV1 := H1!.VertexMap;
   oldLV2 := H2!.VertexMap;
   oldLE1 := H1!.EdgeMap;
   oldLE2 := H2!.EdgeMap;
   newLV := List(oldLV1, x -> oldLV2[x]);
   newLE := List(oldLE1, x -> Concatenation(List([1 .. Size(x)], y->oldLE2[x[y]])));
-  return WalkHomomorphism(H1!.DomainDigraph, H2!.CoDomainDigraph, newLV, newLE);
+  c := WalkHomomorphism(H1!.DomainDigraph, H2!.CoDomainDigraph, newLV, newLE);
+  if Tester(IsUDAFFolding)(H1) and Tester(IsUDAFFolding)(H2) and 
+    IsUDAFFolding(H1) and IsUDAFFolding(H2) then
+    SetIsUDAFFolding(c, true);
+  fi;
+  if Tester(IsOneSidedFolding)(H1) and Tester(IsOneSidedFolding)(H2) and 
+    IsOneSidedFolding(H1) and IsOneSidedFolding(H2) then
+    SetIsOneSidedFolding(c, true);
+  fi;
+  return c;
 end);
 
 #O(WalkHomomorphism)
@@ -411,7 +459,7 @@ InstallMethod(FoldingToLineFolding, "for a walk homomorphism which is a folding"
 function(H)
   local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges,
         out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
-        historyinfo, outforwardimages, outbackwardimages, containedincone, out2;
+        historyinfo, outforwardimages, outbackwardimages, containedincone, out2, trimmedtarg;
 
   sync := SynchronousWalkHomomorphism(H);
   Apply(sync, TrimWalkHomomorphism);
@@ -444,7 +492,9 @@ function(H)
   futureinfo := Maximum(List(Concatenation(vertexforwardimages), x-> Size(x[1])));
   historyinfo := Maximum(List(Concatenation(vertexbackwardimages), x-> Size(x[1])));
 
-  out1 := LineDigraphWalkHomomorphism(S!.CoDomainDigraph, historyinfo, futureinfo);
+  trimmedtarg := TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph));
+  out1 := LineDigraphWalkHomomorphism(trimmedtarg!.DomainDigraph, historyinfo, futureinfo);
+  out1 := out1 * trimmedtarg;
   Rout1 := DualWalkHomomorphism(out1);
   
   outforwardimages := ImagesAsUnionsOfCones(out1);
@@ -458,13 +508,13 @@ function(H)
        return shallowcone[2] = deepcone[2];
      fi;
      if reversed then
-       return shallowcone[2] = DigraphEdges(R!.DomainDigraph)[deepcone[1][1]][1];
+       return shallowcone[2] = DigraphEdges(Rout1!.DomainDigraph)[deepcone[1][1]][1];
      fi;
-     return shallowcone[2] = DigraphEdges(S!.DomainDigraph)[deepcone[1][1]][1];
+     return shallowcone[2] = DigraphEdges(out1!.DomainDigraph)[deepcone[1][1]][1];
   end;
 
   out2vertexmap := [];
-  for v in DigraphVertices(out1!.DomainDigraph) do
+  for v in [1 .. DigraphNrVertices(out1!.DomainDigraph)] do
     new := Filtered([1 .. DigraphNrVertices(S!.DomainDigraph)],
               x-> ForAny(vertexforwardimages[x], y-> containedincone(outforwardimages[v][1], y, false))
               and ForAny(vertexbackwardimages[x], y-> containedincone(outbackwardimages[v][1], y, true)));
@@ -654,7 +704,7 @@ function(H)
   local iswalkstarttarg, iswalkstart, A, isgood, imageofwalk, isgoodvertex, out;
   
   A := ImageFinderWalkHomomorphism(H);
-  
+
   iswalkstarttarg := BlistList([1 .. DigraphNrVertices(A[1]!.CoDomainDigraph)], []);
   iswalkstart := function(v, currentsafevertices)
     local check;
@@ -665,7 +715,7 @@ function(H)
        return false;
     fi;
     AddSet(currentsafevertices, v);
-    check := ForAll(OutNeighbours(A[1]!.CoDomainDigraph)[v], 
+    check := ForAny(OutNeighbours(A[1]!.CoDomainDigraph)[v], 
                     x-> iswalkstart(x, currentsafevertices));
     if check then
       iswalkstarttarg[v] := true;
@@ -761,10 +811,10 @@ function(H)
   edges1 := [List(edges1, x->x[1][1]), List(edges1, x->x[1][2])];
   edges2 := [List(edges2, x->x[1][1]), List(edges2, x->x[1][2])];
 
-  return WalkHomomorphism(Digraph(DigraphNrVertices(D1), edges1[1], edges1[2]),
-                          Digraph(DigraphNrVertices(D2), edges2[1], edges2[2]),
-                          H!.VertexMap,
-                          newedgemap);
+  return MAKE_WALK_HOM(Digraph(DigraphNrVertices(D1), edges1[1], edges1[2]),
+                       Digraph(DigraphNrVertices(D2), edges2[1], edges2[2]),
+                       H!.VertexMap,
+                       newedgemap);
 end);
 
 
@@ -893,10 +943,6 @@ InstallMethod(\*, "for a pair of walk homomorphisms",
 function(f, g)
   local c;
   c := ComposeWalkHomomorphisms(f, g);
-  if Tester(IsUDAFFolding)(f) and Tester(IsUDAFFolding)(f) and 
-    IsUDAFFolding(f) and IsUDAFFolding(g) then
-    SetIsUDAFFolding(c, true);
-  fi;
   return c;
 end);
 
@@ -1055,18 +1101,113 @@ end);
 InstallMethod(IsOneSidedFolding, "for a walk homomorphism",
 [IsWalkHomomorphism],
 function(H)
-  local R, Cones;
+  local C, T1, T2;
   if not IsDeterministicWalkHomomorphism(H) then
     return false;
   fi;
-  R := DualWalkHomomorphism(TRIMING_WALK_HOMOMORPHISMS(H, true, false));
-  Cones := ImagesAsUnionsOfCones(R);
-  if fail in Cones then
-    return false;
-  fi;
-  SetIsUDAFFolding(H, true);
-  return true;
   
+  C := SynchronizingSequenceConnections(H);
+  T1 := TRIMING_WALK_HOMOMORPHISMS(C[Size(C)], true, false);
+  T2 := TRIMING_WALK_HOMOMORPHISMS(IdentityWalkHomomorphism(T1!.CoDomainDigraph),
+                                  true, false);
+  return DigraphNrVertices(T1!.DomainDigraph) = 
+         DigraphNrVertices(T2!.DomainDigraph);
+  #R := DualWalkHomomorphism(TRIMING_WALK_HOMOMORPHISMS(H, true, false));
+  #Cones := ImagesAsUnionsOfCones(R);
+  #if fail in Cones then
+  #  return false;
+  #fi;
+  #if Size(Set(ImageFinderWalkHomomorphism(R)[2])) < DigraphNrVertices(R!.DomainDigraph) then
+  #  return false;
+  #fi;
+  #SetIsUDAFFolding(H, true);
+  #return true;
+end);
+
+InstallMethod(ReduceSynchronizingLength, "for a deterministic walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local outinfo, buckets, outneighs, edgemap, vertexmap, b, edge, 
+        A1, A2, oldvertextonewvertex, oldedgetonewedge, vertex, e;
+  if not IsDeterministicWalkHomomorphism(H) then
+    #TODO error message
+    return fail;
+  fi;
+
+  
+  outinfo := List([1 .. DigraphNrVertices(H!.DomainDigraph)], y->
+                [H!.VertexMap[y], AsSet(List(OutEdgesAtVertex(H!.DomainDigraph)[y], 
+                      x -> [x[2], H!.EdgeMap[x[1]]]))]);
+
+  buckets := AsSet(outinfo);
+  if Size(buckets) = DigraphNrVertices(H!.DomainDigraph) then
+    return [IdentityWalkHomomorphism(H!.DomainDigraph), H];
+  fi;
+  oldvertextonewvertex := List([1 .. DigraphNrVertices(H!.DomainDigraph)],
+                                y-> Position(buckets, outinfo[y]));
+  
+  outneighs := [];
+  edgemap := [];
+  vertexmap := [];
+  for b in buckets do
+    Add(outneighs, []);
+    Add(vertexmap, b[1]);
+    for edge in b[2] do
+      Add(outneighs[Size(outneighs)], oldvertextonewvertex[edge[1]]);
+      Add(edgemap, edge[2]);
+    od;
+  od;
+  A2 := WalkHomomorphism(Digraph(outneighs), H!.CoDomainDigraph,
+                        vertexmap, edgemap);
+  SetIsDeterministicWalkHomomorphism(A2, true);
+  
+  oldedgetonewedge := [];
+  for vertex in DigraphVertices(H!.DomainDigraph) do
+    for edge in OutEdgesAtVertex(H!.DomainDigraph)[vertex] do
+      for e in OutEdgesAtVertex(A2!.DomainDigraph)[oldvertextonewvertex[vertex]] do
+        if A2!.EdgeMap[e[1]] = H!.EdgeMap[edge[1]] then
+          Add(oldedgetonewedge, [e[1]]);
+          break;
+        fi;
+      od;
+    od;
+  od;
+  A1 := WalkHomomorphism(H!.DomainDigraph, A2!.DomainDigraph, oldvertextonewvertex, oldedgetonewedge);
+  SetIsDeterministicWalkHomomorphism(A1, true);
+  return [A1, A2];
+end);
+
+InstallMethod(SynchronizingSequenceConnections, "for a deterministic walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local red;
+  red := ReduceSynchronizingLength(H);
+  if red[2] = H then 
+    return [H];
+  fi;
+  return Concatenation([red[1]], SynchronizingSequenceConnections(red[2]));
+end);
+
+InstallMethod(SynchronizingSequence, "for a deterministic walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local L, L2, i;
+  L := SynchronizingSequenceConnections(H);
+  L2 := [1 .. Size(L)];
+  i := Size(L);
+  L2[i] := L[i];
+  i := i - 1;
+  while i >= 1 do
+    L2[i] := L[i] * L2[i + 1];
+    i := i-1;
+  od;
+  return L2;
+end);
+
+InstallMethod(IsTwoSidedFolding, "for a walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  return IsSynchronousWalkHomomorphism(H) and IsUDAFFolding(H);  
 end);
 
 
@@ -1358,6 +1499,116 @@ function(H)
   newdigraph := Digraph(edges);
   return [WalkHomomorphism(newdigraph, T!.CoDomainDigraph, vertexmap, edgemap), 
           List([1 .. DigraphNrVertices(H!.DomainDigraph)], class)];
+end);
+
+COMBINE_ALMOST_SYNCHRONISED_VERTICES_DIGRAPH := function(D, pair)
+  local L, i, j, vertexconvert, e, newL, edgemap, duplicatededges, 
+        vertexmap;
+  pair := Set(pair);
+  L := OutNeighbours(D);
+
+  vertexconvert := function(v)
+    if v = pair[2] then
+      return pair[1];
+    elif v > pair[2] then
+      return v - 1;  
+    else
+      return v;
+    fi;
+  end;
+  vertexmap := List([1 .. Size(L)], vertexconvert);
+  edgemap := [];
+  duplicatededges := OutEdgesAtVertex(D)[pair[1]];
+  
+  e := 1;
+  for i in [1 .. Size(L)] do
+    for j in [1 .. Size(L[i])] do
+      if i > pair[2] then
+        Add(edgemap, [e - Size(duplicatededges)]);
+      elif i = pair[2] then
+        Add(edgemap, [duplicatededges[j][1]]);
+      else
+        Add(edgemap, [e]);
+      fi;
+      e := e + 1;
+    od;
+  od;
+  
+  newL := [];
+  for i in [1 ..Size(L)] do
+    if i <> pair[2] then
+      Add(newL, []);
+      for j in [1 .. Size(L[i])] do
+         Add(newL[Size(newL)], vertexmap[L[i][j]]);
+      od;
+    fi;
+  od;
+  
+  return MAKE_WALK_HOM(D, Digraph(newL), vertexmap, edgemap);
+end;
+
+
+COMBINE_ALMOST_SYNCHRONISED_VERTICES := function(D)
+  local L, pair, i, j, D2, duplicatededges;
+  L := OutNeighbours(D);
+  pair := [];
+  for i in [1 .. Size(L)] do
+    for j in [i + 1 .. Size(L)] do
+      if pair <> [] and L[i] = L[j] then
+        pair := [i, j];
+        break;
+      fi;
+    od;
+    if pair <> [] then
+      break;
+    fi; 
+  od;
+  if pair = [] then
+    return IdentityWalkHomomorphism(D);
+  fi;
+  
+  return COMBINE_ALMOST_SYNCHRONISED_VERTICES_DIGRAPH(D, pair) * COMBINE_ALMOST_SYNCHRONISED_VERTICES(D2);
+end;
+
+
+
+SORT_DIGRAPH_EDGES := function(D)
+  local L, i, Out, edgemap, iedgemap, codom;
+  L := EmptyPlist(DigraphNrVertices(D));
+  for i in [1 .. DigraphNrVertices(D)] do
+    L[i] := SortedList(List([1 .. Size(OutEdgesAtVertex(D)[i])], 
+             x->[OutEdgesAtVertex(D)[i][x][2], OutEdgesAtVertex(D)[i][x][1], i]));
+  od;
+  Out := COPY(L);
+  for i in [1 .. Size(Out)] do
+    Apply(Out[i], x-> x[1]);
+  od;
+  codom := Digraph(Out);
+  
+  iedgemap := Concatenation(L);
+  Apply(iedgemap, x-> x[2]);
+  
+  edgemap := List([1 .. Size(iedgemap)], x-> [Position(iedgemap, x)]);
+  return WalkHomomorphism(D, codom, [1 .. DigraphNrVertices(D)], edgemap);
+end;
+
+InstallMethod(OneSidedDigraphMinimise, "for a Digraph",
+[IsDigraph],
+function(D)
+  local W;
+  W := SORT_DIGRAPH_EDGES(D);
+  return W * COMBINE_ALMOST_SYNCHRONISED_VERTICES(W!.CoDomainDigraph);
+end);
+
+InstallMethod(WalkHomomorphismInputString, "for a walk homomorphism",
+[IsWalkHomomorphism],
+function(H)
+  local s1, s2, s3, s4;
+  s1 := String(OutNeighbours(H!.DomainDigraph));
+  s2 := String(OutNeighbours(H!.CoDomainDigraph));
+  s3 := String(H!.VertexMap);
+  s4 := String(H!.EdgeMap);
+  return Concatenation("WalkHomomorphism(Digraph(", s1, "), Digraph(", s2, "), ", s3, ", ", s4, ")");
 end);
 
 # Functions to hide

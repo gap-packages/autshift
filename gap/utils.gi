@@ -45,6 +45,13 @@ function(T)
   Draw(T!.SynchronousUDAFTransducer);
 end);
 
+InstallMethod(Draw, 
+"for a one sided shift isomorphism",
+[IsOneSidedShiftIsomorphism],
+function(T)
+  Draw(T!.MinimalTransducer);
+end);
+
 
 InstallMethod(Draw, 
 "for a walk homomorphism",

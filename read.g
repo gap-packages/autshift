@@ -8,7 +8,8 @@
 #############################################################################
 ##
 
+
+ReadPackage("autshift", "gap/foldings.gi");
 ReadPackage("autshift", "gap/transducer.gi");
 ReadPackage("autshift", "gap/shiftoperations.gi");
-ReadPackage("autshift", "gap/foldings.gi");
 ReadPackage("autshift", "gap/utils.gi");
