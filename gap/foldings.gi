@@ -169,6 +169,10 @@ InstallMethod(ComposeWalkHomomorphisms, "for a pair of walk homomorphisms",
 [IsWalkHomomorphism, IsWalkHomomorphism],
 function(H1, H2)
   local newLV, newLE, oldLV1, oldLV2, oldLE1, oldLE2, c;
+  
+  if not OutNeighbours(H1!.CoDomainDigraph) = OutNeighbors(H2!.DomainDigraph) then
+    return fail;
+  fi;
   oldLV1 := H1!.VertexMap;
   oldLV2 := H2!.VertexMap;
   oldLE1 := H1!.EdgeMap;
@@ -275,16 +279,16 @@ end);
 #given H:D1->D2", returns a synchronous H':D3->D2, and an UDAF folding
 #f:D3-> D1 such that fH and H' induce the same function from the unindexed routes of D3 to the
 #unindexed routes of D2
-InstallMethod(SynchronousWalkHomomorphism, "for a digraph, a digraph, a list, and a list",
+InstallMethod(MakeSynchronousWalkHomomorphism, "for a digraph, a digraph, a list, and a list",
 [IsWalkHomomorphism],
 function(H)
   local SWH;
   if IsDegenerateWalkHomomorphism(H) then
-     ErrorNoReturn("AutShift: SynchronousWalkHomomorphism: usage,\n",
+     ErrorNoReturn("AutShift: MakeSynchronousWalkHomomorphism: usage,\n",
                 "the given homomorphism must be non-degenerate");
   fi;
   if not IsUDAFDigraph(H!.CoDomainDigraph) then
-     ErrorNoReturn("AutShift: SynchronousWalkHomomorphism: usage,\n",
+     ErrorNoReturn("AutShift: MakeSynchronousWalkHomomorphism: usage,\n",
                 "the target digraph must be an UDAF Digraph");
   fi;
 
@@ -461,7 +465,7 @@ function(H)
         out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
         historyinfo, outforwardimages, outbackwardimages, containedincone, out2, trimmedtarg;
 
-  sync := SynchronousWalkHomomorphism(H);
+  sync := MakeSynchronousWalkHomomorphism(H);
   Apply(sync, TrimWalkHomomorphism);
   S := sync[1];
   f2 := sync[2];
@@ -1000,7 +1004,7 @@ function(input)
     for v in DigraphVertices(H!.DomainDigraph) do
       for pair in [1 .. Size(prefixes[v])] do
         edges := Filtered([1 .. DigraphNrEdges(H!.DomainDigraph)],
-                       x-> DigraphEdges(H!.DomainDigraph)[x][1] =prefixes[v][pair][2]);
+                       x-> DigraphEdges(H!.DomainDigraph)[x][1] = prefixes[v][pair][2]);
         if Size(edges) = 1 then
           flag := true;
           Append(prefixes[v][pair][1], H!.EdgeMap[edges[1]]);
@@ -1019,7 +1023,7 @@ function(input)
     fi;
     prefixes[v] := [prefixes[v], v2];
     # I don't really know what causes this to be a periodic list sometimes
-    # but is it is then the tests will fail (maybe its GreatestCommonPrefix?)
+    # but if it is then the tests will fail (maybe its GreatestCommonPrefix?)
     if IsPeriodicList(prefixes[v][1]) then
       prefixes[v][1]:= PrePeriod(prefixes[v][1]);
     fi;
@@ -1207,6 +1211,9 @@ end);
 InstallMethod(IsTwoSidedFolding, "for a walk homomorphism",
 [IsWalkHomomorphism],
 function(H)
+  if not (IsUDAFDigraph(H!.CoDomainDigraph) and IsUDAFDigraph(H!.CoDomainDigraph)) then
+    return fail;
+  fi;
   return IsSynchronousWalkHomomorphism(H) and IsUDAFFolding(H);  
 end);
 
@@ -1368,7 +1375,7 @@ function(H)
   local vertices, vmap, edges, emap, usedsubsets, v, e, i, newedgelabels, 
         edgetoset, newdigraph, newedges;
   if not IsSynchronousWalkHomomorphism(H) then
-    H := SynchronousWalkHomomorphism(H)[1];
+    H := MakeSynchronousWalkHomomorphism(H)[1];
   fi;
   vertices := List([1 .. DigraphNrVertices(H!.DomainDigraph)], x->[x]);
   vmap := [];
@@ -1549,12 +1556,12 @@ end;
 
 
 COMBINE_ALMOST_SYNCHRONISED_VERTICES := function(D)
-  local L, pair, i, j, D2, duplicatededges;
+  local L, pair, i, j, h, duplicatededges;
   L := OutNeighbours(D);
   pair := [];
   for i in [1 .. Size(L)] do
     for j in [i + 1 .. Size(L)] do
-      if pair <> [] and L[i] = L[j] then
+      if pair = [] and L[i] = L[j] then
         pair := [i, j];
         break;
       fi;
@@ -1567,7 +1574,8 @@ COMBINE_ALMOST_SYNCHRONISED_VERTICES := function(D)
     return IdentityWalkHomomorphism(D);
   fi;
   
-  return COMBINE_ALMOST_SYNCHRONISED_VERTICES_DIGRAPH(D, pair) * COMBINE_ALMOST_SYNCHRONISED_VERTICES(D2);
+  h := COMBINE_ALMOST_SYNCHRONISED_VERTICES_DIGRAPH(D, pair);
+  return h * COMBINE_ALMOST_SYNCHRONISED_VERTICES(h!.CoDomainDigraph);
 end;
 
 

@@ -17,7 +17,8 @@ function()
                              "title.xml",
                              "transducer.xml",
                              "shiftoperations.xml",
-                             "utils.xml"], "autshift", "MathJax", "../../..");
+                             "utils.xml",
+                             "foldings.xml"], "autshift", "MathJax", "../../..");
   return;
 end);
 

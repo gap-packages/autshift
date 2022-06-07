@@ -70,13 +70,12 @@ AbstractHTML :=
    stands for \"asynchronous automata algorithms\".",
 
 PackageDoc := rec(
-  BookName  := "autshift",
+  BookName  := ~.PackageName,
   ArchiveURLSubset := ["doc"],
   HTMLStart := "doc/chap0.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
-  LongTitle := "implements algorithms for automorphisms of the shift and \
-                related objects",
+  LongTitle := ~.Subtitle,
 ),
 
 Dependencies := rec(

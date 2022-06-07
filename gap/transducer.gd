@@ -41,6 +41,24 @@ DeclareRepresentation("IsOneSidedShiftIsomorphism", IsComponentObjectRep and
                                                    "DomainDigraph",
                                                    "CoDomainDigraph",
                                                    "MinimalTransducer"]);
+                                                   
+#! @Arguments T
+#! @Returns an isomorphism of subshifts of finite type
+#! @Description
+#!  Creates an object called a shift homomorphism. A shift isomorphism is a
+#!  homomorphisms between subshifts of finite type. This input method requires
+#!  a full shift/
+#!
+#!  This is input as synchronous transducer from the aaa package (TODO ref)
+#!  which is strongly synchronizing and such that the map it defines on the 
+#!  shift space is a bijection.
+#! <Example>gap> 
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>
+#!gap> ShiftIsomorphism(T);                                              
+#!&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
+#!</Example> 
 DeclareOperation("ShiftIsomorphism", [IsTransducer]);
 DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
 DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer, IsDenseList]);
@@ -72,7 +90,6 @@ DeclareOperation("\*", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism])
 DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 DeclareOperation("\*", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
-DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
 DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsInt]);
 DeclareOperation("\^", [IsUDAFIsomorphism, IsInt]);

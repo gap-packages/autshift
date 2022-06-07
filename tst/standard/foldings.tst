@@ -134,20 +134,20 @@ true
 gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));
 false
 
-# SynchronousWalkHomomorphism
-gap> SynchronousWalkHomomorphism(
+# MakeSynchronousWalkHomomorphism
+gap> MakeSynchronousWalkHomomorphism(
 > WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));
 [ <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.>, 
   <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ]
-gap> SynchronousWalkHomomorphism(
+gap> MakeSynchronousWalkHomomorphism(
 > WalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));
-Error, AutShift: SynchronousWalkHomomorphism: usage,
+Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
 the given homomorphism must be non-degenerate
-gap> SynchronousWalkHomomorphism(
+gap> MakeSynchronousWalkHomomorphism(
 > WalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));
-Error, AutShift: SynchronousWalkHomomorphism: usage,
+Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
 the target digraph must be an UDAF Digraph
-gap> P := SynchronousWalkHomomorphism(PhitoR2Fold());
+gap> P := MakeSynchronousWalkHomomorphism(PhitoR2Fold());
 [ <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
   <walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ]
 gap> IsSynchronousWalkHomomorphism(P[1]);
@@ -156,7 +156,7 @@ gap> H := P[2] * PhitoR2Fold();
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];
 true
-gap> P := SynchronousWalkHomomorphism(R2toPhiFold());
+gap> P := MakeSynchronousWalkHomomorphism(R2toPhiFold());
 [ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>, 
   <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.> ]
 gap> H := P[2] * R2toPhiFold();
@@ -174,6 +174,16 @@ gap> WalkHomomorphismVertexImageAutomaton(PhitoR2Fold(), 2);
 gap> WalkHomomorphismVertexImageAutomaton(R2toPhiFold(), 2);
 Error, AutShift: WalkHomomorphismVertexImageAutomaton: usage,
 the given integer must be a vertex of the doman digraph
+
+# PowerSetWalkHomomorphism
+gap> W := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> ImageAsUnionOfCones(W, 1);                                                                              
+[ [ [ 2, 1 ], 1 ] ]
+gap> W2 := PowerSetWalkHomomorphism(W);                                                                      
+<walk homomorphism from a digraph with 6 edges to a digraph with 2 edges.>
+gap> ImageAsUnionOfCones(W2, 1);       
+[ [ [ 2, 1 ], 1 ] ]
 
 # IsUDAFFolding
 gap> IsUDAFFolding(R2toPhiFold());
@@ -248,7 +258,7 @@ gap> MaxFutureConeDepth(PhitoR2Fold());
 0
 gap> MaxHistoryConeDepth(R2toPhiFold());
 0
-gap> f := SynchronousWalkHomomorphism(PhitoR2Fold())[1];
+gap> f := MakeSynchronousWalkHomomorphism(PhitoR2Fold())[1];
 <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
 gap> MaxFutureConeDepth(f);
 0
@@ -354,6 +364,16 @@ gap> TrimWalkHomomorphism(W);
 <walk homomorphism from a digraph with 0 edges to a digraph with 2 edges.>
 gap> TrimWalkHomomorphism(PhitoR2Fold());
 <walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.>
+gap> D := Digraph([[1, 2, 2], []]);
+<immutable multidigraph with 2 vertices, 3 edges>
+gap> W := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsTwoSidedFolding(W);
+fail
+gap> W := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);
+<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+gap> IsTwoSidedFolding(W);                                
+fail
 
 # * and =
 gap> W := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),
@@ -428,6 +448,16 @@ gap> ReduceSynchronizingLength(H);
 fail
 gap> S[2] = LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);
 true
+gap> D := Digraph([[1, 1]]);                                  
+<immutable multidigraph with 1 vertex, 2 edges>
+gap> D10 := LineDigraphWalkHomomorphism(D,1,0)!.DomainDigraph;
+<immutable digraph with 2 vertices, 4 edges>
+gap> OneSidedDigraphMinimise(D10);      
+<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+gap> D11 := LineDigraphWalkHomomorphism(D,1,1)!.DomainDigraph;
+<immutable digraph with 4 vertices, 8 edges>
+gap> OneSidedDigraphMinimise(D11);                            
+<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
 
 # WalkHomomorphismAnnotation and IsAnnotatableWalkHomomorphism
 gap> H := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),
