@@ -458,95 +458,119 @@ function(H)
    return not FoldingToLineFolding(H) = fail;
 end);
 
+#here trim just means we're not using a one sided folding
+FTOLFTRIM := function(H, trim)
+local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges,
+      out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
+      historyinfo, outforwardimages, outbackwardimages, containedincone, out2, trimmedtarg;
+
+sync := MakeSynchronousWalkHomomorphism(H);
+if trim then
+  Apply(sync, TrimWalkHomomorphism);
+else
+    Apply(sync, x->TRIMING_WALK_HOMOMORPHISMS(x, true, false));
+fi;
+S := sync[1];
+f2 := sync[2];
+R := DualWalkHomomorphism(S);
+if DigraphNrVertices(S!.DomainDigraph) = 0 then
+  if DigraphNrVertices(TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph))!.DomainDigraph) = 0 then
+    return [S, f2];
+  fi;
+  return fail;
+fi;
+
+for e1 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
+  for e2 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
+    if DigraphEdges(S!.DomainDigraph)[e1] = DigraphEdges(S!.DomainDigraph)[e2] and
+       S!.EdgeMap[e1] = S!.EdgeMap[e2] and not (e1 = e2) then
+       return fail;
+    fi;
+  od;
+od;
+
+if trim then
+vertexforwardimages :=  ImagesAsUnionsOfCones(S);
+fi;
+vertexbackwardimages := ImagesAsUnionsOfCones(R);
+
+if (trim and ForAny(vertexforwardimages, x-> x= fail)) or ForAny(vertexbackwardimages, x-> x=fail) then
+  return fail;
+fi;
+
+if trim then
+futureinfo := Maximum(List(Concatenation(vertexforwardimages), x-> Size(x[1])));
+else
+  futureinfo := 0;
+fi;
+historyinfo := Maximum(List(Concatenation(vertexbackwardimages), x-> Size(x[1])));
+
+if trim then
+  trimmedtarg := TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph));
+else
+  trimmedtarg := TRIMING_WALK_HOMOMORPHISMS(IdentityWalkHomomorphism(S!.CoDomainDigraph), true, false);
+fi;
+out1 := LineDigraphWalkHomomorphism(trimmedtarg!.DomainDigraph, historyinfo, futureinfo);
+out1 := out1 * trimmedtarg;
+Rout1 := DualWalkHomomorphism(out1);
+
+outforwardimages := ImagesAsUnionsOfCones(out1);
+outbackwardimages := ImagesAsUnionsOfCones(Rout1);
+
+containedincone := function(deepcone, shallowcone, reversed)
+   if not shallowcone[1] = [] then
+     return IsPrefix(deepcone[1], shallowcone[1]);
+   fi;
+   if deepcone[1] = [] then
+     return shallowcone[2] = deepcone[2];
+   fi;
+   if reversed then
+     return shallowcone[2] = DigraphEdges(Rout1!.DomainDigraph)[deepcone[1][1]][1];
+   fi;
+   return shallowcone[2] = DigraphEdges(out1!.DomainDigraph)[deepcone[1][1]][1];
+end;
+
+out2vertexmap := [];
+for v in [1 .. DigraphNrVertices(out1!.DomainDigraph)] do
+  if trim then
+    new := Filtered([1 .. DigraphNrVertices(S!.DomainDigraph)],
+            x-> ForAny(vertexforwardimages[x], y-> containedincone(outforwardimages[v][1], y, false))
+            and ForAny(vertexbackwardimages[x], y-> containedincone(outbackwardimages[v][1], y, true)));
+  else
+    new := Filtered([1 .. DigraphNrVertices(S!.DomainDigraph)],
+            x-> ForAny(vertexbackwardimages[x], y-> containedincone(outbackwardimages[v][1], y, true)));
+  fi;
+  if not Size(new) = 1 then
+    return fail;
+  fi;
+  new := new[1];
+  Add(out2vertexmap, new);
+od;
+
+out2edgemap := [];
+for e1 in [1 .. DigraphNrEdges(out1!.DomainDigraph)] do
+  for e2 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
+    if DigraphEdges(S!.DomainDigraph)[e2] =
+       [out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][1]],
+        out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][2]]] then
+      if out1!.EdgeMap[e1] = S!.EdgeMap[e2] then
+         Add(out2edgemap, [e2]);
+         break;
+      fi;
+    fi;
+  od;
+od;
+
+out2 := WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap) * f2;
+SetIsUDAFFolding(out1, true);
+SetIsUDAFFolding(out2, true);
+return [out1, out2];
+end;
+
 InstallMethod(FoldingToLineFolding, "for a walk homomorphism which is a folding",
 [IsWalkHomomorphism],
 function(H)
-  local sync, S, f2, R, e1, e2, v, new, out1, Rout1, outforwardedges, outbackwardedges,
-        out2vertexmap, out2edgemap, vertexforwardimages, vertexbackwardimages, futureinfo,
-        historyinfo, outforwardimages, outbackwardimages, containedincone, out2, trimmedtarg;
-
-  sync := MakeSynchronousWalkHomomorphism(H);
-  Apply(sync, TrimWalkHomomorphism);
-  S := sync[1];
-  f2 := sync[2];
-  R := DualWalkHomomorphism(S);
-  if DigraphNrVertices(S!.DomainDigraph) = 0 then
-    if DigraphNrVertices(TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph))!.DomainDigraph) = 0 then
-      return [S, f2];
-    fi;
-    return fail;
-  fi;
-
-  for e1 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
-    for e2 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
-      if DigraphEdges(S!.DomainDigraph)[e1] = DigraphEdges(S!.DomainDigraph)[e2] and
-         S!.EdgeMap[e1] = S!.EdgeMap[e2] and not (e1 = e2) then
-         return fail;
-      fi;
-    od;
-  od;
-
-  vertexforwardimages :=  ImagesAsUnionsOfCones(S);
-  vertexbackwardimages := ImagesAsUnionsOfCones(R);
-  
-  if ForAny(vertexforwardimages, x-> x= fail) or ForAny(vertexbackwardimages, x-> x=fail) then
-    return fail;
-  fi;
-
-  futureinfo := Maximum(List(Concatenation(vertexforwardimages), x-> Size(x[1])));
-  historyinfo := Maximum(List(Concatenation(vertexbackwardimages), x-> Size(x[1])));
-
-  trimmedtarg := TrimWalkHomomorphism(IdentityWalkHomomorphism(S!.CoDomainDigraph));
-  out1 := LineDigraphWalkHomomorphism(trimmedtarg!.DomainDigraph, historyinfo, futureinfo);
-  out1 := out1 * trimmedtarg;
-  Rout1 := DualWalkHomomorphism(out1);
-  
-  outforwardimages := ImagesAsUnionsOfCones(out1);
-  outbackwardimages := ImagesAsUnionsOfCones(Rout1);
-
-  containedincone := function(deepcone, shallowcone, reversed)
-     if not shallowcone[1] = [] then
-       return IsPrefix(deepcone[1], shallowcone[1]);
-     fi;
-     if deepcone[1] = [] then
-       return shallowcone[2] = deepcone[2];
-     fi;
-     if reversed then
-       return shallowcone[2] = DigraphEdges(Rout1!.DomainDigraph)[deepcone[1][1]][1];
-     fi;
-     return shallowcone[2] = DigraphEdges(out1!.DomainDigraph)[deepcone[1][1]][1];
-  end;
-
-  out2vertexmap := [];
-  for v in [1 .. DigraphNrVertices(out1!.DomainDigraph)] do
-    new := Filtered([1 .. DigraphNrVertices(S!.DomainDigraph)],
-              x-> ForAny(vertexforwardimages[x], y-> containedincone(outforwardimages[v][1], y, false))
-              and ForAny(vertexbackwardimages[x], y-> containedincone(outbackwardimages[v][1], y, true)));
-    if not Size(new) = 1 then
-      return fail;
-    fi;
-    new := new[1];
-    Add(out2vertexmap, new);
-  od;
-
-  out2edgemap := [];
-  for e1 in [1 .. DigraphNrEdges(out1!.DomainDigraph)] do
-    for e2 in [1 .. DigraphNrEdges(S!.DomainDigraph)] do
-      if DigraphEdges(S!.DomainDigraph)[e2] =
-         [out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][1]],
-          out2vertexmap[DigraphEdges(out1!.DomainDigraph)[e1][2]]] then
-        if out1!.EdgeMap[e1] = S!.EdgeMap[e2] then
-           Add(out2edgemap, [e2]);
-           break;
-        fi;
-      fi;
-    od;
-  od;
-  
-  out2 := WalkHomomorphism(out1!.DomainDigraph, S!.DomainDigraph, out2vertexmap, out2edgemap) * f2;
-  SetIsUDAFFolding(out1, true);
-  SetIsUDAFFolding(out2, true);
-  return [out1, out2];
+  return FTOLFTRIM(H, true);
 end);
 
 
@@ -894,12 +918,12 @@ function(D, past, future)
   local vertices, edges, nrverts, edgepairs, leftvertices, rightvertices,
         inductivestep, D2;
 
-  if not past >= 0 and future >= 0 then
+  if not (past >= 0 and future >= 0) then
     return fail;
   fi;
 
   if past = 0 and future = 0 then
-    return TrimWalkHomomorphism(IdentityWalkHomomorphism(D));
+    return IdentityWalkHomomorphism(D);
   fi;
 
   if past + future = 1 then

@@ -82,9 +82,6 @@ gap> IdentityShiftIsomorphism(2);
 <shift isomorphism whose domain digraph has 
 2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 
-# ShiftIsomorphism
-gap> 
-
 # UDAFTransducer with GNS transducer input
 gap> T := Transducer(2, 2, [[1, 1]], [[[], []]]);
 <transducer with input alphabet on 2 symbols, output alphabet on 
@@ -158,22 +155,22 @@ gap> L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);
 gap> T := UDAFTransducer(L11, L20);                              
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
-gap> ComposeUDAFTransducersSlow(T, T, true);
+gap> ComposeUDAFTransducers(T, T);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 8 states.>
-gap> T2 := ComposeUDAFTransducersSlow(T, T, true);
+2 edges, and which has 4 states.>
+gap> T2 := ComposeUDAFTransducers(T, T);
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-2 edges, and which has 8 states.>
+2 edges, and which has 4 states.>
 gap> f := T2!.DomainFolding;
-<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
 gap> g := T2!.CoDomainFolding;
-<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
 gap> MaxHistoryConeDepth(f);
 1
 gap> MaxFutureConeDepth(f); 
-2
+1
 gap> MaxHistoryConeDepth(g);
-3
+2
 gap> MaxFutureConeDepth(g); 
 0
 
@@ -185,7 +182,7 @@ gap> L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);
 gap> T := UDAFTransducer(L20, L11);           
 <UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 2 edges, and which has 4 states.>
-gap> T * T = ComposeUDAFTransducersSlow(T, T, false);
+gap> T * T = ComposeUDAFTransducers(T, T);
 true
 gap> T^-1 = UDAFTransducer(L11, L20);
 true
@@ -376,6 +373,28 @@ gap> IsOneSidedFolding(W);
 false
 
 # OneSidedTorsionDecomposition
+gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
+<transducer with input alphabet on 3 symbols, output alphabet on 
+3 symbols, and 1 state.>
+gap> C:= OneSidedShiftIsomorphism(UDAFTransducer(C));
+<one sided shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 1 state.>
+gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+> Digraph([[1, 1, 1]]),
+> [1, 1, 1],
+> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
+<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+> Digraph([[1, 1, 1]]),
+> [1, 1, 1],
+> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
+<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+gap> Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);  
+<one sided shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+gap> Fig5^C;
+<one sided shift isomorphism whose domain digraph has 
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
 gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
 > Digraph([[1, 1, 1]]),
 > [1, 1, 1],
@@ -424,3 +443,11 @@ gap> T := RandomOneSidedAut(Digraph([[1, 2], [1, 2]]));;
 gap> T := RandomOneSidedAut(Digraph([[1, 2], [1]]));;   
 gap> T := RandomOneSidedAut(Digraph([[1, 1, 2], [1]]));;
 gap> T := RandomOneSidedAut(Digraph([[2, 2], [1, 1]]));;
+gap> D := (Digraph([[1,1, 2, 2], []]));;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;
+gap> RandomOneSidedAut(D);;

@@ -119,7 +119,7 @@ function(T, L)
     Append(str, Concatenation(label[i], "\n"));
   od;
   for i in verts1 do
-    Append(str, Concatenation(label[i], "\n"));
+    Append(str, Concatenation(label1[i], "\n"));
   od;
  
  for i in verts2 do

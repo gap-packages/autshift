@@ -117,6 +117,93 @@ function(input)
         DigraphNrVertices(T!.Digraph), " ", state, ".>");
 end);
 
+COMPUDAF := function(f, g, slow, trim)
+  local Df2, Dg1, pastadder, futureadder, fmodifier, gmodifier, fpast, ffuture, gpast, gfuture;
+  Df2 := f!.CoDomainDigraph;
+  Dg1 := g!.DomainDigraph;
+
+  #note that this is stronger than insisting Df2 = Dg1 as it ensures the
+  #edges are stored in the same order
+  if not [DigraphVertices(Df2), DigraphEdges(Df2)] =
+         [DigraphVertices(Dg1), DigraphEdges(Dg1)] then
+     ErrorNoReturn("autshift: ComposeUDAFTransducer: usage,\n",
+                  "the transducers must be composable,");
+  fi;
+
+  if f!.CoDomainFolding = g!.DomainFolding then
+    return UDAFTransducer(f!.DomainFolding, g!.CoDomainFolding);
+  fi;
+
+  if not slow then
+    f := f^-1;
+    f := MinimalUDAFTransducer(f);
+    f := f^-1;
+  fi;
+  
+  
+  fmodifier := FTOLFTRIM(f!.CoDomainFolding, trim);
+  gmodifier := FTOLFTRIM(g!.DomainFolding, trim);
+
+  fpast := MaxHistoryConeDepth(fmodifier[1]);
+  gpast := MaxHistoryConeDepth(gmodifier[1]);
+  
+  if trim then
+  ffuture := MaxFutureConeDepth(fmodifier[1]);
+  gfuture := MaxFutureConeDepth(gmodifier[1]);
+  fi;
+
+  if fpast = -1 then
+    return UDAFTransducer(WalkHomomorphism(EmptyDigraph(0), f!.DomainDigraph, [], []),
+                           WalkHomomorphism(EmptyDigraph(0), g!.CoDomainDigraph, [], []));
+  fi;
+
+  if fpast < gpast then
+    pastadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, gpast - fpast, 0);
+    fmodifier[1] := pastadder * fmodifier[1];
+    fmodifier[2] := pastadder * fmodifier[2];
+  fi;
+  if gpast < fpast then
+    pastadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, fpast - gpast, 0);
+    gmodifier[1] := pastadder * gmodifier[1];
+    gmodifier[2] := pastadder * gmodifier[2];
+  fi;
+  
+  if trim then
+  if ffuture < gfuture then
+    futureadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, 0, gfuture - ffuture);
+    fmodifier[1] := futureadder * fmodifier[1];
+    fmodifier[2] := futureadder * fmodifier[2];
+  fi;
+  if gfuture < ffuture then
+    futureadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, 0, ffuture - gfuture);
+    gmodifier[1] := futureadder * gmodifier[1];
+    gmodifier[2] := futureadder * gmodifier[2];
+
+  fi;
+  fi;
+
+  return UDAFTransducer(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
+end;
+
+IsValidAnnotatedTransducer := function(T, L)
+  local edges, e;
+  if not IsDeterministicWalkHomomorphism(T!.DomainFolding) then
+    return false;
+  fi;
+  if not UDAFNrStates(T) = Size(L) then
+    return false;
+  fi;
+
+  edges := DigraphEdges(T!.Digraph);
+  for e in [1 .. Size(edges)] do
+    if not L[edges[e][2]] - L[edges[e][1]] = Size((T!.CoDomainFolding)!.EdgeMap[e]) - 1 then
+      return false;
+    fi;
+  od;
+  return true;
+end;
+
+
 
 #this could be made way faster
 InstallMethod(IsMinimalUDAFTransducer, "for an UDAF transducer",
@@ -775,90 +862,46 @@ end);
 InstallMethod(ComposeShiftIsomorphisms, "for a pair of Shift Isomorphisms",
 [IsShiftIsomorphism, IsShiftIsomorphism],
 function(f, g)
-  return ShiftIsomorphism(ComposeUDAFTransducersSlow(
+  return ShiftIsomorphism(COMPUDAF(
                           f!.SynchronousUDAFTransducer,
                           g!.SynchronousUDAFTransducer,
-                          true));
+                          true, true));
 end);
 
-InstallMethod(ComposeUDAFTransducersSlow, "for a pair of compatible UDAF Isomorphisms",
-[IsUDAFTransducer, IsUDAFTransducer, IsBool],
-function(f, g, slow)
-  local Df2, Dg1, pastadder, futureadder, fmodifier, gmodifier, fpast, ffuture, gpast, gfuture;
-  Df2 := f!.CoDomainDigraph;
-  Dg1 := g!.DomainDigraph;
 
-  #note that this is stronger than insisting Df2 = Dg1 as it ensures the
-  #edges are stored in the same order
-  if not [DigraphVertices(Df2), DigraphEdges(Df2)] =
-         [DigraphVertices(Dg1), DigraphEdges(Dg1)] then
-     ErrorNoReturn("autshift: ComposeUDAFTransducer: usage,\n",
-                  "the transducers must be composable,");
-  fi;
-
-  if f!.CoDomainFolding = g!.DomainFolding then
-    return UDAFTransducer(f!.DomainFolding, g!.CoDomainFolding);
-  fi;
-
-  if not slow then
-    f := f^-1;
-    f := MinimalUDAFTransducer(f);
-    f := f^-1;
-  fi;
-  
-  fmodifier := FoldingToLineFolding(f!.CoDomainFolding);
-  gmodifier := FoldingToLineFolding(g!.DomainFolding);
-
-  fpast := MaxHistoryConeDepth(fmodifier[1]);
-  ffuture := MaxFutureConeDepth(fmodifier[1]);
-  gpast := MaxHistoryConeDepth(gmodifier[1]);
-  gfuture := MaxFutureConeDepth(gmodifier[1]);
-
-  if fpast = -1 then
-    return UDAFTransducer(WalkHomomorphism(EmptyDigraph(0), f!.DomainDigraph, [], []),
-                           WalkHomomorphism(EmptyDigraph(0), g!.CoDomainDigraph, [], []));
-  fi;
-
-  if fpast < gpast then
-    pastadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, gpast - fpast, 0);
-    fmodifier[1] := pastadder * fmodifier[1];
-    fmodifier[2] := pastadder * fmodifier[2];
-  fi;
-  if gpast < fpast then
-    pastadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, fpast - gpast, 0);
-    gmodifier[1] := pastadder * gmodifier[1];
-    gmodifier[2] := pastadder * gmodifier[2];
-  fi;
-  if ffuture < gfuture then
-    futureadder := LineDigraphWalkHomomorphism(fmodifier[1]!.DomainDigraph, 0, gfuture - ffuture);
-    fmodifier[1] := futureadder * fmodifier[1];
-    fmodifier[2] := futureadder * fmodifier[2];
-  fi;
-  if gfuture < ffuture then
-    futureadder := LineDigraphWalkHomomorphism(gmodifier[1]!.DomainDigraph, 0, ffuture - gfuture);
-    gmodifier[1] := futureadder * gmodifier[1];
-    gmodifier[2] := futureadder * gmodifier[2];
-
-  fi;
-
-  return UDAFTransducer(fmodifier[2] * f!.DomainFolding, gmodifier[2] * g!.CoDomainFolding);
+InstallMethod(ComposeUDAFTransducers, "for a pair of compatible UDAF Isomorphisms",
+[IsUDAFTransducer, IsUDAFTransducer],
+function(f, g)
+  return COMPUDAF(f, g, false, true);
 end);
 
 InstallMethod(\*, "for a pair of compatible UDAF Transducers",
 [IsUDAFTransducer, IsUDAFTransducer],
 function(f, g)
-  return ComposeUDAFTransducersSlow(f, g, false);
+  return ComposeUDAFTransducers(f, g);
 end);
 
 InstallMethod(\*, "for a pair of compatible UDAF Transducers",
 [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
 function(f, g)
+  return ComposeOneSidedShiftIsomorphisms(f, g);
+end);
+
+InstallMethod(ComposeOneSidedShiftIsomorphisms, "for a pair of compatible one-sided shift isomorphisms",
+[IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
+function(f, g)
   return OneSidedShiftIsomorphism(
-                ComposeUDAFTransducersSlow(f!.MinimalTransducer, 
-                                           g!.MinimalTransducer, true));
+                COMPUDAF(f!.MinimalTransducer, 
+                                           g!.MinimalTransducer, true, false));
 end);
 
 InstallMethod(\*, "for a pair of compatible UDAF Isomorphisms",
+[IsUDAFIsomorphism, IsUDAFIsomorphism],
+function(f, g)
+  return ComposeUDAFIsomorphisms(f, g);
+end);
+
+InstallMethod(ComposeUDAFIsomorphisms, "for a pair of compatible UDAF isomorphisms",
 [IsUDAFIsomorphism, IsUDAFIsomorphism],
 function(f, g)
   return UDAFIsomorphism(f!.MinimalUDAFTransducer * g!.MinimalUDAFTransducer);
@@ -1006,25 +1049,6 @@ function(Alph, WordLen)
   return Transducer(Alph, Alph, Pi, Lambda);
 end);
 
-InstallMethod(IsValidAnnotatedTransducer, "for an UDAF transducer and a dense list",
-[IsUDAFTransducer, IsDenseList],
-function(T, L)
-  local edges, e;
-  if not IsDeterministicWalkHomomorphism(T!.DomainFolding) then
-    return false;
-  fi;
-  if not UDAFNrStates(T) = Size(L) then
-    return false;
-  fi;
-
-  edges := DigraphEdges(T!.Digraph);
-  for e in [1 .. Size(edges)] do
-    if not L[edges[e][2]] - L[edges[e][1]] = Size((T!.CoDomainFolding)!.EdgeMap[e]) - 1 then
-      return false;
-    fi;
-  od;
-  return true;
-end);
 
 
 # returns the transducer on alphabet out which reads blocks of length WordLen
@@ -1056,7 +1080,6 @@ function(Alph, WordLen, f)
   od;
   return Transducer(Alph, Alph, Pi, Lambda);
 end);
-
 
 
 InstallMethod(ResizeZeroStringTransducer, "for three two positive integers", [IsPosInt, IsPosInt, IsPosInt],
@@ -1269,10 +1292,11 @@ RANDOM_FINITE_ORDER_ONESIDED := function(D)
   while Random(List([1 .. n], x-> (n >= (n - x)^2))) and (bound ^ n < 100) do
     n := n + 1;
   od;
+  n := n - 1;
 
 
   B := LineDigraphWalkHomomorphism(D, n, 0);
-  n := Random([0 .. DigraphNrVertices(B!.DomainDigraph) - DigraphNrVertices(D)]);
+  n := Random([0 .. Maximum(DigraphNrVertices(B!.DomainDigraph) - DigraphNrVertices(D), 0)]);
   i := 0;
   while (i < n or not IsMultiDigraph(B!.DomainDigraph)) and 
     (DigraphNrVertices(B!.DomainDigraph) > DigraphNrVertices(D)) do
@@ -1318,7 +1342,7 @@ RANDOM_FINITE_ORDER_ONESIDED := function(D)
                                  x]);
   Sort(emap21);
   Sort(emap22);
-  emap2 := HashMap(DigraphNrEdges(B!.DomainDigraph));
+  emap2 := HashMap(DigraphNrEdges(B!.DomainDigraph) + 1);
   for i in [1 .. Size(emap21)] do
     emap2[emap21[i][3]] := emap22[i][3]^emap;
   od;
