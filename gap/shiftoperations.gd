@@ -18,7 +18,14 @@
 #!  well-defined function from the set of forwards infinite words in the domain 
 #!  alphabet to the set of infinite words, and these maps are all Lipschitz 
 #!  continuous.
-#!  TODO add disclaimer and metric
+#!
+#!  This is done with respect to the metric:
+#!
+#!   d(x_0x_1x_2..., y_0y_1y_2...) := inf({1/2^n|where n is such that x_i=y_i for all i &lt; n}).
+#!
+#!  Note that it is possible for the minimal transducer of a Lipschitz function
+#!  to not be Lipschitz as the minimal transducer of a map with a constant state
+#!  will have states which do not give output.
 #! <Example>
 #!gap> T := Transducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;
 #!gap> IsLipschitzTransducer(T);

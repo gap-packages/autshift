@@ -91,7 +91,11 @@ function(T, L)
   H1 := T!.DomainFolding;
   H2 := T!.CoDomainFolding;
 
-#TODO check that L is valid
+  if not Size(L) = UDAFNrStates(T) then
+    ErrorNoReturn("AutShift: DotUDAFTransducerWithVertexLabels: usage,\n",
+                    "the second input must have one entry for each state of\n",
+                    " the first input,");
+  fi;
 
   D := T!.Digraph;
   verts := DigraphVertices(D);

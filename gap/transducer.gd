@@ -86,6 +86,7 @@ DeclareOperation("ShiftIsomorphism", [IsTransducer]);
 #!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
 #!</Example>
 DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
+#(TODO add reference to explanation of this).
 
 #! @Arguments T
 #! @Returns an isomorphism of subshifts of finite type
@@ -96,7 +97,7 @@ DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
 #!  This is input as a minimal UDAF transducer and a valid annotation of its 
 #!  codomain folding. The isomorphism is the composite of the inverse of the
 #!  homeomorphism induced by the first folding with the homeomorphism induced by
-#!  the second folding using the annotation (TODO add reference to explanation of this).
+#!  the second folding using the annotation.
 #! <Example> 
 #!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
 #!> [-1]);
@@ -324,13 +325,14 @@ DeclareOperation("UDAFTransducer", [IsWalkHomomorphism, IsWalkHomomorphism]);
 #!</Example>
 DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer, 
                                                 IsUDAFTransducer]);
-                                                
+# TODO define the following?    
+                                            
 #! @Arguments T
 #! @Returns an UDAF transducer
 #! @Description
 #! An UDAF transducer is called minimal if its domain is a one-sided folding,
 #! its codomain is an UDAF folding without complete responce, and no two states
-#! have both the same domain image and the same codomain image. TODO define this?
+#! have both the same domain image and the same codomain image.
 #!
 #! The operation returns a minimal UDAF transducer which induces the same UDAF
 #! isomorphism as the given transducer.
@@ -353,13 +355,14 @@ DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer,
 #!true
 #!</Example>                                
 DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
+#TODO define the following?
 
 #! @Arguments T
 #! @Returns true or false
 #! @Description
 #! An UDAF transducer is called minimal if its domain is a one-sided folding,
 #! its codomain is an UDAF folding without complete responce, and no two states
-#! have both the same domain image and the same codomain image. TODO define this?
+#! have both the same domain image and the same codomain image. 
 #!
 #! The attribute returns true if and only if the given transducer is minimal.
 #! <Example>
@@ -383,13 +386,14 @@ DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
 DeclareAttribute("IsMinimalUDAFTransducer", IsUDAFTransducer);
 
 DeclareSynonymAttr("IsMinimal", IsMinimalUDAFTransducer);
+# (TODO more detail in the following?)
 
 #! @Arguments T1, T2, L1, L2
 #! @Returns true or false
 #! @Description
 #! Two UDAF transducers are called isomorphic if they have the same domain and 
 #! codomain digraphs, and there is an isomorphism of their underlying digraphs 
-#! which converts one into the other (TODO more detail?).
+#! which converts one into the other 
 #!
 #! Here T1, T2 are UDAF transducers and L1, L2 are lists with one entry for each
 #! state of T1 and T2 respectievly. These are intended to be thought of as labels
@@ -423,14 +427,14 @@ DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
                                                          IsUDAFTransducer,
                                                          IsDenseList,
                                                          IsDenseList]);
-                                                      
+# (TODO more detail in the following?).                              
                                                       
 #! @Arguments T1, T2
 #! @Returns true or false
 #! @Description
 #! Two UDAF transducers are called isomorphic if they have the same domain and 
 #! codomain digraphs, and there is an isomorphism of their underlying digraphs 
-#! which converts one into the other (TODO more detail?).
+#! which converts one into the other
 #!
 #! The attribute returns true if and only if the given transducers are isomorphic.
 #! <Example>
@@ -970,11 +974,12 @@ DeclareSynonymAttr("FiniteOrderDecomposition", OneSidedTorsionDecomposition);
 #! @Returns a one-sided shift isomorphism
 #! @Description
 #! Returns a random one-sided isomorphism with <A>D</A> as it's domain and codomain
-#!  digraph. TODO add slowness warning
+#!  digraph.
+#!
+#! Warning this commant is currently very slow even on rather small examples.
 #! <Example> 
 #!gap> RandomOneSidedAut(Digraph([[1, 1, 1]]));
 #! &lt;one sided shift isomorphism whose domain digraph has 
 #!3 edges, whose codomain digraph has 3 edges, and which has 3 states.>
 #!</Example>
 DeclareOperation("RandomOneSidedAut", [IsDigraph]);
-#TODO bugfix RandomOneSidedAut(Digraph([[2, 2], []]));

@@ -1158,7 +1158,6 @@ function(H)
   local outinfo, buckets, outneighs, edgemap, vertexmap, b, edge, 
         A1, A2, oldvertextonewvertex, oldedgetonewedge, vertex, e;
   if not IsDeterministicWalkHomomorphism(H) then
-    #TODO error message
     return fail;
   fi;
 
