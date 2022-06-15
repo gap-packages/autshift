@@ -46,14 +46,17 @@ DeclareRepresentation("IsOneSidedShiftIsomorphism", IsComponentObjectRep and
 #!@Chapter Transducers and isomorphisms
 
 #!@Section UDAF
-
+#! In this section we descible methods for working with UDAF 
+#! transducers and UDAF isomorphisms as described in the paper 
+#! (https://arxiv.org/abs/2112.13359). Note that many of the functions here
+#! are only implemented for UDAF digraphs for the reasons discussed in the paper.
 
 #TODO add support for two walk homomorphism shift isomorphism input
 
 #! @Arguments T
 #! @Returns an isomorphism in the UDAF category
 #! @Description
-#!  Creates an object called an UDAF isomorphism (seehttps://arxiv.org/abs/2112.13359).
+#!  Creates an object called an UDAF isomorphism.
 #!
 #!  The input is an UDAF transducer, the stored isomorphism is the one obtained
 #!  by composing the inverse of the induced domain map with the induced codomain
@@ -524,7 +527,19 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 
 
 #!@Section Two-sided shift
-
+#! In this section we describe methods for working with isomorphisms
+#! between subshifts of finite type. If D is a finite digraph, then the 
+#! corresponding shift space is defined to be the topological space of biinfinite
+#! edge walks throught D with the product topology. We call such a space a shift
+#! space. We call the dynamical system consisting of this space and the homomorphism
+#! defined by shifting the indexing of a walk by one, a subshift of finite type.
+#! If f is any isomorphism between the subshifts of finite type corresponding to 
+#! two digraphs A and B, then one can find a third digraph C and a pair of two-sided
+#! f1:C->A and f2:C->B such that f is equal to the composit of the inverse of the
+#! homeomorphism induced by f1 with the homeomorphism induced by f2. 
+#! This is how shift isomorphisms are handled in this package.
+#! Many of the functions in this section use UDAF transducers as a base and hense
+#! require the given digraphs to be UDAF digraphs.
 
 #! @Arguments T
 #! @Returns an isomorphism of subshifts of finite type
@@ -750,7 +765,20 @@ DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
 
 
 #!@Section One-sided shift
-
+#! In this section we describe methods for working with isomorphisms
+#! between one-sided subshifts of finite type. If D is a finite digraph, then the 
+#! corresponding one-sided shift space is defined to be the topological space of 
+#! backwards infinite edge walks throught D with the product topology. We call 
+#! such a space a one-sided shift space. We call the dynamical system consisting
+#! of this space and the continuous map defined by deleting the last edge in a walk
+#! (and reindexing the remaining edges) a one-sided subshift of finite type.
+#! If f is any isomorphism between the one-sided subshifts of finite type corresponding to 
+#! two digraphs A and B, then one can find a third digraph C and a pair of one-sided foldings
+#! f1:C->A and f2:C->B such that f is equal to the composit of the inverse of the
+#! homeomorphism induced by f1 with the homeomorphism induced by f2. 
+#! This is how one-sided shift isomorphisms are handled in this package.
+#! Many of the functions in this section use UDAF transducers as a base and hense
+#! require the given digraphs to be UDAF digraphs.
 
 #! @Arguments T
 #! @Returns an isomorphism of one-sided subshifts of finite type
@@ -938,7 +966,8 @@ DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsInt]);
 #! @Description
 #! It is required that the given isomorphism have the same domain and codomain digraph.
 #! Returns a list of one-sided shift isomorphisms of finite order whose composite
-#! is the given isomorphism <A>T</A>.
+#! is the given isomorphism <A>T</A>. This is done via an slight generalisation
+#! of the algorithm presented in https://arxiv.org/abs/2004.08478v4by.
 #! <Example> 
 #!gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
 #!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
@@ -1005,7 +1034,10 @@ DeclareOperation("RandomOneSidedAut", [IsDigraph]);
 
 
 
-#!@Section Aaa transducers
+#!@Section GNS transducers (from aaa).
+#! By a GNS transducer we mean a transducer of the type
+#! described by Grigorchuk, Nekrashevich, and Sushchanskii as defined in the 
+#!  package aaa (https://github.com/gap-packages/aaa).
 
 #! @Arguments AlphSize, History, BlockMap
 #! @Returns an aaa transducer object

@@ -30,6 +30,13 @@ DeclareRepresentation("IsWalkHomomorphism", IsComponentObjectRep and
 #!@Chapter Walk homomorphisms and foldings
 
 #!@Section Walk homomorphisms
+#!  A walk homomorphism from a digraph A to a digraph B consists of a 
+#! function from the vertex set of A to the vertex set of B, and a function from
+#! the edge sets of A to the set of finite walks in B. These functions must be compatible
+#! in the sense that an edge between two vertices must be mapped to a walk between
+#! the images of those vertices. A walk homomorphism is to be thought of a 
+#! generalisation of a digraph homomorphism (in the sense that a walk homomorphism
+#! which maps all edges to walks of length one is equivalent to a digraph homomorphism).
 
 #! @Arguments Dom, CoDom, VertexMap, EdgeMap 
 #! @Returns a walk homomorphism
@@ -723,6 +730,20 @@ DeclareAttribute("WalkHomomorphismInputString", IsWalkHomomorphism);
 
 
 #!@Section Foldings
+#! We use three types of folding in this package. We call these, UDAF foldings,
+#! two-sided foldings, and one-sided foldings. Each of these is a special type
+#! of walk homomorphism.
+#!
+#! An UDAF folding is a walk homomorphism between two finite digraphs which induces
+#! a bijection between the sets of unindexed biinfinite walks in the digraphs.
+#!
+#! A two-sided folding is a homomorphism between two finite digraphs which induces
+#! a bijection between the sets of indexed biinfinite walks in the digraphs 
+#! (we define these as walk homomorphism).
+#!
+#! A one-sided folding is a homomorphism between two finite digraphs which induces
+#! a bijection between the sets of indexed backwards infinite walks in the digraphs 
+#! (we define these as walk homomorphism).
 
 #! @Arguments W 
 #! @Returns a pair of walk homomorphisms

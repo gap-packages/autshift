@@ -13,6 +13,8 @@
 ##  <!ENTITY ARCHIVENAME "autshift-0.1.0">
 ##  <!ENTITY COPYRIGHTYEARS "2022">
 ##  <#/GAPDoc>
+
+
 SetPackageInfo( rec(
 
 PackageName := "autshift",
@@ -20,6 +22,14 @@ Subtitle := "Algorithms for Automotphisms of the Shift and related objects",
 Version := "0.1.0",
 Date := "16/02/2022", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
+AutoDoc := rec(TitlePage := rec(Abstract:= 
+   "The autshift package is a GAP package containing methods for transducers that can be used\
+     to represent isomorphisms between subshifts of finite type and related objects. It implements the\
+    some of processes described in the papers https://arxiv.org/abs/2004.08478v4by and https://arxiv.org/abs/2112.13359\
+    and builds on the existing package https://github.com/gap-packages/aaa.",
+   Acknowledgements:= 
+      "This package was created by Luke Elliott under the funding of ESPRC grant EP/R032866/1 and supervised by Collin Bleak. Special thanks to James Mitchell and Michael Torpey for their technical support.")),
+
 
 Persons := [
   rec(
@@ -58,8 +68,14 @@ ArchiveFormats := ".tar.gz",
 ##    "other"         for all other packages
 ##
 Status := "dev",
+#AutoDoc
+#    This is a record which can be used to control the scaffolding performed by
+# AutoDoc, specifically to provide extra information for the title page. 
+#For example, you can set AutoDoc.TitlePage.Copyright to a string which will then
+#  be inserted on the generated title page. Using this method you can customize the following title page elements: TitleComment, Abstract, Copyright, Acknowledgements and Colophon.
+#    Note that AutoDoc.TitlePage behaves exactly the same as the scaffold.TitlePage parameter of the AutoDoc (4.1-1) function.
 
-AbstractHTML :=  
+Abstract :=  
    "The <span class=\"pkgname\">autshift</span> package, is a package for \
    building and using transducers as described in the paper entitled \
    'Automata, Dynamical Systems, and Groups' of R. I. Grigorchuk, \
@@ -113,5 +129,4 @@ TestFile := "tst/testall.g",
 #Keywords := [ "TODO" ],
 
 ));
-
 
