@@ -12,6 +12,7 @@
 # that of objects that relate to this package. The appropiate ViewObj functions
 # are defined in the transducer.gi file.
 
+#TODO add doc for ! commands
 DeclareRepresentation("IsShiftIsomorphism", IsComponentObjectRep and
                       IsAttributeStoringRep, ["Digraph",
                                               "DomainDigraph",
@@ -41,84 +42,12 @@ DeclareRepresentation("IsOneSidedShiftIsomorphism", IsComponentObjectRep and
                                                    "DomainDigraph",
                                                    "CoDomainDigraph",
                                                    "MinimalTransducer"]);
-                                                   
-#! @Arguments T
-#! @Returns an isomorphism of subshifts of finite type
-#! @Description
-#!  Creates an object called a shift homomorphism. A shift isomorphism is a
-#!  homomorphism between subshifts of finite type. This input method requires
-#!  a full shift.
-#!
-#!  This is input as synchronous transducer from the aaa package (https://github.com/gap-packages/aaa)
-#!  which is strongly synchronizing and such that the map it defines on the 
-#!  shift space is a bijection.
-#! <Example>gap> 
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>
-#!gap> ShiftIsomorphism(T);                                              
-#!&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
-#!</Example>
-DeclareOperation("ShiftIsomorphism", [IsTransducer]);
 
-#! @Arguments T
-#! @Returns an isomorphism of subshifts of finite type
-#! @Description
-#!  Creates an object called a shift homomorphism. A shift isomorphism is a
-#!  homomorphism between subshifts of finite type. 
-#!
-#!  This is input as an UDAF transducer for which both UDAF foldings are two-sided
-#!  foldings. The isomorphism is the composite of the inverse of the
-#!  homeomorphism induced by the first folding with the homeomorphism induced by
-#!  the second folding.
-#! <Example> 
-#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));
-#!&lt;shift isomorphism whose domain digraph has 
-#!4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
-#!2 symbols, and 4 states.>
-#!gap> T := UDAFTransducer(T);
-#!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-#!2 edges, and which has 4 states.>
-#!gap> S := ShiftIsomorphism(T);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
-#!</Example>
-DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
-#(TODO add reference to explanation of this).
+#!@Chapter Transducers and isomorphisms
 
-#! @Arguments T
-#! @Returns an isomorphism of subshifts of finite type
-#! @Description
-#!  Creates an object called a shift homomorphism. A shift isomorphism is a
-#!  homomorphism between subshifts of finite type. 
-#!
-#!  This is input as a minimal UDAF transducer and a valid annotation of its 
-#!  codomain folding. The isomorphism is the composite of the inverse of the
-#!  homeomorphism induced by the first folding with the homeomorphism induced by
-#!  the second folding using the annotation.
-#! <Example> 
-#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
-#!> [-1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
-#!2 symbols, and 4 states.>
-#!gap> T := UDAFTransducer(T);
-#!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
-#!2 edges, and which has 4 states.>
-#!gap> S := ShiftIsomorphism(T);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
-#!gap> S2 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [2]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
-#!gap> S=S2;
-#!true
-#!</Example>
-DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer, IsDenseList]);
+#!@Section UDAF
+
+
 #TODO add support for two walk homomorphism shift isomorphism input
 
 #! @Arguments T
@@ -142,6 +71,7 @@ DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer, IsDenseList]);
 #!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 #!</Example>
 DeclareOperation("UDAFIsomorphism", [IsUDAFTransducer]);
+
 
 #! @Arguments T
 #! @Returns an isomorphism in the UDAF category
@@ -193,81 +123,7 @@ DeclareOperation("UDAFIsomorphism", [IsWalkHomomorphism, IsWalkHomomorphism]);
 #!</Example>
 DeclareOperation("UDAFIsomorphism", [IsShiftIsomorphism]);
 
-#! @Arguments S1, S2
-#! @Returns a shift isomorphism
-#! @Description
-#! Returns the shift isomorphism obtained by composing the homeomorphisms 
-#! <A>S1</A> and <A>S2</A>.
-#!
-#! This operation can also be called with *.
-#! <Example> 
-#!gap> SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]); 
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
-#!gap> S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> SM1 * S1 = S0;
-#!true
-#!</Example>
-DeclareOperation("ComposeShiftIsomorphisms", [IsShiftIsomorphism, 
-                                              IsShiftIsomorphism]);    
-#! @Arguments AlphSize, History, BlockMap
-#! @Returns an aaa transducer object
-#! @Description
-#!  <A>AlphSize</A> is assumed to be an integer which is at least 2. <A>History</A> is assumed
-#!  to be a non-negative integer. <A>BlockMap</A> is a function which assigns each word
-#!  over the alphabet [0, 1, ..., <A>AlphSize</A> - 1] of length <A>History</A> + 1
-#!  another word over the same alphbet.
-#!
-#!  The output object is an aaa (https://github.com/gap-packages/aaa) transducer
-#!  whose input and output alphabets have <A>AlphSize</A> letters. There is a
-#!  state for each word of length <A>History</A> in the alphbet. Transitions are
-#!  done as is DeBruijin graphs, that is a letter a is read from a state w by 
-#!  transitioning to the state which is a suffix of the word wa. In this case
-#!  the word wrtten that the word objetain by applying the function <A>BlockMap</A>
-#!  to wa.
-#!
-#! <Example> 
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
-#!2 symbols, and 4 states.>
-#!</Example>
-DeclareOperation("BlockCodeTransducer", [IsPosInt, IsInt, IsFunction]);
 
-#! @Arguments n
-#! @Returns a shift isomorphism
-#! @Description
-#! Returns the identity shift isomorphism on for the shift space of the digraph
-#! with one vertex and <A>n</A> edges (for <A>n</A> at least 2).
-#! <Example> 
-#!gap> IdentityShiftIsomorphism(2);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
-#!gap> IdentityShiftIsomorphism(4);
-#!&lt;shift isomorphism whose domain digraph has 
-#!4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
-#!</Example>
-DeclareOperation("IdentityShiftIsomorphism", [IsPosInt]);
-
-#! @Arguments AlphSize, History
-#! @Returns an aaa transducer
-#! @Description
-#!  The output object is an aaa (https://github.com/gap-packages/aaa) transducer
-#!  whose input and output alphabets have <A>AlphSize</A> letters. There is a
-#!  state for each word of length <A>History</A> in the alphbet. Transitions are
-#!  done as is DeBruijin graphs, that is a letter a is read from a state w by 
-#!  transitioning to the state which is a suffix of the word wa.
-#!  The write function is the identity function.
-#! <Example> 
-#!gap> DeBruijnTransducer(2, 3);                       
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
-#!2 symbols, and 8 states.>
-#!</Example>
-DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
 
 #! @Arguments T
 #! @Returns an UDAF transducer
@@ -386,6 +242,9 @@ DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
 DeclareAttribute("IsMinimalUDAFTransducer", IsUDAFTransducer);
 
 DeclareSynonymAttr("IsMinimal", IsMinimalUDAFTransducer);
+
+
+
 # (TODO more detail in the following?)
 
 #! @Arguments T1, T2, L1, L2
@@ -461,109 +320,8 @@ DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
 #!</Example>     
 DeclareOperation("AreIsomorphicUDAFTransducers", [IsUDAFTransducer,
                                                   IsUDAFTransducer]);
-                                                  
 
-#! @Arguments S1, S2
-#! @Returns a shift isomorphism
-#! @Description
-#! Returns the shift isomorphism obtained by composing the homeomorphisms 
-#! <A>S1</A> and <A>S2</A>.
-#! <Example> 
-#!gap> SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]); 
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
-#!gap> S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> SM1 * S1 = S0;
-#!true
-#!</Example>
-DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 
-#! @Arguments S1, S2
-#! @Returns a one-sided shift isomorphism
-#! @Description
-#! Returns the one-sided shift isomorphism obtained by composing the homeomorphisms 
-#! <A>S1</A> and <A>S2</A>.
-#! <Example> 
-#!gap> SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]); 
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
-#!gap> S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> SM1 * S1 = S0;
-#!true
-#!</Example>
-DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
-
-#! @Arguments S1, S2
-#! @Returns a one-sided shift isomorphism
-#! @Description
-#! Returns the one-sided shift isomorphism obtained by composing the homeomorphisms 
-#! <A>S1</A> and <A>S2</A>.
-#! <Example> 
-#!gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
-#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
-#!> [ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],
-#!> [ 2 ] ]);
-#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
-#!gap> g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
-#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
-#!> [ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], 
-#!> [ 1 ], [ 2 ] ]);
-#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
-#!gap> T := OneSidedShiftIsomorphism(f, g);
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!4 edges, whose codomain digraph has 4 edges, and which has 6 states.>
-#!gap> S := OneSidedTorsionDecomposition(T);
-#![ &lt;one sided shift isomorphism whose domain digraph has 
-#!    4 edges, whose codomain digraph has 4 edges, and which has 3 states.>, 
-#!  &lt;one sided shift isomorphism whose domain digraph has 
-#!    4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ]
-#!gap> S[1] * S[2] = T;
-#!true
-#!</Example>
-DeclareOperation("\*", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
-
-#! @Arguments S1, S2
-#! @Returns a one-sided shift isomorphism
-#! @Description
-#! Returns the one-sided shift isomorphism obtained by composing the homeomorphisms 
-#! <A>S1</A> and <A>S2</A>.
-#!
-#! This operation can also be called with *.
-#! <Example> 
-#!gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
-#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
-#!> [ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],
-#!> [ 2 ] ]);
-#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
-#!gap> g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
-#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
-#!> [ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], 
-#!> [ 1 ], [ 2 ] ]);
-#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
-#!gap> T := OneSidedShiftIsomorphism(f, g);
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!4 edges, whose codomain digraph has 4 edges, and which has 6 states.>
-#!gap> S := OneSidedTorsionDecomposition(T);
-#![ &lt;one sided shift isomorphism whose domain digraph has 
-#!    4 edges, whose codomain digraph has 4 edges, and which has 3 states.>, 
-#!  &lt;one sided shift isomorphism whose domain digraph has 
-#!    4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ]
-#!gap> S[1] * S[2] = T;
-#!true
-#!</Example>
-DeclareOperation("ComposeOneSidedShiftIsomorphisms", [IsOneSidedShiftIsomorphism, 
-                                              IsOneSidedShiftIsomorphism]);
-                                              
 #! @Arguments T1, T2
 #! @Returns an UDAF transducer
 #! @Description
@@ -649,55 +407,59 @@ DeclareOperation("\*", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 #!</Example>
 DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
 
-#! @Arguments S, n
-#! @Returns a shift isomorphism
-#! @Description
-#! Returns the product of <A>S</A> with itself <A>n</A> times for positive <A>n</A>.
-#! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
-#! otherwise.
-#! <Example> 
-#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
-#!> [1]); 
-#!&lt;shift isomorphism whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> S!.Annotation;
-#![ 1 ]
-#!gap> (S^3)!.Annotation;
-#![ 3 ]
-#!gap> (S^-2)!.Annotation;
-#![ -2 ]
-#!</Example>
-DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
-#TODO add doc for ! commands
 
-#! @Arguments S, n
-#! @Returns a one-sided shift isomorphism
+#! @Arguments T
+#! @Returns an integer
 #! @Description
-#! Returns the product of <A>S</A> with itself <A>n</A> times for positive <A>n</A>.
-#! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
-#! otherwise.
-#! <Example> 
-#!gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
-#!> Digraph([[1, 1, 1]]),
-#!> [1, 1, 1],
-#!> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
-#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
-#!gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
-#!> Digraph([[1, 1, 1]]),
-#!> [1, 1, 1],
-#!> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
-#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
-#!gap> Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);      
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
-#!gap> Fig5^2;
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 3 states.>
-#!gap> Fig5^-1;
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#! Returns the number of states of an UDAF transducer <A>T</A>. That is, the number
+#! of vertices of the shared domain of the two UDAF foldings defining <A>T</A>.
+#! <Example>
+#!gap> T := ResizeZeroStringTransducer(2, 2, 3);;
+#!gap> T := UDAFTransducer(T);
+#!&lt;UDAF Transducer whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
+#!gap> UDAFNrStates(T);
+#!5
 #!</Example>
-DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsInt]);
+DeclareAttribute("UDAFNrStates", IsUDAFTransducer);
+#DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
+
+#! @Arguments D
+#! @Returns an UDAF transducer
+#! @Description
+#! Returns the UDAF transducer defined using two copies of the identity folding
+#! on the given digraph.
+#! <Example>
+#!gap> T := IdentityUDAFTransducer(PetersenGraph());
+#!&lt;UDAF Transducer whose domain digraph has 
+#!30 edges, whose codomain digraph has 30 edges, and which has 10 states.>
+#!</Example>
+DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);
+
+
+#! @Arguments T
+#! @Returns an UDAF transducer and a list of lists of integers
+#! @Description
+#! It is assumed that the domain folding of <A>T</A> is deterministic.
+#! The operation returns the transducer obtained from <A>T</A> by quotienting the
+#! the underlying digraph of <A>T</A> as much as possible such that the UDAF
+#! foldings of <A>T</A> are still well defined.
+#!
+#! The operation also returns the list of equivalence classes of vertices of the
+#! above relation.
+#! <Example>
+#!gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);
+#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+#!gap> U := UDAFTransducer(L10, L10);
+#!&lt;UDAF Transducer whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> DeterministicDomainCombineEquivalentStates(U);
+#![ &lt;UDAF Transducer whose domain digraph has 
+#!    2 edges, whose codomain digraph has 2 edges, and which has 1 state.>, 
+#!  [ [ 1, 2 ] ] ]
+#!</Example>
+DeclareOperation("DeterministicDomainCombineEquivalentStates", [IsUDAFTransducer]);
+
 
 #! @Arguments S, n
 #! @Returns an UDAF isomorphism
@@ -744,6 +506,150 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsInt]);
 #!</Example>
 DeclareOperation("\^", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!@Section Two-sided shift
+
+
+#! @Arguments T
+#! @Returns an isomorphism of subshifts of finite type
+#! @Description
+#!  Creates an object called a shift homomorphism. A shift isomorphism is a
+#!  homomorphism between subshifts of finite type. This input method requires
+#!  a full shift.
+#!
+#!  This is input as synchronous transducer from the aaa package (https://github.com/gap-packages/aaa)
+#!  which is strongly synchronizing and such that the map it defines on the 
+#!  shift space is a bijection.
+#! <Example>gap> 
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>
+#!gap> ShiftIsomorphism(T);                                              
+#!&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
+#!</Example>
+DeclareOperation("ShiftIsomorphism", [IsTransducer]);
+
+#! @Arguments T
+#! @Returns an isomorphism of subshifts of finite type
+#! @Description
+#!  Creates an object called a shift homomorphism. A shift isomorphism is a
+#!  homomorphism between subshifts of finite type. 
+#!
+#!  This is input as an UDAF transducer for which both UDAF foldings are two-sided
+#!  foldings. The isomorphism is the composite of the inverse of the
+#!  homeomorphism induced by the first folding with the homeomorphism induced by
+#!  the second folding.
+#! <Example> 
+#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));
+#!&lt;shift isomorphism whose domain digraph has 
+#!4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
+#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 4 states.>
+#!gap> T := UDAFTransducer(T);
+#!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+#!2 edges, and which has 4 states.>
+#!gap> S := ShiftIsomorphism(T);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
+#!</Example>
+DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
+
+
+#(TODO add reference to explanation of this).
+
+#! @Arguments T
+#! @Returns an isomorphism of subshifts of finite type
+#! @Description
+#!  Creates an object called a shift homomorphism. A shift isomorphism is a
+#!  homomorphism between subshifts of finite type. 
+#!
+#!  This is input as a minimal UDAF transducer and a valid annotation of its 
+#!  codomain folding. The isomorphism is the composite of the inverse of the
+#!  homeomorphism induced by the first folding with the homeomorphism induced by
+#!  the second folding using the annotation.
+#! <Example> 
+#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+#!> [-1]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 4 states.>
+#!gap> T := UDAFTransducer(T);
+#!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
+#!2 edges, and which has 4 states.>
+#!gap> S := ShiftIsomorphism(T);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
+#!gap> S2 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [2]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 4 states.>
+#!gap> S=S2;
+#!true
+#!</Example>
+DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer, IsDenseList]);
+
+
+#! @Arguments S1, S2
+#! @Returns a shift isomorphism
+#! @Description
+#! Returns the shift isomorphism obtained by composing the homeomorphisms 
+#! <A>S1</A> and <A>S2</A>.
+#!
+#! This operation can also be called with *.
+#! <Example> 
+#!gap> SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]); 
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
+#!gap> S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> SM1 * S1 = S0;
+#!true
+#!</Example>
+DeclareOperation("ComposeShiftIsomorphisms", [IsShiftIsomorphism, 
+                                              IsShiftIsomorphism]);    
+
+#! @Arguments S1, S2
+#! @Returns a shift isomorphism
+#! @Description
+#! Returns the shift isomorphism obtained by composing the homeomorphisms 
+#! <A>S1</A> and <A>S2</A>.
+#! <Example> 
+#!gap> SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]); 
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
+#!gap> S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
+#!gap> SM1 * S1 = S0;
+#!true
+#!</Example>
+DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
+
 #! @Arguments S, T
 #! @Returns a shift isomorphism
 #! @Description
@@ -774,106 +680,77 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 #!</Example>
 DeclareOperation("\^", [IsShiftIsomorphism, IsShiftIsomorphism]);
 
-#! @Arguments S, T
-#! @Returns a one-sided shift isomorphism
+#! @Arguments n
+#! @Returns a shift isomorphism
 #! @Description
-#! Returns the conjugate of <A>S</A> by <A>T</A>. That is to say the product <A>T</A>^-1 <A>S</A> <A>T</A>.
-#! <Example>
-#!gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
-#!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
-#!3 symbols, and 1 state.>
-#!gap> C:= OneSidedShiftIsomorphism(UDAFTransducer(C));
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 1 state.>
-#!gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
-#!> Digraph([[1, 1, 1]]),
-#!> [1, 1, 1],
-#!> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
-#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
-#!gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
-#!> Digraph([[1, 1, 1]]),
-#!> [1, 1, 1],
-#!> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
-#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
-#!gap> Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);  
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
-#!gap> Fig5^C;
-#!&lt;one sided shift isomorphism whose domain digraph has 
-#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#! Returns the identity shift isomorphism on for the shift space of the digraph
+#! with one vertex and <A>n</A> edges (for <A>n</A> at least 2).
+#! <Example> 
+#!gap> IdentityShiftIsomorphism(2);
+#!&lt;shift isomorphism whose domain digraph has 
+#!2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
+#!gap> IdentityShiftIsomorphism(4);
+#!&lt;shift isomorphism whose domain digraph has 
+#!4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
 #!</Example>
-DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
+DeclareOperation("IdentityShiftIsomorphism", [IsPosInt]);
 
 
-#! @Arguments T
-#! @Returns an integer
+#! @Arguments S, n
+#! @Returns a shift isomorphism
 #! @Description
-#! Returns the number of states of an UDAF transducer <A>T</A>. That is, the number
-#! of vertices of the shared domain of the two UDAF foldings defining <A>T</A>.
-#! <Example>
-#!gap> T := ResizeZeroStringTransducer(2, 2, 3);;
-#!gap> T := UDAFTransducer(T);
-#!&lt;UDAF Transducer whose domain digraph has 
-#!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
-#!gap> UDAFNrStates(T);
-#!5
-#!</Example>
-DeclareAttribute("UDAFNrStates", IsUDAFTransducer);
-#DeclareOperation("\=", [IsUDAFTransducer, IsUDAFTransducer]);
-
-#! @Arguments D
-#! @Returns an UDAF transducer
-#! @Description
-#! Returns the UDAF transducer defined using two copies of the identity folding
-#! on the given digraph.
-#! <Example>
-#!gap> T := IdentityUDAFTransducer(PetersenGraph());
-#!&lt;UDAF Transducer whose domain digraph has 
-#!30 edges, whose codomain digraph has 30 edges, and which has 10 states.>
-#!</Example>
-DeclareOperation("IdentityUDAFTransducer", [IsDigraph]);
-
-#! @Arguments AlphSize, Len1, Len2
-#! @Returns an aaa transducer
-#! @Description
-#! It is required that <A>AlphSize</A> is at least 2. Returns the minimal aaa 
-#! transducer which defines the homeomorphism of cantor space defined by
-#! finding all maximal contiguous all zero substrings in the
-#! given input, and replacing those with length <A>Len1</A> with those with
-#! length <A>Len2</A> and vice versa.
-#! <Example>
-#!gap> ResizeZeroStringTransducer(2, 1, 3);
-#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
-#!2 symbols, and 5 states.>
-#!gap> ResizeZeroStringTransducer(3, 2, 1);
-#!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
-#!3 symbols, and 4 states.>
-#!</Example>
-DeclareOperation("ResizeZeroStringTransducer", [IsPosInt, IsPosInt, IsPosInt]);
-#DeclareOperation("IsValidAnnotatedTransducer", [IsUDAFTransducer, IsDenseList]);
-
-#! @Arguments T
-#! @Returns an UDAF transducer and a list of lists of integers
-#! @Description
-#! It is assumed that the domain folding of <A>T</A> is deterministic.
-#! The operation returns the transducer obtained from <A>T</A> by quotienting the
-#! the underlying digraph of <A>T</A> as much as possible such that the UDAF
-#! foldings of <A>T</A> are still well defined.
-#!
-#! The operation also returns the list of equivalence classes of vertices of the
-#! above relation.
-#! <Example>
-#!gap> L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);
-#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
-#!gap> U := UDAFTransducer(L10, L10);
-#!&lt;UDAF Transducer whose domain digraph has 
+#! Returns the product of <A>S</A> with itself <A>n</A> times for positive <A>n</A>.
+#! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
+#! otherwise.
+#! <Example> 
+#!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),
+#!> [1]); 
+#!&lt;shift isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> DeterministicDomainCombineEquivalentStates(U);
-#![ &lt;UDAF Transducer whose domain digraph has 
-#!    2 edges, whose codomain digraph has 2 edges, and which has 1 state.>, 
-#!  [ [ 1, 2 ] ] ]
+#!gap> S!.Annotation;
+#![ 1 ]
+#!gap> (S^3)!.Annotation;
+#![ 3 ]
+#!gap> (S^-2)!.Annotation;
+#![ -2 ]
 #!</Example>
-DeclareOperation("DeterministicDomainCombineEquivalentStates", [IsUDAFTransducer]);
+DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!@Section One-sided shift
+
 
 #! @Arguments T
 #! @Returns an isomorphism of one-sided subshifts of finite type
@@ -933,7 +810,129 @@ DeclareOperation("OneSidedShiftIsomorphism", [IsUDAFTransducer]);
 #!</Example>
 DeclareOperation("OneSidedShiftIsomorphism", [IsWalkHomomorphism, 
                                               IsWalkHomomorphism]);
-                                            
+
+#! @Arguments S1, S2
+#! @Returns a one-sided shift isomorphism
+#! @Description
+#! Returns the one-sided shift isomorphism obtained by composing the homeomorphisms 
+#! <A>S1</A> and <A>S2</A>.
+#!
+#! This operation can also be called with *.
+#! <Example> 
+#!gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+#!> [ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],
+#!> [ 2 ] ]);
+#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+#!gap> g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+#!> [ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], 
+#!> [ 1 ], [ 2 ] ]);
+#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+#!gap> T := OneSidedShiftIsomorphism(f, g);
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!4 edges, whose codomain digraph has 4 edges, and which has 6 states.>
+#!gap> S := OneSidedTorsionDecomposition(T);
+#![ &lt;one sided shift isomorphism whose domain digraph has 
+#!    4 edges, whose codomain digraph has 4 edges, and which has 3 states.>, 
+#!  &lt;one sided shift isomorphism whose domain digraph has 
+#!    4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ]
+#!gap> S[1] * S[2] = T;
+#!true
+#!</Example>
+DeclareOperation("ComposeOneSidedShiftIsomorphisms", [IsOneSidedShiftIsomorphism, 
+                                              IsOneSidedShiftIsomorphism]);
+                                              
+#! @Arguments S1, S2
+#! @Returns a one-sided shift isomorphism
+#! @Description
+#! Returns the one-sided shift isomorphism obtained by composing the homeomorphisms 
+#! <A>S1</A> and <A>S2</A>.
+#! <Example> 
+#!gap> f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+#!> [ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],
+#!> [ 2 ] ]);
+#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+#!gap> g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ], 
+#!> [ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ], 
+#!> [ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], 
+#!> [ 1 ], [ 2 ] ]);
+#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>
+#!gap> T := OneSidedShiftIsomorphism(f, g);
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!4 edges, whose codomain digraph has 4 edges, and which has 6 states.>
+#!gap> S := OneSidedTorsionDecomposition(T);
+#![ &lt;one sided shift isomorphism whose domain digraph has 
+#!    4 edges, whose codomain digraph has 4 edges, and which has 3 states.>, 
+#!  &lt;one sided shift isomorphism whose domain digraph has 
+#!    4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ]
+#!gap> S[1] * S[2] = T;
+#!true
+#!</Example>
+DeclareOperation("\*", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
+
+#! @Arguments S, T
+#! @Returns a one-sided shift isomorphism
+#! @Description
+#! Returns the conjugate of <A>S</A> by <A>T</A>. That is to say the product <A>T</A>^-1 <A>S</A> <A>T</A>.
+#! <Example>
+#!gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
+#!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
+#!3 symbols, and 1 state.>
+#!gap> C:= OneSidedShiftIsomorphism(UDAFTransducer(C));
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 1 state.>
+#!gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+#!> Digraph([[1, 1, 1]]),
+#!> [1, 1, 1],
+#!> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
+#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+#!gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+#!> Digraph([[1, 1, 1]]),
+#!> [1, 1, 1],
+#!> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
+#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+#!gap> Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);  
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#!gap> Fig5^C;
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#!</Example>
+DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism]);
+
+#! @Arguments S, n
+#! @Returns a one-sided shift isomorphism
+#! @Description
+#! Returns the product of <A>S</A> with itself <A>n</A> times for positive <A>n</A>.
+#! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
+#! otherwise.
+#! <Example> 
+#!gap> Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+#!> Digraph([[1, 1, 1]]),
+#!> [1, 1, 1],
+#!> [[1], [2], [3], [1], [2], [3], [1], [2], [3]]);
+#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+#!gap> Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),
+#!> Digraph([[1, 1, 1]]),
+#!> [1, 1, 1],
+#!> [[3], [1], [2], [3], [2], [1], [3], [2], [1]]);
+#!&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>
+#!gap> Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);      
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#!gap> Fig5^2;
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 3 states.>
+#!gap> Fig5^-1;
+#!&lt;one sided shift isomorphism whose domain digraph has 
+#!3 edges, whose codomain digraph has 3 edges, and which has 2 states.>
+#!</Example>
+DeclareOperation("\^", [IsOneSidedShiftIsomorphism, IsInt]);
+
+
+
 #! @Arguments T
 #! @Returns a list of one-sided shift isomorphisms
 #! @Description
@@ -970,6 +969,7 @@ DeclareSynonymAttr("TorDecomp", OneSidedTorsionDecomposition);
 DeclareSynonymAttr("FiniteOrderDecomp", OneSidedTorsionDecomposition);
 DeclareSynonymAttr("FiniteOrderDecomposition", OneSidedTorsionDecomposition);
 
+
 #! @Arguments D
 #! @Returns a one-sided shift isomorphism
 #! @Description
@@ -983,3 +983,198 @@ DeclareSynonymAttr("FiniteOrderDecomposition", OneSidedTorsionDecomposition);
 #!3 edges, whose codomain digraph has 3 edges, and which has 3 states.>
 #!</Example>
 DeclareOperation("RandomOneSidedAut", [IsDigraph]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#!@Section Aaa transducers
+
+#! @Arguments AlphSize, History, BlockMap
+#! @Returns an aaa transducer object
+#! @Description
+#!  <A>AlphSize</A> is assumed to be an integer which is at least 2. <A>History</A> is assumed
+#!  to be a non-negative integer. <A>BlockMap</A> is a function which assigns each word
+#!  over the alphabet [0, 1, ..., <A>AlphSize</A> - 1] of length <A>History</A> + 1
+#!  another word over the same alphbet.
+#!
+#!  The output object is an aaa (https://github.com/gap-packages/aaa) transducer
+#!  whose input and output alphabets have <A>AlphSize</A> letters. There is a
+#!  state for each word of length <A>History</A> in the alphbet. Transitions are
+#!  done as is DeBruijin graphs, that is a letter a is read from a state w by 
+#!  transitioning to the state which is a suffix of the word wa. In this case
+#!  the word wrtten that the word objetain by applying the function <A>BlockMap</A>
+#!  to wa.
+#!
+#! <Example> 
+#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 4 states.>
+#!</Example>
+DeclareOperation("BlockCodeTransducer", [IsPosInt, IsInt, IsFunction]);
+
+#! @Arguments AlphSize, History
+#! @Returns an aaa transducer
+#! @Description
+#!  The output object is an aaa (https://github.com/gap-packages/aaa) transducer
+#!  whose input and output alphabets have <A>AlphSize</A> letters. There is a
+#!  state for each word of length <A>History</A> in the alphbet. Transitions are
+#!  done as is DeBruijin graphs, that is a letter a is read from a state w by 
+#!  transitioning to the state which is a suffix of the word wa.
+#!  The write function is the identity function.
+#! <Example> 
+#!gap> DeBruijnTransducer(2, 3);                       
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 8 states.>
+#!</Example>
+DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
+
+
+#! @Arguments AlphSize, Len1, Len2
+#! @Returns an aaa transducer
+#! @Description
+#! It is required that <A>AlphSize</A> is at least 2. Returns the minimal aaa 
+#! transducer which defines the homeomorphism of cantor space defined by
+#! finding all maximal contiguous all zero substrings in the
+#! given input, and replacing those with length <A>Len1</A> with those with
+#! length <A>Len2</A> and vice versa.
+#! <Example>
+#!gap> ResizeZeroStringTransducer(2, 1, 3);
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 5 states.>
+#!gap> ResizeZeroStringTransducer(3, 2, 1);
+#!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
+#!3 symbols, and 4 states.>
+#!</Example>
+DeclareOperation("ResizeZeroStringTransducer", [IsPosInt, IsPosInt, IsPosInt]);
+                          
+
+
+#! @Arguments T
+#! @Returns true or false
+#! @Description
+#!  We say that a trasducer T is Lipschitz if for each state of T defines a 
+#!  well-defined function from the set of forwards infinite words in the domain 
+#!  alphabet to the set of infinite words, and these maps are all Lipschitz 
+#!  continuous.
+#!
+#!  This is done with respect to the metric:
+#!
+#!   d(x_0x_1x_2..., y_0y_1y_2...) := inf({1/2^n|where n is such that x_i=y_i for all i &lt; n}).
+#!
+#!  Note that it is possible for the minimal transducer of a Lipschitz function
+#!  to not be Lipschitz as the minimal transducer of a map with a constant state
+#!  will have states which do not give output.
+#! <Example>
+#!gap> T := Transducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;
+#!gap> IsLipschitzTransducer(T);
+#!true
+#!gap> T := AlphabetChangeTransducer(4, 3);;
+#!gap> IsLipschitzTransducer(T);
+#!true
+#!gap> T := Transducer(3, 3, [[2, 2, 1], [3, 4, 3], [1, 1, 2], [2, 2, 3]],
+#!> [[[1, 0, 1], [0], [2, 2, 0]], [[], [2], [0, 1, 2, 2]], [[], [0, 1], [2, 2]],
+#!> [[2, 2], [0, 2], [1, 2, 2]]]);;
+#!gap> IsLipschitzTransducer(T);
+#!false
+#!gap> T := AlphabetChangeTransducer(3, 4);;
+#!gap> IsLipschitzTransducer(T);
+#!false
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!> [1, 1]], [[0], [1]]]);;
+#!gap> IsLipschitzTransducer(T);
+#!false
+#!gap> M := MinimalTransducer(T);                                      
+#!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 2 states.>
+#!gap> IsLipschitzTransducer(T);                                          
+#!true
+#!gap> IsLipschitzTransducer(M);                                          
+#!false
+#!</Example>
+DeclareOperation("IsLipschitzTransducer", [IsTransducer]);
+
+#! @Arguments T
+#! @Returns an aaa transducer
+#! @Description
+#!  If T is a synchronizing transducer, then we define the core of T to be the
+#!  smallest non-empty transducer obtainable from T by removing states from T.
+#!
+#!  The Operation takes as input an synchronizing transducer and returns its Core
+#! <Example>
+#!gap> T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
+#!> [[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;
+#!gap> C := TransducerCore(T);;
+#!gap> OutputFunction(C);
+#![ [ [ 1 ], [ 0, 1 ] ], [ [ 1 ], [  ] ], [ [ 1 ], [ 0 ] ] ]
+#!gap> TransitionFunction(C);
+#![ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!> [1, 1]], [[0], [1]]]);;
+#!gap> C := TransducerCore(T);;
+#!gap> OutputFunction(C);
+#![ [ [ 1, 0 ], [  ] ], [ [ 0 ], [ 1, 1 ] ], [ [ 0 ], [ 1 ] ] ]
+#!gap> TransitionFunction(C);
+#![ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
+#!gap> T := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);
+#!transducer with input alphabet on 2 symbols, output alphabet on 
+#!2 symbols, and 2 states.>
+#!gap> TransducerCore(T);
+#!Error, autshift: TransducerCore: usage,
+#!the transducer must be synchronizing 
+#!</Example>
+DeclareOperation("TransducerCore", [IsTransducer]);
+
+#! @Arguments T
+#! @Returns true or false
+#! @Description
+#!  If T is a synchronizing transducer, then we define the core of T to be the
+#!  smallest non-empty transducer obtainable from T by removing states from T.
+#!  We say that T is core if it is equal to its core.
+#!
+#!  The attribute returns true if and only if the given transducer is core.
+#! <Example>
+#!gap> T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
+#!> [[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;
+#!gap> IsCoreTransducer(T);
+#!false
+#!gap> C := TransducerCore(T);;
+#!gap> IsCoreTransducer(C);
+#!true
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!> [1, 1]], [[0], [1]]]);;
+#!gap> IsCoreTransducer(T);
+#!true
+#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!> [1, 1]], [[0], [1]]]);;
+#!gap> IsCoreTransducer(T);
+#!true
+#!gap> T := Transducer(2, 4, [[1, 2], [1, 3], [1, 1]], [[[0], []], [[1], []],
+#!> [[2], [3]]]);;
+#!gap> IsCoreTransducer(T);
+#!false
+#!gap> T := DeBruijnTransducer(2, 3);;
+#!gap> IsCoreTransducer(T);
+#!true
+#!gap> T := DeBruijnTransducer(3, 2);;
+#!gap> IsCoreTransducer(T);
+#!true
+#!</Example>
+DeclareAttribute("IsCoreTransducer", IsTransducer);

@@ -12,6 +12,9 @@
 
 DeclareGlobalFunction("AutshiftMakeDoc");
 
+#!@Chapter Pictures and homomorphisms and dot strings
+#!@Section Dot strings
+
 #! @Arguments T
 #! @Returns a string
 #! @Description
@@ -42,6 +45,10 @@ DeclareOperation("DotUDAFTransducer", [IsUDAFTransducer]);
 #!  digraph of the transducer are labelled according to the list <A>L</A>.
 DeclareOperation("DotUDAFTransducerWithVertexLabels", [IsUDAFTransducer, IsDenseList]);
 
+
+
+
+#!@Section Pictures
 #! @Arguments T
 #! @Returns 
 #! @Description

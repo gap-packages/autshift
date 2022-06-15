@@ -26,6 +26,11 @@ DeclareRepresentation("IsWalkHomomorphism", IsComponentObjectRep and
                                               "CoDomainDigraph",
                                               "VertexMap",
                                               "EdgeMap"]);
+                                              
+#!@Chapter Walk homomorphisms and foldings
+
+#!@Section Walk homomorphisms
+
 #! @Arguments Dom, CoDom, VertexMap, EdgeMap 
 #! @Returns a walk homomorphism
 #! @Description
@@ -45,6 +50,64 @@ DeclareRepresentation("IsWalkHomomorphism", IsComponentObjectRep and
 #! <Example>gap> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
 #! &lt;walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.&gt; </Example>
 DeclareOperation("WalkHomomorphism", [IsDigraph, IsDigraph, IsDenseList, IsDenseList]);
+
+
+#! @Arguments A, B
+#! @Returns a walk homomorphism
+#! @Description
+#!  If <A>A</A> is a walk homomorphism from D1 to D2 and <A>B</A> is a walk 
+#!  homomorphism from D2 to D3, then the composite of <A>A</A> and <B>B</B> is
+#!  a walk homomorphism from D1 to D3. The vertex map is the composite of
+#!  the vertex maps of <A>A</A> and <A>B</A>. The edge map maps an edge
+#!  e to the walk obtained by applying <A>A</A> to e, and concatening the walks
+#!  obtained by applying <A>B</A> to the edges in this walk.
+#!
+#!  This operation returns the composite of <A>A</A> and <A>B</A> if they are
+#!  composable and returns fail otherwise.
+#!
+#!  This operation and also be called using *.
+#! <Example> 
+#!gap> I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));
+#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+#!gap> I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));
+#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+#!gap> I1*I2;
+#!fail
+#!gap> R2toPhiFold() * PhitoR2Fold();
+#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+#!</Example>
+DeclareOperation("ComposeWalkHomomorphisms", [IsWalkHomomorphism, IsWalkHomomorphism]);
+
+
+#! @Arguments A, B
+#! @Returns a walk homomorphism
+#! @Description
+#!  Same as ComposeWalkHomomorphisms.
+#! <Example> 
+#!gap> I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));
+#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+#!gap> I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));
+#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+#!gap> I1*I2;
+#!fail
+#!gap> R2toPhiFold() * PhitoR2Fold();
+#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
+#!</Example>
+DeclareOperation("\*", [IsWalkHomomorphism, IsWalkHomomorphism]);
+
+
+
+#! @Arguments D
+#! @Returns a walk homomorphisms
+#! @Description
+#!  Returns the walk homomorphism from <A>D</A> to <A>D</A> which maps each edge
+#!  to the walk of length 1 containing it, and fixing all vertices.
+#!
+#! <Example> 
+#!gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
+#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
+#!</Example>
+DeclareOperation("IdentityWalkHomomorphism", [IsDigraph]);
 
 #! @Arguments W 
 #! @Returns true or false
@@ -66,56 +129,6 @@ DeclareOperation("WalkHomomorphism", [IsDigraph, IsDigraph, IsDenseList, IsDense
 #!> WalkHomomorphism(Digraph([[2], [1]]), Digraph([[1]]), [1, 1], [[], []]));
 #!true </Example>
 DeclareAttribute("IsDegenerateWalkHomomorphism", IsWalkHomomorphism);
-
-#! @Arguments W 
-#! @Returns a pair of walk homomorphisms
-#! @Description
-#!  A walk homomorphism is called synchronous if it maps each edge to a walk of length 1.
-#!  Hence synchronous walk homomorphisms as essentially the same as digraph 
-#!  homomorphisms.
-#!
-#!  If <A>W</A> is an UDAF folding between digraphs D1 and D2, then 
-#!  this operation returns a synchronous UDAF folding H from some digraph D3 to D2
-#!  and an UDAF folding f from D3-> D1 such that H and the composite fW induce 
-#!  the same UDAF isomorphism.
-#! <Example> 
-#!gap> MakeSynchronousWalkHomomorphism(
-#!> WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));
-#![ &lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ]
-#!gap> MakeSynchronousWalkHomomorphism(
-#!> WalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));
-#!Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
-#!the given homomorphism must be non-degenerate
-#!gap> MakeSynchronousWalkHomomorphism(
-#!> WalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));
-#!Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
-#!the target digraph must be an UDAF Digraph
-#!gap> P := MakeSynchronousWalkHomomorphism(PhitoR2Fold());
-#![ &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ]
-#!gap> IsSynchronousWalkHomomorphism(P[1]);
-#!true
-#!gap> H := P[2] * PhitoR2Fold();
-#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
-#!gap> RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];
-#!true
-#!true </Example>
-DeclareOperation("MakeSynchronousWalkHomomorphism", [IsWalkHomomorphism]);
-
-
-#! @Arguments  
-#! @Returns A walk homomorphism
-#! @Description
-#!  This returns the same output as WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
-DeclareOperation("R2toPhiFold", []);
-
-#! @Arguments  
-#! @Returns A walk homomorphism
-#! @Description
-#!  This returns the same output as WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1], [[1], [2], []]]);
-DeclareOperation("PhitoR2Fold", []);
-
 
 #! @Arguments W 
 #! @Returns an automaton
@@ -178,6 +191,8 @@ DeclareOperation("WalkHomomorphismVertexImageAutomaton", [IsWalkHomomorphism, Is
 #![ [ [ 2, 1 ], 1 ] ]
 #!</Example>
 DeclareOperation("PowerSetWalkHomomorphism", [IsWalkHomomorphism]);
+
+
 
 #! @Arguments W 
 #! @Returns a walk homomorphism and a list of integers
@@ -246,64 +261,6 @@ DeclareAttribute("ImageFinderWalkHomomorphism", IsWalkHomomorphism);
 #!</Example>
 DeclareAttribute("DualWalkHomomorphism", IsWalkHomomorphism);
 
-#! @Arguments D, n
-#! @Returns a list of lists of integers
-#! @Description
-#!  Returns all the walks in <A>D</A> of length <A>n</A>. Each walk is given as
-#!  a sequence of edges. If <A>n</A> is 0 then the operation returns fail.
-#!
-#! <Example> 
-#!gap> WalksOfGivenLength(Digraph([[2], [1, 1]]), 3);
-#![ [ 1, 2, 1 ], [ 1, 3, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], [ 3, 1, 2 ], 
-#!  [ 3, 1, 3 ] ]
-#!gap> WalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);
-#![ [ 1, 3, 1 ], [ 1, 3, 2 ], [ 1, 4, 1 ], [ 1, 4, 2 ], [ 2, 3, 1 ], 
-#!  [ 2, 3, 2 ], [ 2, 4, 1 ], [ 2, 4, 2 ], [ 3, 1, 3 ], [ 3, 1, 4 ], 
-#!  [ 3, 2, 3 ], [ 3, 2, 4 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 3 ], 
-#!  [ 4, 2, 4 ] ]
-#!gap> WalksOfGivenLength(Digraph([[1, 1]]), 3);
-#![ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ], 
-#!  [ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ]
-#!</Example>
-DeclareOperation("WalksOfGivenLength", [IsDigraph, IsInt]);
-
-#! @Arguments D
-#! @Returns a list of lists of pairs of integers
-#! @Description
-#!  Returns a list whose vth entry is a list of pairs. There is one pair
-#!  for each edge in D starting at vertex v. The pair contains the number of the
-#!  edge (its position in DigraphEdges(<A>D</A>)) and the vertex it points to in
-#!  that order.
-#!
-#! <Example> 
-#!gap> OutEdgesAtVertex(D);
-#![ [ [ 1, 1 ], [ 2, 1 ] ] ]
-#!gap> D := Digraph([[1, 1]]);
-#!&lt;immutable multidigraph with 1 vertex, 2 edges>
-#!gap> OutEdgesAtVertex(D);
-#![ [ [ 1, 1 ], [ 2, 1 ] ] ]
-#!gap> D := Digraph([[2], [1]]);
-#!&lt;immutable digraph with 2 vertices, 2 edges>
-#!gap> OutEdgesAtVertex(D);     
-#![ [ [ 1, 2 ] ], [ [ 2, 1 ] ] ]
-#!gap> D := Digraph([[2], [1], [1]]);
-#!&lt;immutable digraph with 3 vertices, 3 edges>
-#!gap> OutEdgesAtVertex(D);          
-#![ [ [ 1, 2 ] ], [ [ 2, 1 ] ], [ [ 3, 1 ] ] ]
-#!</Example>
-DeclareAttribute("OutEdgesAtVertex", IsDigraph);
-
-#! @Arguments D
-#! @Returns a walk homomorphisms
-#! @Description
-#!  Returns the walk homomorphism from <A>D</A> to <A>D</A> which maps each edge
-#!  to the walk of length 1 containing it, and fixing all vertices.
-#!
-#! <Example> 
-#!gap> H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));
-#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-#!</Example>
-DeclareOperation("IdentityWalkHomomorphism", [IsDigraph]);
 
 #! @Arguments W, v
 #! @Returns a list
@@ -346,145 +303,6 @@ DeclareOperation("ImageAsUnionOfCones", [IsWalkHomomorphism, IsInt]);
 #!  This attribute outputs the list whose vth entry is ImageAsUnionOfCones(<A>W</A>, v).
 DeclareAttribute("ImagesAsUnionsOfCones", IsWalkHomomorphism);
 
-#! @Arguments A, B
-#! @Returns a walk homomorphism
-#! @Description
-#!  If <A>A</A> is a walk homomorphism from D1 to D2 and <A>B</A> is a walk 
-#!  homomorphism from D2 to D3, then the composite of <A>A</A> and <B>B</B> is
-#!  a walk homomorphism from D1 to D3. The vertex map is the composite of
-#!  the vertex maps of <A>A</A> and <A>B</A>. The edge map maps an edge
-#!  e to the walk obtained by applying <A>A</A> to e, and concatening the walks
-#!  obtained by applying <A>B</A> to the edges in this walk.
-#!
-#!  This operation returns the composite of <A>A</A> and <A>B</A> if they are
-#!  composable and returns fail otherwise.
-#!
-#!  This operation and also be called using *.
-#! <Example> 
-#!gap> I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));
-#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-#!gap> I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));
-#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-#!gap> I1*I2;
-#!fail
-#!gap> R2toPhiFold() * PhitoR2Fold();
-#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-#!</Example>
-DeclareOperation("ComposeWalkHomomorphisms", [IsWalkHomomorphism, IsWalkHomomorphism]);
-
-#! @Arguments D, p, f
-#! @Returns a walk homomorphism
-#! @Description
-#!  If <A>D</A> is a digraph then one can natually contruct a new digraph from 
-#!  <A>D</A> called its line digraph which has a vertex for each walk of length
-#!  1 and an edge for each walk of length 2 see https://en.wikipedia.org/wiki/Line_graph. 
-#!  
-#!  There are two natural digraph hommorphisms from this new digraph to the old
-#!  one. Defined by mapping each vertex to its start or end vertex in the 
-#!  origional digraph. These homomorphisms are the output of 
-#!  LineDigraphWalkHomomorphism(<A>D</A>, 0, 1) and LineDigraphWalkHomomorphism(<A>D</A>, 1, 0)
-#!  respectively. The idea being that the vertices in the former digraph store
-#!  one edge of future information and those in the latter store one edge of
-#!  past information.
-#!
-#!  A vertex of the domain of LineDigraphWalkHomomorphism(<A>D</A>, p, f) is
-#!  is a walk of length p + f and the vertex map sends such a vertex to the
-#!  vertex in the origional digraph which is p edges from the front and f
-#!  edges from the end.
-#!
-#!  This construction is nice in the sense that if a, b, c, d are positive integers
-#!  and D2 is the doman of LineDigraphWalkHomomorphism(<A>D</A>, a, b), then
-#!  LineDigraphWalkHomomorphism(<A>D2</A>, c, d) * LineDigraphWalkHomomorphism(<A>D</A>, a, b)
-#!  agrees with LineDigraphWalkHomomorphism(<A>D</A>, a + c, b + d).
-#! <Example>
-#!gap> L12 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 2);
-#!&lt;walk homomorphism from a digraph with 13 edges to a digraph with 3 edges.>
-#!gap> N11 := LineDigraphWalkHomomorphism(L12!.DomainDigraph, 1, 1);    
-#!&lt;walk homomorphism from a digraph with 34 edges to a digraph with 13 edges.>
-#!gap> L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);
-#!&lt;walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>
-#!gap> N11 * L12 = L23;
-#!true
-#!</Example>
-DeclareOperation("LineDigraphWalkHomomorphism", [IsDigraph, IsInt, IsInt]);
-
-#! @Arguments D
-#! @Returns true or false
-#! @Description
-#!  If <A>D</A> is a digraph, then we say that <A>D</A> is an UDAF digraph
-#!  if for all vertices v of <A>D</A> we have that neither the number of infinite
-#!  backwards walks ending at <A>D</A> nor the number of infinite forwards walks
-#!  begining at v is equal to 1.
-#!
-#!  This property is to ensure that the "irrational" walks in <A>D</A> are "dense"
-#!  this property is desirable as is allows us to prove various facts about walk
-#!  homomorphisms between these digraphs see the paper https://arxiv.org/abs/2112.13359
-#!  for more details.
-#!
-#!  Moreover some of the operations in this package will reject digraphs that are
-#!  are not UDAF digraphs as it is not known that they will work as inteded in such
-#!  cases.
-#! <Example>
-#!gap> IsUDAFDigraph(Digraph([[1, 1]]));
-#!true
-#!gap> IsUDAFDigraph(Digraph([[1]]));
-#!false
-#!gap> IsUDAFDigraph(Digraph([[], []]));
-#!true
-#!gap> IsUDAFDigraph(Digraph([[2], [1]]));
-#!false
-#!gap> IsUDAFDigraph(Digraph([[1, 2], [1]]));
-#!true
-#!gap> IsUDAFDigraph(Digraph([[1, 1], [1]]));
-#!true
-#!gap> IsUDAFDigraph(Digraph([[2, 2], [2]]));
-#!false
-#!gap> IsUDAFDigraph(Digraph([[2], [2, 2]]));
-#!true
-#!gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], []]));
-#!true
-#!gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));
-#!false
-#!</Example>
-DeclareAttribute("IsUDAFDigraph", IsDigraph);
-
-#! @Arguments W
-#! @Returns true or false
-#! @Description
-#!  A walk homomorphism is called an UDAF folding if it induces a bijection
-#!  between the sets of shist equivalence clasees of biinfinite walks of the
-#!  domain and codomain (which we require to be UDAF digraphs).
-#! <Example>
-#!gap> IsUDAFFolding(R2toPhiFold());
-#!true
-#!gap> IsUDAFFolding(PhitoR2Fold());
-#!true
-#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[], [1,3], []])));
-#!true
-#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,3], []])));
-#!false
-#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,2, 3], []])));
-#!true
-#!gap> IsUDAFFolding(
-#!> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []]));
-#!false
-#!gap> IsUDAFFolding(
-#!> WalkHomomorphism(Digraph([[1, 1], [2, 2]]), Digraph([[1, 1]]),
-#!> [1, 1], [[1], [2], [1], [2]]));
-#!false
-#!gap> IsUDAFFolding(
-#!> WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),
-#!> [1], [[1], [2], [1]]));
-#!false
-#!gap> f:= WalkHomomorphism(Digraph([ [ 1, 2, 3 ], [ 1, 4, 1 ], [ 1, 2, 3 ], 
-#!> [ 1, 4, 1 ] ]), Digraph([ [ 3 ], [ 3 ], [ 3, 3, 3 ] ]), [ 3, 3, 3, 3 ], 
-#!> [ [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], 
-#!> [ 4 ], [ 5 ] ]);
-#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 5 edges.>
-#!gap> IsUDAFFolding(f);
-#!true
-#!</Example>
-DeclareAttribute("IsUDAFFolding", IsWalkHomomorphism);
 
 #! @Arguments W
 #! @Returns a walk homomorphism
@@ -547,6 +365,7 @@ DeclareOperation("TrimWalkHomomorphism", [IsWalkHomomorphism]);
 #!3
 #!</Example>
 DeclareAttribute("MaxFutureConeDepth", IsWalkHomomorphism);
+
 
 #! @Arguments W
 #! @Returns an integer
@@ -622,22 +441,6 @@ DeclareAttribute("MaxHistoryConeDepth", IsWalkHomomorphism);
 #!false
 #!</Example>
 DeclareAttribute("IsDeterministicWalkHomomorphism", IsWalkHomomorphism);
-
-#! @Arguments A, B
-#! @Returns a walk homomorphism
-#! @Description
-#!  Same as ComposeWalkHomomorphisms.
-#! <Example> 
-#!gap> I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));
-#!&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>
-#!gap> I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));
-#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-#!gap> I1*I2;
-#!fail
-#!gap> R2toPhiFold() * PhitoR2Fold();
-#!&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>
-#!</Example>
-DeclareOperation("\*", [IsWalkHomomorphism, IsWalkHomomorphism]);
 
 #! @Arguments W
 #! @Returns A list
@@ -820,6 +623,235 @@ DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism, IsInt]);
 #!</Example>
 DeclareOperation("WalkHomomorphismAnnotation", [IsWalkHomomorphism]);
 
+
+
+#! @Arguments W
+#! @Returns a pair of walk homomorphisms
+#! @Description
+#! It is assummed that the given walk homomorphism is deterministic, the attribute 
+#! will return fail if this is not the case.
+#!
+#! The attribute quotients the domain digraph by the relation that two vertices v, w
+#! are equivalent if they map to the same vertex under <A>W</A> and if one reads
+#! an edge of the codomain digraph from either of these vertices, then the same
+#! vertex is reached. That is to say that if t is the common image of v and w, then
+#! for all edges e starting at t, there are edges ev, ew of the domain Which
+#! 1. start at v, w respectively. 2. are both mapped to e by <A>W</A>. 3. have 
+#! the same target vertex.
+#!
+#! the first output is the quotient homomorphism q, and the second is the walk 
+#! homomorphism w2 such that <A>W</A> is equal to the composite qw2.
+#! <Example> 
+#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);                
+#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+#!gap> ReduceSynchronizingLength(H);
+#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,
+#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.> ]
+#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 1);                
+#!&lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
+#!gap> ReduceSynchronizingLength(H);                                             
+#!fail
+#!</Example>
+DeclareAttribute("ReduceSynchronizingLength", IsWalkHomomorphism);
+
+#! @Arguments W
+#! @Returns a list of walk homomorphisms
+#! @Description
+#! It is assummed that the given walk homomorphism is deterministic, the attribute 
+#! will return fail if this is not the case.
+#!
+#! The attribute reduces the walk homomorphism as in the second output of 
+#!  ReduceSynchronizingLength. This is then repeated until the walk homorphism
+#! can't be reduced further. The output is the resulting sequence of walk
+#! homomorphisms starting with the input and ending with the irreducible
+#! one at the end.
+#! <Example> 
+#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);
+#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+#!gap> S := SynchronizingSequence(H);
+#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>,
+#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ]
+#!</Example>
+DeclareAttribute("SynchronizingSequence", IsWalkHomomorphism);
+
+#! @Arguments W
+#! @Returns a list of walk homomorphisms
+#! @Description
+#! It is assummed that the given walk homomorphism is deterministic, the attribute 
+#! will return fail if this is not the case.
+#!
+#! The attribute reduces the walk homomorphism as in the second output of 
+#!  ReduceSynchronizingLength. This is then repeated until the walk homorphism
+#! can't be reduced further. The output is the resulting sequence of quotient maps
+#! from the first output of ReduceSynchronizingLength but ending with the irreducible
+#! output at the end.
+#!
+#! This is such that the nth entry of SynchronizingSequence(<A>W</A>) is equal
+#! to the composite of the nth and later entries of SynchronizingSequenceConnections(<A>W</A>).
+#!
+#! <Example> 
+#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);
+#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
+#!gap> SynchronizingSequenceConnections(H);                     
+#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,
+#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 4 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ]
+#!</Example>
+DeclareAttribute("SynchronizingSequenceConnections", IsWalkHomomorphism);
+
+
+#! @Arguments W
+#! @Returns a string
+#! @Description
+#! This operation converts a walk homomorphism into the string the user needs to
+#! enter to instruct GAP to generate it.
+#! <Example> 
+#!gap> WalkHomomorphismInputString(R2toPhiFold());
+#!"WalkHomomorphism(Digraph([ [ 1, 1 ] ]), Digraph([ [ 1, 2 ], [ 1 ] ]), [ 1 ],
+#! [ [ 1 ], [ 2, 3 ] ])"
+#!</Example>
+DeclareAttribute("WalkHomomorphismInputString", IsWalkHomomorphism);
+
+
+
+
+
+
+
+
+#!@Section Foldings
+
+#! @Arguments W 
+#! @Returns a pair of walk homomorphisms
+#! @Description
+#!  A walk homomorphism is called synchronous if it maps each edge to a walk of length 1.
+#!  Hence synchronous walk homomorphisms as essentially the same as digraph 
+#!  homomorphisms.
+#!
+#!  If <A>W</A> is an UDAF folding between digraphs D1 and D2, then 
+#!  this operation returns a synchronous UDAF folding H from some digraph D3 to D2
+#!  and an UDAF folding f from D3-> D1 such that H and the composite fW induce 
+#!  the same UDAF isomorphism.
+#! <Example> 
+#!gap> MakeSynchronousWalkHomomorphism(
+#!> WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));
+#![ &lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ]
+#!gap> MakeSynchronousWalkHomomorphism(
+#!> WalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));
+#!Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
+#!the given homomorphism must be non-degenerate
+#!gap> MakeSynchronousWalkHomomorphism(
+#!> WalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));
+#!Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
+#!the target digraph must be an UDAF Digraph
+#!gap> P := MakeSynchronousWalkHomomorphism(PhitoR2Fold());
+#![ &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
+#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ]
+#!gap> IsSynchronousWalkHomomorphism(P[1]);
+#!true
+#!gap> H := P[2] * PhitoR2Fold();
+#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+#!gap> RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];
+#!true
+#!true </Example>
+DeclareOperation("MakeSynchronousWalkHomomorphism", [IsWalkHomomorphism]);
+
+
+#! @Arguments  
+#! @Returns A walk homomorphism
+#! @Description
+#!  This returns the same output as WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
+DeclareOperation("R2toPhiFold", []);
+
+#! @Arguments  
+#! @Returns A walk homomorphism
+#! @Description
+#!  This returns the same output as WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1], [[1], [2], []]]);
+DeclareOperation("PhitoR2Fold", []);
+
+
+
+#! @Arguments D, p, f
+#! @Returns a walk homomorphism
+#! @Description
+#!  If <A>D</A> is a digraph then one can natually contruct a new digraph from 
+#!  <A>D</A> called its line digraph which has a vertex for each walk of length
+#!  1 and an edge for each walk of length 2 see https://en.wikipedia.org/wiki/Line_graph. 
+#!  
+#!  There are two natural digraph hommorphisms from this new digraph to the old
+#!  one. Defined by mapping each vertex to its start or end vertex in the 
+#!  origional digraph. These homomorphisms are the output of 
+#!  LineDigraphWalkHomomorphism(<A>D</A>, 0, 1) and LineDigraphWalkHomomorphism(<A>D</A>, 1, 0)
+#!  respectively. The idea being that the vertices in the former digraph store
+#!  one edge of future information and those in the latter store one edge of
+#!  past information.
+#!
+#!  A vertex of the domain of LineDigraphWalkHomomorphism(<A>D</A>, p, f) is
+#!  is a walk of length p + f and the vertex map sends such a vertex to the
+#!  vertex in the origional digraph which is p edges from the front and f
+#!  edges from the end.
+#!
+#!  This construction is nice in the sense that if a, b, c, d are positive integers
+#!  and D2 is the doman of LineDigraphWalkHomomorphism(<A>D</A>, a, b), then
+#!  LineDigraphWalkHomomorphism(<A>D2</A>, c, d) * LineDigraphWalkHomomorphism(<A>D</A>, a, b)
+#!  agrees with LineDigraphWalkHomomorphism(<A>D</A>, a + c, b + d).
+#! <Example>
+#!gap> L12 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 2);
+#!&lt;walk homomorphism from a digraph with 13 edges to a digraph with 3 edges.>
+#!gap> N11 := LineDigraphWalkHomomorphism(L12!.DomainDigraph, 1, 1);    
+#!&lt;walk homomorphism from a digraph with 34 edges to a digraph with 13 edges.>
+#!gap> L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);
+#!&lt;walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>
+#!gap> N11 * L12 = L23;
+#!true
+#!</Example>
+DeclareOperation("LineDigraphWalkHomomorphism", [IsDigraph, IsInt, IsInt]);
+
+
+#! @Arguments W
+#! @Returns true or false
+#! @Description
+#!  A walk homomorphism is called an UDAF folding if it induces a bijection
+#!  between the sets of shist equivalence clasees of biinfinite walks of the
+#!  domain and codomain (which we require to be UDAF digraphs).
+#! <Example>
+#!gap> IsUDAFFolding(R2toPhiFold());
+#!true
+#!gap> IsUDAFFolding(PhitoR2Fold());
+#!true
+#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[], [1,3], []])));
+#!true
+#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,3], []])));
+#!false
+#!gap> IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,2, 3], []])));
+#!true
+#!gap> IsUDAFFolding(
+#!> WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []]));
+#!false
+#!gap> IsUDAFFolding(
+#!> WalkHomomorphism(Digraph([[1, 1], [2, 2]]), Digraph([[1, 1]]),
+#!> [1, 1], [[1], [2], [1], [2]]));
+#!false
+#!gap> IsUDAFFolding(
+#!> WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),
+#!> [1], [[1], [2], [1]]));
+#!false
+#!gap> f:= WalkHomomorphism(Digraph([ [ 1, 2, 3 ], [ 1, 4, 1 ], [ 1, 2, 3 ], 
+#!> [ 1, 4, 1 ] ]), Digraph([ [ 3 ], [ 3 ], [ 3, 3, 3 ] ]), [ 3, 3, 3, 3 ], 
+#!> [ [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], 
+#!> [ 4 ], [ 5 ] ]);
+#!&lt;walk homomorphism from a digraph with 12 edges to a digraph with 5 edges.>
+#!gap> IsUDAFFolding(f);
+#!true
+#!</Example>
+DeclareAttribute("IsUDAFFolding", IsWalkHomomorphism);
+
+
+
 #! @Arguments W
 #! @Returns true or false
 #! @Description
@@ -909,119 +941,6 @@ DeclareAttribute("IsOneSidedFolding", IsWalkHomomorphism);
 #!</Example>
 DeclareAttribute("IsTwoSidedFolding", IsWalkHomomorphism);
 
-#! @Arguments W
-#! @Returns a pair of walk homomorphisms
-#! @Description
-#! It is assummed that the given walk homomorphism is deterministic, the attribute 
-#! will return fail if this is not the case.
-#!
-#! The attribute quotients the domain digraph by the relation that two vertices v, w
-#! are equivalent if they map to the same vertex under <A>W</A> and if one reads
-#! an edge of the codomain digraph from either of these vertices, then the same
-#! vertex is reached. That is to say that if t is the common image of v and w, then
-#! for all edges e starting at t, there are edges ev, ew of the domain Which
-#! 1. start at v, w respectively. 2. are both mapped to e by <A>W</A>. 3. have 
-#! the same target vertex.
-#!
-#! the first output is the quotient homomorphism q, and the second is the walk 
-#! homomorphism w2 such that <A>W</A> is equal to the composite qw2.
-#! <Example> 
-#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);                
-#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
-#!gap> ReduceSynchronizingLength(H);
-#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,
-#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.> ]
-#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 1);                
-#!&lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>
-#!gap> ReduceSynchronizingLength(H);                                             
-#!fail
-#!</Example>
-DeclareAttribute("ReduceSynchronizingLength", IsWalkHomomorphism);
-
-#! @Arguments W
-#! @Returns a list of walk homomorphisms
-#! @Description
-#! It is assummed that the given walk homomorphism is deterministic, the attribute 
-#! will return fail if this is not the case.
-#!
-#! The attribute reduces the walk homomorphism as in the second output of 
-#!  ReduceSynchronizingLength. This is then repeated until the walk homorphism
-#! can't be reduced further. The output is the resulting sequence of walk
-#! homomorphisms starting with the input and ending with the irreducible
-#! one at the end.
-#! <Example> 
-#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);
-#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
-#!gap> S := SynchronizingSequence(H);
-#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>,
-#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ]
-#!</Example>
-DeclareAttribute("SynchronizingSequence", IsWalkHomomorphism);
-
-#! @Arguments W
-#! @Returns a list of walk homomorphisms
-#! @Description
-#! It is assummed that the given walk homomorphism is deterministic, the attribute 
-#! will return fail if this is not the case.
-#!
-#! The attribute reduces the walk homomorphism as in the second output of 
-#!  ReduceSynchronizingLength. This is then repeated until the walk homorphism
-#! can't be reduced further. The output is the resulting sequence of quotient maps
-#! from the first output of ReduceSynchronizingLength but ending with the irreducible
-#! output at the end.
-#!
-#! This is such that the nth entry of SynchronizingSequence(<A>W</A>) is equal
-#! to the composite of the nth and later entries of SynchronizingSequenceConnections(<A>W</A>).
-#!
-#! <Example> 
-#!gap> H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);
-#!&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>
-#!gap> SynchronizingSequenceConnections(H);                     
-#![ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,
-#!  &lt;walk homomorphism from a digraph with 8 edges to a digraph with 4 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, 
-#!  &lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ]
-#!</Example>
-DeclareAttribute("SynchronizingSequenceConnections", IsWalkHomomorphism);
-
-#! @Arguments D
-#! @Returns a walk homomorphisms
-#! @Description
-#! If the digraph has a pair of vertices which have the same multiset of outneighbours
-#! then one can naturally form a quotient of the origional digraph by identifying
-#! only these vertices and the corresponding edges eminating from them.
-#!
-#! This operation reduces the digraph in this fashion as much as possible and
-#! returns a homomorphism from the given digraph to a digraph for which no two 
-#! vertices has the same multiset of outneighbours. The given walk homomorphism 
-#!is always a one-sided folding.
-#! <Example> 
-#!gap> D := Digraph([[1, 1]]);                                  
-#!&lt;immutable multidigraph with 1 vertex, 2 edges>
-#!gap> D10 := LineDigraphWalkHomomorphism(D,1,0)!.DomainDigraph;
-#!&lt;immutable digraph with 2 vertices, 4 edges>
-#!gap> OneSidedDigraphMinimise(D10);      
-#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
-#!gap> D11 := LineDigraphWalkHomomorphism(D,1,1)!.DomainDigraph;
-#!&lt;immutable digraph with 4 vertices, 8 edges>
-#!gap> OneSidedDigraphMinimise(D11);                            
-#!&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
-#!</Example>
-DeclareOperation("OneSidedDigraphMinimise", [IsDigraph]);
-
-#! @Arguments W
-#! @Returns a string
-#! @Description
-#! This operation converts a walk homomorphism into the string the user needs to
-#! enter to instruct GAP to generate it.
-#! <Example> 
-#!gap> WalkHomomorphismInputString(R2toPhiFold());
-#!"WalkHomomorphism(Digraph([ [ 1, 1 ] ]), Digraph([ [ 1, 2 ], [ 1 ] ]), [ 1 ],
-#! [ [ 1 ], [ 2, 3 ] ])"
-#!</Example>
-DeclareAttribute("WalkHomomorphismInputString", IsWalkHomomorphism);
 
 #! @Arguments W
 #! @Returns a pair of walk homomorphisms
@@ -1062,3 +981,130 @@ DeclareAttribute("WalkHomomorphismInputString", IsWalkHomomorphism);
 #!true
 #!</Example>
 DeclareOperation("FoldingToLineFolding", [IsWalkHomomorphism]);
+
+
+
+
+
+
+
+
+
+
+#!@Section Other
+
+#! @Arguments D, n
+#! @Returns a list of lists of integers
+#! @Description
+#!  Returns all the walks in <A>D</A> of length <A>n</A>. Each walk is given as
+#!  a sequence of edges. If <A>n</A> is 0 then the operation returns fail.
+#!
+#! <Example> 
+#!gap> WalksOfGivenLength(Digraph([[2], [1, 1]]), 3);
+#![ [ 1, 2, 1 ], [ 1, 3, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], [ 3, 1, 2 ], 
+#!  [ 3, 1, 3 ] ]
+#!gap> WalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);
+#![ [ 1, 3, 1 ], [ 1, 3, 2 ], [ 1, 4, 1 ], [ 1, 4, 2 ], [ 2, 3, 1 ], 
+#!  [ 2, 3, 2 ], [ 2, 4, 1 ], [ 2, 4, 2 ], [ 3, 1, 3 ], [ 3, 1, 4 ], 
+#!  [ 3, 2, 3 ], [ 3, 2, 4 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 3 ], 
+#!  [ 4, 2, 4 ] ]
+#!gap> WalksOfGivenLength(Digraph([[1, 1]]), 3);
+#![ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ], 
+#!  [ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ]
+#!</Example>
+DeclareOperation("WalksOfGivenLength", [IsDigraph, IsInt]);
+
+#! @Arguments D
+#! @Returns a list of lists of pairs of integers
+#! @Description
+#!  Returns a list whose vth entry is a list of pairs. There is one pair
+#!  for each edge in D starting at vertex v. The pair contains the number of the
+#!  edge (its position in DigraphEdges(<A>D</A>)) and the vertex it points to in
+#!  that order.
+#!
+#! <Example> 
+#!gap> OutEdgesAtVertex(D);
+#![ [ [ 1, 1 ], [ 2, 1 ] ] ]
+#!gap> D := Digraph([[1, 1]]);
+#!&lt;immutable multidigraph with 1 vertex, 2 edges>
+#!gap> OutEdgesAtVertex(D);
+#![ [ [ 1, 1 ], [ 2, 1 ] ] ]
+#!gap> D := Digraph([[2], [1]]);
+#!&lt;immutable digraph with 2 vertices, 2 edges>
+#!gap> OutEdgesAtVertex(D);     
+#![ [ [ 1, 2 ] ], [ [ 2, 1 ] ] ]
+#!gap> D := Digraph([[2], [1], [1]]);
+#!&lt;immutable digraph with 3 vertices, 3 edges>
+#!gap> OutEdgesAtVertex(D);          
+#![ [ [ 1, 2 ] ], [ [ 2, 1 ] ], [ [ 3, 1 ] ] ]
+#!</Example>
+DeclareAttribute("OutEdgesAtVertex", IsDigraph);
+
+
+
+
+#! @Arguments D
+#! @Returns true or false
+#! @Description
+#!  If <A>D</A> is a digraph, then we say that <A>D</A> is an UDAF digraph
+#!  if for all vertices v of <A>D</A> we have that neither the number of infinite
+#!  backwards walks ending at <A>D</A> nor the number of infinite forwards walks
+#!  begining at v is equal to 1.
+#!
+#!  This property is to ensure that the "irrational" walks in <A>D</A> are "dense"
+#!  this property is desirable as is allows us to prove various facts about walk
+#!  homomorphisms between these digraphs see the paper https://arxiv.org/abs/2112.13359
+#!  for more details.
+#!
+#!  Moreover some of the operations in this package will reject digraphs that are
+#!  are not UDAF digraphs as it is not known that they will work as inteded in such
+#!  cases.
+#! <Example>
+#!gap> IsUDAFDigraph(Digraph([[1, 1]]));
+#!true
+#!gap> IsUDAFDigraph(Digraph([[1]]));
+#!false
+#!gap> IsUDAFDigraph(Digraph([[], []]));
+#!true
+#!gap> IsUDAFDigraph(Digraph([[2], [1]]));
+#!false
+#!gap> IsUDAFDigraph(Digraph([[1, 2], [1]]));
+#!true
+#!gap> IsUDAFDigraph(Digraph([[1, 1], [1]]));
+#!true
+#!gap> IsUDAFDigraph(Digraph([[2, 2], [2]]));
+#!false
+#!gap> IsUDAFDigraph(Digraph([[2], [2, 2]]));
+#!true
+#!gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], []]));
+#!true
+#!gap> D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));
+#!false
+#!</Example>
+DeclareAttribute("IsUDAFDigraph", IsDigraph);
+
+
+#! @Arguments D
+#! @Returns a walk homomorphisms
+#! @Description
+#! If the digraph has a pair of vertices which have the same multiset of outneighbours
+#! then one can naturally form a quotient of the origional digraph by identifying
+#! only these vertices and the corresponding edges eminating from them.
+#!
+#! This operation reduces the digraph in this fashion as much as possible and
+#! returns a homomorphism from the given digraph to a digraph for which no two 
+#! vertices has the same multiset of outneighbours. The given walk homomorphism 
+#!is always a one-sided folding.
+#! <Example> 
+#!gap> D := Digraph([[1, 1]]);                                  
+#!&lt;immutable multidigraph with 1 vertex, 2 edges>
+#!gap> D10 := LineDigraphWalkHomomorphism(D,1,0)!.DomainDigraph;
+#!&lt;immutable digraph with 2 vertices, 4 edges>
+#!gap> OneSidedDigraphMinimise(D10);      
+#!&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>
+#!gap> D11 := LineDigraphWalkHomomorphism(D,1,1)!.DomainDigraph;
+#!&lt;immutable digraph with 4 vertices, 8 edges>
+#!gap> OneSidedDigraphMinimise(D11);                            
+#!&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>
+#!</Example>
+DeclareOperation("OneSidedDigraphMinimise", [IsDigraph]);
