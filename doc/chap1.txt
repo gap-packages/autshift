@@ -1,0 +1,1136 @@
+  
+  [1X1 [33X[0;0YWalk homomorphisms and foldings[133X[101X
+  
+  
+  [1X1.1 [33X[0;0YWalk homomorphisms[133X[101X
+  
+  [33X[0;0YA  walk  homomorphism from a digraph A to a digraph B consists of a function
+  from  the  vertex  set  of A to the vertex set of B, and a function from the
+  edge  sets  of  A  to  the set of finite walks in B. These functions must be
+  compatible  in the sense that an edge between two vertices must be mapped to
+  a  walk  between  the images of those vertices. A walk homomorphism is to be
+  thought  of  a generalisation of a digraph homomorphism (in the sense that a
+  walk  homomorphism which maps all edges to walks of length one is equivalent
+  to a digraph homomorphism).[133X
+  
+  [1X1.1-1 WalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphism[102X( [3XDom[103X, [3XCoDom[103X, [3XVertexMap[103X, [3XEdgeMap[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YCreates  an  object  called a walk homomorphism. A walk homomorphism is is a
+  generalisation  of  a  digraph  homomorphism  which  allows mapping edges to
+  finite walks.[133X
+  
+  [33X[0;0Y[3XDom[103X          and          [3XCoDom[103X          are          both          digraphs
+  (https://www.gap-system.org/Packages/digraphs.html)  [3XVertexMap[103X  is a list of
+  vertices  of  CoDom  with  one  entry  for each vertex of [3XDom[103X. This is to be
+  thought  of as a function from the vertices of Dom to the vertices of [3XCoDom[103X.
+  [3XEdgeMap[103X  is  a list of lists of edges of [3XCoDom[103X, each list of edges must be a
+  walk  in  [3XCoDom[103X  (this means each edge must end with the start vertex of the
+  next  edge).  This is to be thought of as a map from the edges of [3XDom[103X to the
+  walks  in [3XCoDom[103X where each edge of a digraph [3XD[103X is identified by its position
+  in the list [3XDigraphEdges(D)[103X;[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.> [128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-2 ComposeWalkHomomorphisms[101X
+  
+  [33X[1;0Y[29X[2XComposeWalkHomomorphisms[102X( [3XA[103X, [3XB[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YIf  [3XA[103X is a walk homomorphism from D1 to D2 and [3XB[103X is a walk homomorphism from
+  D2  to  D3,  then the composite of [3XA[103X and [12XB[112X is a walk homomorphism from D1 to
+  D3.  The vertex map is the composite of the vertex maps of [3XA[103X and [3XB[103X. The edge
+  map  maps an edge e to the walk obtained by applying [3XA[103X to e, and concatening
+  the walks obtained by applying [3XB[103X to the edges in this walk.[133X
+  
+  [33X[0;0YThis  operation  returns the composite of [3XA[103X and [3XB[103X if they are composable and
+  returns fail otherwise.[133X
+  
+  [33X[0;0YThis operation and also be called using *.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XI1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI1*I2;[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XR2toPhiFold() * PhitoR2Fold();[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-3 \*[101X
+  
+  [33X[1;0Y[29X[2X\*[102X( [3XA[103X, [3XB[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YSame as ComposeWalkHomomorphisms.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XI1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI1*I2;[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XR2toPhiFold() * PhitoR2Fold();[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-4 IdentityWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XIdentityWalkHomomorphism[102X( [3XD[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphisms[133X
+  
+  [33X[0;0YReturns  the  walk homomorphism from [3XD[103X to [3XD[103X which maps each edge to the walk
+  of length 1 containing it, and fixing all vertices.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-5 IsDegenerateWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XIsDegenerateWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YA  walk  homomorphism  is  called  degenerate  if there is a biinfinite walk
+  through  its  domain  which  is  not mapped by [3XW[103X to a biinfinite walk in its
+  codomain.  Equivalently it is degenerate if there is a finite non-empty walk
+  in  the domain with the same start and end points which is mapped by [3XW[103X to an
+  empty walk.[133X
+  
+  [33X[0;0YThis attribute returns true if and only if [3XW[103X is degenerate.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIsDegenerateWalkHomomorphism(PhitoR2Fold());[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsDegenerateWalkHomomorphism([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[1, 1]]), Digraph([[1]]), [1], [[1], []]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsDegenerateWalkHomomorphism([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[2], [1]]), Digraph([[1]]), [1, 1], [[], []]));[127X[104X
+    [4X[28Xtrue [128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-6 WalkHomomorphismImageAutomaton[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismImageAutomaton[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Yan automaton[133X
+  
+  [33X[0;0YThis              returns             an             automaton             A
+  (https://www.gap-system.org/Packages/automata.html)   such   that  for  each
+  vertex  in  the domain of [3XW[103X, the regular language of words which can be read
+  from  the corresponding state of A is equal to the set of walks in the image
+  of the vertex.[133X
+  
+  [33X[0;0YHere by "image of the vertex" we mean the set of finite prefixes of walks in
+  the  codomain  of  [3XW[103X which can be obtained by applying [3XW[103X to forwards walk in
+  the domain of [3XW[103X starting with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismVertexImageAutomaton(R2toPhiFold(), 1);[127X[104X
+    [4X[28X< epsilon automaton on 4 letters with 2 states >[128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismVertexImageAutomaton(PhitoR2Fold(), 1);[127X[104X
+    [4X[28X< epsilon automaton on 3 letters with 2 states >[128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismVertexImageAutomaton(PhitoR2Fold(), 2);[127X[104X
+    [4X[28X< epsilon automaton on 3 letters with 2 states >[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-7 WalkHomomorphismVertexImageAutomaton[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismVertexImageAutomaton[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan automaton[133X
+  
+  [33X[0;0YThis  returns  the same automaton as WalkHomomorphismImageAutomaton but with
+  its initial state set to the specified vertex[133X
+  
+  [1X1.1-8 PowerSetWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XPowerSetWalkHomomorphism[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YThis  returns an walk homomorphism W2 such that each vertex in the domain of
+  W has the same image as the corresponding vertex of the domain of W2. W2 has
+  the  additional properties that each edge is mapped to a walk of length one,
+  and  no  two edges with the same start vertex are mapped to the same walk of
+  length 1. This is done in a manner analogous to the "power set construction"
+  for regular languages.[133X
+  
+  [33X[0;0YAs  some  vertices  in  the  domain  of [3XW[103X may have the same image, we do not
+  combine  the  "equivalent  states" of W2 so that the above condition remains
+  true.  If  the  user  wants  a  smaller output walk homomorphism they may be
+  interested in the operation ImageFinderWalkHomomorphism instead.[133X
+  
+  [33X[0;0YHere by "image of the vertex" we mean the set of finite prefixes of walks in
+  the  codomain  of  [3XW[103X which can be obtained by applying [3XW[103X to forwards walk in
+  the domain of [3XW[103X starting with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W, 1);[127X[104X
+    [4X[28X[ [ [ 2, 1 ], 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XW2 := PowerSetWalkHomomorphism(W);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 6 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W2, 1);[127X[104X
+    [4X[28X[ [ [ 2, 1 ], 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-9 ImageFinderWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XImageFinderWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism and a list of integers[133X
+  
+  [33X[0;0YThis returns an walk homomorphism W2 and a list of vertices of W2. This list
+  of  vertices  has  an  entry for each vertex in the domain of W, and assigns
+  each vertex a vertex in the domain of W2 with the same image.[133X
+  
+  [33X[0;0YAs   is  the  case  with  PowerSetWalkHomomorphism  W2  has  the  additional
+  properties  that  each  edge  is  mapped to a walk of length one, and no two
+  edges with the same start vertex are mapped to the same walk of length 1.[133X
+  
+  [33X[0;0YW2  now  has the additional property that no to vertices in the domain of W2
+  have the same image (hense the need for the vertex list).[133X
+  
+  [33X[0;0YHere by "image of the vertex" we mean the set of finite prefixes of walks in
+  the  codomain  of  [3XW[103X which can be obtained by applying [3XW[103X to forwards walk in
+  the domain of [3XW[103X starting with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W, 1);[127X[104X
+    [4X[28X[ [ [ 2, 1 ], 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XW2 := ImageFinderWalkHomomorphism(W);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>, [ 3, 2 ] ][128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W2[1], 3);[127X[104X
+    [4X[28X[ [ [ 2, 1 ], 1 ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-10 DualWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XDualWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YThe  Dual  digraph  of  a  digraph is the digraph obtained by "reversing the
+  arrows".  That is replacing each edge with a new edge which starts where the
+  previous  one  ended and ends where the previous one started. Note that this
+  completely reoders the edges.[133X
+  
+  [33X[0;0YIf one applies this process to the domain and codomain of a walk homomorhism
+  one  naturally  obtains  a  new  walk  homomorphism  called  its  dual  walk
+  homomrphism. This Attribute returns a dual of [3XW[103X.[133X
+  
+  [33X[0;0YThe  dual while unique up to "isomorphism" is not unique due to the arbitary
+  decisions  made when reordering certain edges. So there is no guarentee that
+  the this atribute will undo itself.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL12 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 2);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XD := DualWalkHomomorphism(L21);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XD2 := DualWalkHomomorphism(D);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XD2 = L12;[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XOutNeighbours(D2!.DomainDigraph);[127X[104X
+    [4X[28X[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ], [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ] ][128X[104X
+    [4X[25Xgap>[125X [27XOutNeighbours(L12!.DomainDigraph);[127X[104X
+    [4X[28X[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ], [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ] ][128X[104X
+    [4X[25Xgap>[125X [27XD3 := DualWalkHomomorphism(D2);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XD3 = D;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-11 ImageAsUnionOfCones[101X
+  
+  [33X[1;0Y[29X[2XImageAsUnionOfCones[102X( [3XW[103X, [3Xv[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya list[133X
+  
+  [33X[0;0YA  "cone"  for  a digraph is a set of infinite forwards walks in the digraph
+  which  is equal to the set of all infinite forwards walks which start with a
+  fixed finite walk.[133X
+  
+  [33X[0;0YIf  the  image  of v can be expressed as a union of cones then the operation
+  returns  a  list  of  cones  whose  union is the image of v, if not then the
+  operation  returns fail. A cone is given as a pair, whose first entry is the
+  edge  walk shared by the elements of the cone, and whose second entry is the
+  vertex  at  the  end  of the edge walk (thus we can distingish between empty
+  walks  at  different  vertices). In the event that there are multiple finite
+  walks defining a cone, the shortest one is given.[133X
+  
+  [33X[0;0YHere  by "image of v" we mean the set of infinite walks in the codomain of [3XW[103X
+  which  can be obtained by applying [3XW[103X to forwards infinite walk in the domain
+  of [3XW[103X starting with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W, 1);[127X[104X
+    [4X[28X[ [ [ 2, 1 ], 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[2, 2], [2, 2, 2]]), Digraph([[1, 1, 1]]), [1, 1], [[1], [2], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W, 1);[127X[104X
+    [4X[28X[ [ [ 1 ], 1 ], [ [ 2 ], 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[2, 2], [2, 2, 2]]), Digraph([[1, 1, 1, 1]]), [1, 1], [[1], [2], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XImageAsUnionOfCones(W, 1);[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-12 ImagesAsUnionsOfCones[101X
+  
+  [33X[1;0Y[29X[2XImagesAsUnionsOfCones[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya list[133X
+  
+  [33X[0;0YThis  attribute  outputs  the list whose vth entry is ImageAsUnionOfCones([3XW[103X,
+  v).[133X
+  
+  [1X1.1-13 TrimWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XTrimWalkHomomorphism[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YA  walk  homomorphism  is called trimmed if every vertex (and hense edge) of
+  its domain is involved in a biinfinite walk.[133X
+  
+  [33X[0;0YThis  Operation returns the walk homomorphism obtained from W by restricting
+  the  domain  of  W to the subdigraph of the domain including precisely those
+  vertices and edges which are involved in biinfinite walks.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1], [[1], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XTrimWalkHomomorphism(W);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 0 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XTrimWalkHomomorphism(PhitoR2Fold());[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.>[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-14 MaxFutureConeDepth[101X
+  
+  [33X[1;0Y[29X[2XMaxFutureConeDepth[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Yan integer[133X
+  
+  [33X[0;0YThis  attribute is primarily intended to be used with UDAF foldings. If W is
+  an  UDAF folding in which the image of every vertex of can be expressed as a
+  union  of  cones,  this  attribute returns the longest of length of a finite
+  walk  required  to  define  these  cones.  if W is not of this type then the
+  attribute  return  fail,  and  if  all  vertices  have empty image, then the
+  attribute returns -1.[133X
+  
+  [33X[0;0YA  "cone"  for  a digraph is a set of infinite forwards walks in the digraph
+  which  is equal to the set of all infinite forwards walks which start with a
+  fixed finite walk.[133X
+  
+  [33X[0;0YHere  by image of a vertex we mean the set of infinite walks in the codomain
+  of  [3XW[103X  which  can be obtained by applying [3XW[103X to forwards infinite walk in the
+  domain of [3XW[103X starting with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxFutureConeDepth(L00);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxFutureConeDepth(L01);[127X[104X
+    [4X[28X1[128X[104X
+    [4X[25Xgap>[125X [27XL00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxFutureConeDepth(L00);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxFutureConeDepth(L10);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxFutureConeDepth(L23);[127X[104X
+    [4X[28X3[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-15 MaxHistoryConeDepth[101X
+  
+  [33X[1;0Y[29X[2XMaxHistoryConeDepth[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Yan integer[133X
+  
+  [33X[0;0YThis  attribute is primarily intended to be used with UDAF foldings. If W is
+  an  UDAF  folding  in  which  the  backwards image of every vertex of can be
+  expressed  as a union of backwards cones, this attribute returns the longest
+  of  length  of  a finite walk required to define these cones. if W is not of
+  this  type  then  the  attribute return fail, and if all vertices have empty
+  backwards image, then the attribute returns -1.[133X
+  
+  [33X[0;0YA "backwards cone" for a digraph is a set of infinite backwards walks in the
+  digraph  which is equal to the set of all infinite backwards walks which end
+  with a fixed finite walk.[133X
+  
+  [33X[0;0YHere by backwards image of a vertex we mean the set of infinite walks in the
+  codomain of [3XW[103X which can be obtained by applying [3XW[103X to backwards infinite walk
+  in the domain of [3XW[103X ending with the given vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L00);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L01);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L00);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L01);[127X[104X
+    [4X[28X0[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L10);[127X[104X
+    [4X[28X1[128X[104X
+    [4X[25Xgap>[125X [27XL23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XMaxHistoryConeDepth(L23);[127X[104X
+    [4X[28X2[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-16 IsDeterministicWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XIsDeterministicWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YWe  say  that  a walk homomorphism [3XW[103X is deterministic if and only if for all
+  vertices  v  in  the  domain  of [3XW[103X, [3XW[103X mapps the set of edges starting with v
+  bijectively  to  the  set of edges in the codomain of [3XW[103X which begin with the
+  vertex which [3XW[103X maps v to.[133X
+  
+  [33X[0;0YIn  particular, deterministic walk homomorphisms are always synchronous. The
+  name deteministic comes from the observation that a walk homomorphism to the
+  one vertex, n-edge digraph is deterministic if and only if the corresponding
+  automaton is.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XR2 := Digraph([[1, 1]]);[127X[104X
+    [4X[28X<immutable multidigraph with 1 vertex, 2 edges>[128X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(R2, 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(R2, 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsDeterministicWalkHomomorphism(L01);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsDeterministicWalkHomomorphism(L10);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsDeterministicWalkHomomorphism(R2toPhiFold());[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsDeterministicWalkHomomorphism(PhitoR2Fold());[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-17 RemoveIncompleteResponse[101X
+  
+  [33X[1;0Y[29X[2XRemoveIncompleteResponse[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA list[133X
+  
+  [33X[0;0YWe  say  that  a  walk  homomorphism [3XW[103X has incomplete responce if there is a
+  vertex  in  its  domain  such  that  all edges originating at the vertec are
+  mapped  to walks with a common initial edge. This is based on the concept of
+  the same name from: Grigorchuk, R. I., Nekrashevych, V. V., and Sushchansky,
+  V.   I.   (2000).   Automata,   dynamical   systems,   and   groups.   Trudy
+  Matematicheskogo Instituta Imeni VA Steklova, 231, 134-214.[133X
+  
+  [33X[0;0YWe require the given walk homomorphism to map to an UDAF Digraph and for the
+  image of each vertex to be a union of cones.[133X
+  
+  [33X[0;0YThis  operation  replaces  [3XW[103X  with a new walk homomorphism by first trimming
+  (see  TrimWalkHomomorphism)  [3XW[103X and then mapping each edge in the domain of [3XW[103X
+  to  the  walk  obtained by starting with the walk it is currently mapped to,
+  and  then:  1. appending the longest common prefix of the walks in the image
+  of  the target vertex. 2. removing the longest common prefix of the walks in
+  the image of the source vertex. The vertex map is then defined in the unique
+  possible fashion.[133X
+  
+  [33X[0;0YThe first entry of the output is the new walk homomorphism. The second entry
+  is  the  list of prefixes that where removed from the starts of the walks at
+  each  vertex (given as a pair consisting of the edge sequence and the ending
+  vertex).[133X
+  
+  [33X[0;0YThis  operation  is  useful  because  of  the following two observations: 1.
+  removing  incomplete responce from a trimmed UDAF folding doesn't change the
+  induced  UDAF  isomorphism.  2. If f1, f2:D1 to D2 are trimmed UDAF foldings
+  with complete responce which induce the same UDAF isomorphism then f1 = f2.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XR := RemoveIncompleteResponse(H);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>,[128X[104X
+    [4X[28X[ [ [ 1 ], 2 ], [ [ ], 2 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XR[1] = WalkHomomorphism(Digraph([[2], [1, 2]]), Digraph([[2], [1, 2]]),[127X[104X
+    [4X[25X>[125X [27X[2, 2], [[], [2, 1], [3]]);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-18 IsSynchronousWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XIsSynchronousWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YA  walk homomorphism is called synchronous if it maps each edge to a walk of
+  length  1.  Hence  synchronous walk homomorphisms as essentially the same as
+  digraph homomorphisms.[133X
+  
+  [33X[0;0YThis attribute returns true if and only if [3XW[103X is syncrhonous.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIsSynchronousWalkHomomorphism(PhitoR2Fold());[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27Xh := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[2], [2]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsSynchronousWalkHomomorphism(h);[127X[104X
+    [4X[28Xtrue [128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-19 SynchronousRemoveIncompleteResponse[101X
+  
+  [33X[1;0Y[29X[2XSynchronousRemoveIncompleteResponse[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA list[133X
+  
+  [33X[0;0YThis  operation  functions  similarly  to  RemoveIncompleteResponse with the
+  difference  being  that it assumed that the input folding is syncrhonous and
+  incomplete  will  only  be  removed  as  much  as  possible  which remaining
+  synchronousness of the walk homomorphism.[133X
+  
+  [33X[0;0YAs  a  result the second ouptut instead of a list of removed prefixes simply
+  gives  an  integer  corresponding to the amount of incomplete remose removed
+  from each vertex.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL40 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 4, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL13 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 3);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XH := SynchronousRemoveIncompleteResponse(L13);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X3 ][128X[104X
+    [4X[25Xgap>[125X [27XH[1] = L40;[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XL13 = L40;[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-20 IsAnnotatableWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XIsAnnotatableWalkHomomorphism[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YAn  annotation for a walk homomorphism [3XW[103X is a function A from the vertex set
+  of  the domain of [3XW[103X to the integers with the propery that for all edges e in
+  the  domain  of  [3XW[103X from a vertex a to a vertex b, the length L of the walk [3XW[103X
+  maps e to satisfies (b)A - (a)A + 1 = L.[133X
+  
+  [33X[0;0YAnnotations  are useful in using walk homomorphism to define continuous maps
+  between shift space. In particular a constant annotation is always valid for
+  synchronous walk homomorphisms.[133X
+  
+  [33X[0;0YThis  attribute  returns  true  if  and  only if the given walk homomorphism
+  admits an annotation.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1], [[1], [1, 2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsAnnotatableWalkHomomorphism(H);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XS := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1], [[2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsAnnotatableWalkHomomorphism(S);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-21 WalkHomomorphismAnnotation[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismAnnotation[102X( [3XW[103X, [3Xs[103X, [3Xp[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA list of integers[133X
+  
+  [33X[0;0YAn  annotation for a walk homomorphism [3XW[103X is a function A from the vertex set
+  of  the domain of [3XW[103X to the integers with the propery that for all edges e in
+  the  domain  of  [3XW[103X from a vertex a to a vertex b, the length l of the walk [3XW[103X
+  maps e to satisfies (b)A - (a)A + 1 = l.[133X
+  
+  [33X[0;0YAnnotations  are useful in using walk homomorphism to define continuous maps
+  between  shift  space.  In particular a contstant annotation is always valid
+  for synchronous walk homomorphisms.[133X
+  
+  [33X[0;0YIf [3X>W[103X is a walk homomorphism which admits an annotation, then this operation
+  returns  an  annotation  for  [3XW[103X such that the vertex s in the domain of [3XW[103X is
+  mapped to p. This is given as a list of integers.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[2], [2, 2, 3], [], [2]]);;[127X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(D, D, [1, 2, 2, 4],[127X[104X
+    [4X[25X>[125X [27X[[1, 3], [2], [3], [3, 2], [5, 2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 3);[127X[104X
+    [4X[28X[ 3, 4, 5, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 2, 3);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-22 WalkHomomorphismAnnotation[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismAnnotation[102X( [3XW[103X, [3Xp[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA list of integers[133X
+  
+  [33X[0;0YSame as WalkHomomorphismAnnotation(1, p).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[2], [2, 2, 3], [], [2]]);;[127X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(D, D, [1, 2, 2, 4],[127X[104X
+    [4X[25X>[125X [27X[[1, 3], [2], [3], [3, 2], [5, 2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 3);[127X[104X
+    [4X[28X[ 3, 4, 5, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 2, 3);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-23 WalkHomomorphismAnnotation[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismAnnotation[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA list of integers[133X
+  
+  [33X[0;0YSame as WalkHomomorphismAnnotation(1, 0).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[2], [2, 2, 3], [], [2]]);;[127X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(D, D, [1, 2, 2, 4],[127X[104X
+    [4X[25X>[125X [27X[[1, 3], [2], [3], [3, 2], [5, 2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 3);[127X[104X
+    [4X[28X[ 3, 4, 5, 3 ][128X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismAnnotation(H, 2, 3);[127X[104X
+    [4X[28X[ 0, 1, 2, 0 ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-24 ReduceSynchronizingLength[101X
+  
+  [33X[1;0Y[29X[2XReduceSynchronizingLength[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya pair of walk homomorphisms[133X
+  
+  [33X[0;0YIt  is  assummed  that  the  given  walk  homomorphism is deterministic, the
+  attribute will return fail if this is not the case.[133X
+  
+  [33X[0;0YThe attribute quotients the domain digraph by the relation that two vertices
+  v,  w are equivalent if they map to the same vertex under [3XW[103X and if one reads
+  an edge of the codomain digraph from either of these vertices, then the same
+  vertex  is reached. That is to say that if t is the common image of v and w,
+  then  for  all  edges  e starting at t, there are edges ev, ew of the domain
+  Which  1.  start at v, w respectively. 2. are both mapped to e by [3XW[103X. 3. have
+  the same target vertex.[133X
+  
+  [33X[0;0Ythe  first output is the quotient homomorphism q, and the second is the walk
+  homomorphism w2 such that [3XW[103X is equal to the composite qw2.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XReduceSynchronizingLength(H);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XH := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XReduceSynchronizingLength(H);[127X[104X
+    [4X[28Xfail[128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-25 SynchronizingSequence[101X
+  
+  [33X[1;0Y[29X[2XSynchronizingSequence[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya list of walk homomorphisms[133X
+  
+  [33X[0;0YIt  is  assummed  that  the  given  walk  homomorphism is deterministic, the
+  attribute will return fail if this is not the case.[133X
+  
+  [33X[0;0YThe  attribute  reduces  the  walk  homomorphism  as in the second output of
+  ReduceSynchronizingLength.  This  is then repeated until the walk homorphism
+  can't  be  reduced  further.  The  output  is the resulting sequence of walk
+  homomorphisms starting with the input and ending with the irreducible one at
+  the end.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XS := SynchronizingSequence(H);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-26 SynchronizingSequenceConnections[101X
+  
+  [33X[1;0Y[29X[2XSynchronizingSequenceConnections[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya list of walk homomorphisms[133X
+  
+  [33X[0;0YIt  is  assummed  that  the  given  walk  homomorphism is deterministic, the
+  attribute will return fail if this is not the case.[133X
+  
+  [33X[0;0YThe  attribute  reduces  the  walk  homomorphism  as in the second output of
+  ReduceSynchronizingLength.  This  is then repeated until the walk homorphism
+  can't  be  reduced further. The output is the resulting sequence of quotient
+  maps  from the first output of ReduceSynchronizingLength but ending with the
+  irreducible output at the end.[133X
+  
+  [33X[0;0YThis  is such that the nth entry of SynchronizingSequence([3XW[103X) is equal to the
+  composite      of      the      nth      and      later      entries      of
+  SynchronizingSequenceConnections([3XW[103X).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XSynchronizingSequenceConnections(H);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 4 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.> ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.1-27 WalkHomomorphismInputString[101X
+  
+  [33X[1;0Y[29X[2XWalkHomomorphismInputString[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya string[133X
+  
+  [33X[0;0YThis  operation  converts a walk homomorphism into the string the user needs
+  to enter to instruct GAP to generate it.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XWalkHomomorphismInputString(R2toPhiFold());[127X[104X
+    [4X[28X"WalkHomomorphism(Digraph([ [ 1, 1 ] ]), Digraph([ [ 1, 2 ], [ 1 ] ]), [ 1 ],[128X[104X
+    [4X[28X[ [ 1 ], [ 2, 3 ] ])"[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.2 [33X[0;0YFoldings[133X[101X
+  
+  [33X[0;0YWe use three types of folding in this package. We call these, UDAF foldings,
+  two-sided  foldings, and one-sided foldings. Each of these is a special type
+  of walk homomorphism.[133X
+  
+  [33X[0;0YAn  UDAF  folding  is  a walk homomorphism between two finite digraphs which
+  induces  a  bijection  between the sets of unindexed biinfinite walks in the
+  digraphs.[133X
+  
+  [33X[0;0YA  two-sided  folding  is  a  homomorphism between two finite digraphs which
+  induces  a  bijection  between  the  sets of indexed biinfinite walks in the
+  digraphs (we define these as walk homomorphism).[133X
+  
+  [33X[0;0YA  one-sided  folding  is  a  homomorphism between two finite digraphs which
+  induces  a bijection between the sets of indexed backwards infinite walks in
+  the digraphs (we define these as walk homomorphism).[133X
+  
+  [1X1.2-1 MakeSynchronousWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XMakeSynchronousWalkHomomorphism[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya pair of walk homomorphisms[133X
+  
+  [33X[0;0YA  walk homomorphism is called synchronous if it maps each edge to a walk of
+  length  1.  Hence  synchronous walk homomorphisms as essentially the same as
+  digraph homomorphisms.[133X
+  
+  [33X[0;0YIf  [3XW[103X  is  an  UDAF  folding between digraphs D1 and D2, then this operation
+  returns  a synchronous UDAF folding H from some digraph D3 to D2 and an UDAF
+  folding f from D3-> D1 such that H and the composite fW induce the same UDAF
+  isomorphism.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XMakeSynchronousWalkHomomorphism([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XMakeSynchronousWalkHomomorphism([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));[127X[104X
+    [4X[28XError, AutShift: MakeSynchronousWalkHomomorphism: usage,[128X[104X
+    [4X[28Xthe given homomorphism must be non-degenerate[128X[104X
+    [4X[25Xgap>[125X [27XMakeSynchronousWalkHomomorphism([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));[127X[104X
+    [4X[28XError, AutShift: MakeSynchronousWalkHomomorphism: usage,[128X[104X
+    [4X[28Xthe target digraph must be an UDAF Digraph[128X[104X
+    [4X[25Xgap>[125X [27XP := MakeSynchronousWalkHomomorphism(PhitoR2Fold());[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XIsSynchronousWalkHomomorphism(P[1]);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XH := P[2] * PhitoR2Fold();[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XRemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[28Xtrue [128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-2 R2toPhiFold[101X
+  
+  [33X[1;0Y[29X[2XR2toPhiFold[102X(  ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA walk homomorphism[133X
+  
+  [33X[0;0YThis   returns   the  same  output  as  WalkHomomorphism(Digraph([[1,  1]]),
+  Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);[133X
+  
+  [1X1.2-3 PhitoR2Fold[101X
+  
+  [33X[1;0Y[29X[2XPhitoR2Fold[102X(  ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10YA walk homomorphism[133X
+  
+  [33X[0;0YThis  returns  the  same  output as WalkHomomorphism(Digraph([[1, 2], [1]]),
+  Digraph([[1, 1]]), [1, 1], [[1], [2], []]]);[133X
+  
+  [1X1.2-4 LineDigraphWalkHomomorphism[101X
+  
+  [33X[1;0Y[29X[2XLineDigraphWalkHomomorphism[102X( [3XD[103X, [3Xp[103X, [3Xf[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphism[133X
+  
+  [33X[0;0YIf [3XD[103X is a digraph then one can natually contruct a new digraph from [3XD[103X called
+  its  line  digraph  which has a vertex for each walk of length 1 and an edge
+  for each walk of length 2 see https://en.wikipedia.org/wiki/Line_graph.[133X
+  
+  [33X[0;0YThere  are two natural digraph hommorphisms from this new digraph to the old
+  one.  Defined  by  mapping  each  vertex  to  its start or end vertex in the
+  origional    digraph.    These    homomorphisms    are    the    output   of
+  LineDigraphWalkHomomorphism([3XD[103X,  0,  1) and LineDigraphWalkHomomorphism([3XD[103X, 1,
+  0)  respectively.  The  idea  being  that the vertices in the former digraph
+  store  one edge of future information and those in the latter store one edge
+  of past information.[133X
+  
+  [33X[0;0YA  vertex of the domain of LineDigraphWalkHomomorphism([3XD[103X, p, f) is is a walk
+  of  length p + f and the vertex map sends such a vertex to the vertex in the
+  origional digraph which is p edges from the front and f edges from the end.[133X
+  
+  [33X[0;0YThis  construction  is  nice  in  the  sense that if a, b, c, d are positive
+  integers  and  D2 is the doman of LineDigraphWalkHomomorphism([3XD[103X, a, b), then
+  LineDigraphWalkHomomorphism([3XD2[103X, c, d) * LineDigraphWalkHomomorphism([3XD[103X, a, b)
+  agrees with LineDigraphWalkHomomorphism([3XD[103X, a + c, b + d).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL12 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 2);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 13 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XN11 := LineDigraphWalkHomomorphism(L12!.DomainDigraph, 1, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 34 edges to a digraph with 13 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XN11 * L12 = L23;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-5 IsUDAFFolding[101X
+  
+  [33X[1;0Y[29X[2XIsUDAFFolding[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YA  walk  homomorphism  is  called  an UDAF folding if it induces a bijection
+  between  the  sets  of  shist equivalence clasees of biinfinite walks of the
+  domain and codomain (which we require to be UDAF digraphs).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(R2toPhiFold());[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(PhitoR2Fold());[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(IdentityWalkHomomorphism(Digraph([[], [1,3], []])));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,3], []])));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,2, 3], []])));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[1, 1], [2, 2]]), Digraph([[1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1], [[1], [2], [1], [2]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding([127X[104X
+    [4X[25X>[125X [27XWalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1], [[1], [2], [1]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27Xf:= WalkHomomorphism(Digraph([ [ 1, 2, 3 ], [ 1, 4, 1 ], [ 1, 2, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 4, 1 ] ]), Digraph([ [ 3 ], [ 3 ], [ 3, 3, 3 ] ]), [ 3, 3, 3, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 4 ], [ 5 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 5 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFFolding(f);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-6 IsOneSidedFolding[101X
+  
+  [33X[1;0Y[29X[2XIsOneSidedFolding[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YWe  say that a walk homomorphism is a one-sided folding if it is sycnhronous
+  and  itinduces a bijection beween the set of infinite backwards walks of the
+  domain and codomain digraphs.[133X
+  
+  [33X[0;0YThis  attribute returns true if and only if the given walk homomorphism is a
+  one-sided folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI := IdentityWalkHomomorphism(Digraph([[1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(H);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(I);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(H);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[1, 2, 2], []]);[127X[104X
+    [4X[28X<immutable multidigraph with 2 vertices, 3 edges>[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(W);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(W);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [1, 3], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(W);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[], [1, 3], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(W);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-7 IsTwoSidedFolding[101X
+  
+  [33X[1;0Y[29X[2XIsTwoSidedFolding[102X( [3XW[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YIt  is  assummed that the given walk homomorphisms are between UDAF digraphs
+  and the operation will return fail if this is not the case.[133X
+  
+  [33X[0;0YWe  say that a walk homomorphism is a two-sided folding if it is sycnhronous
+  and  itinduces  a bijection beween the set of biinfinite walks of the domain
+  and codomain digraphs.[133X
+  
+  [33X[0;0YThis  attribute returns true if and only if the given walk homomorphism is a
+  two-sided folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XI := IdentityWalkHomomorphism(Digraph([[1, 1]]));[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(H);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(I);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XH := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(H);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[1, 2, 2], []]);[127X[104X
+    [4X[28X<immutable multidigraph with 2 vertices, 3 edges>[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(W);[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(W);[127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[1, 1, 2, 2], []]);[127X[104X
+    [4X[28X<immutable multidigraph with 2 vertices, 4 edges>[128X[104X
+    [4X[25Xgap>[125X [27XW := WalkHomomorphism(D, D, [1, 2], [[1], [2], [3], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XIsTwoSidedFolding(W);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsOneSidedFolding(W);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X1.2-8 FoldingToLineFolding[101X
+  
+  [33X[1;0Y[29X[2XFoldingToLineFolding[102X( [3XW[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya pair of walk homomorphisms[133X
+  
+  [33X[0;0YBy   a   line   folding   we   mean   one   of  the  type  constructable  by
+  LineDigraphWalkHomomorphism.         It         is         true         (see
+  https://arxiv.org/abs/2112.13359) that if [3XW[103X is an UDAF folding then there is
+  a  line  folding  L and an UDAF folding f such that the composite Lf induces
+  the same UDAF isomorphism as [3XW[103X.[133X
+  
+  [33X[0;0YIf  [3XW[103X is an UDAF folding then the operation returns such a pair L, f in that
+  order. Otherwise the operation returns fail.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFoldingToLineFolding(R2toPhiFold());[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XP := FoldingToLineFolding(R2toPhiFold());[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XH := P[2] * R2toPhiFold();[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XRemoveIncompleteResponse(P[1])[1] = RemoveIncompleteResponse(H)[1];[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XP := FoldingToLineFolding(PhitoR2Fold());[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XH := P[2] * PhitoR2Fold();[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XRemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27Xf := WalkHomomorphism(Digraph([[], []]), Digraph([[2], []]), [2, 1], []);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.>[128X[104X
+    [4X[25Xgap>[125X [27XP := FoldingToLineFolding(f);[127X[104X
+    [4X[28X[ <walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.>,[128X[104X
+    [4X[28X<walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.> ][128X[104X
+    [4X[25Xgap>[125X [27XH := P[2] * f;[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.>[128X[104X
+    [4X[25Xgap>[125X [27XRemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X1.3 [33X[0;0YOther[133X[101X
+  
+  [1X1.3-1 WalksOfGivenLength[101X
+  
+  [33X[1;0Y[29X[2XWalksOfGivenLength[102X( [3XD[103X, [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya list of lists of integers[133X
+  
+  [33X[0;0YReturns  all the walks in [3XD[103X of length [3Xn[103X. Each walk is given as a sequence of
+  edges. If [3Xn[103X is 0 then the operation returns fail.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XWalksOfGivenLength(Digraph([[2], [1, 1]]), 3);[127X[104X
+    [4X[28X[ [ 1, 2, 1 ], [ 1, 3, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], [ 3, 1, 2 ],[128X[104X
+    [4X[28X[ 3, 1, 3 ] ][128X[104X
+    [4X[25Xgap>[125X [27XWalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);[127X[104X
+    [4X[28X[ [ 1, 3, 1 ], [ 1, 3, 2 ], [ 1, 4, 1 ], [ 1, 4, 2 ], [ 2, 3, 1 ],[128X[104X
+    [4X[28X[ 2, 3, 2 ], [ 2, 4, 1 ], [ 2, 4, 2 ], [ 3, 1, 3 ], [ 3, 1, 4 ],[128X[104X
+    [4X[28X[ 3, 2, 3 ], [ 3, 2, 4 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 3 ],[128X[104X
+    [4X[28X[ 4, 2, 4 ] ][128X[104X
+    [4X[25Xgap>[125X [27XWalksOfGivenLength(Digraph([[1, 1]]), 3);[127X[104X
+    [4X[28X[ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ],[128X[104X
+    [4X[28X[ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.3-2 OutEdgesAtVertex[101X
+  
+  [33X[1;0Y[29X[2XOutEdgesAtVertex[102X( [3XD[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya list of lists of pairs of integers[133X
+  
+  [33X[0;0YReturns  a  list  whose  vth entry is a list of pairs. There is one pair for
+  each  edge  in  D  starting at vertex v. The pair contains the number of the
+  edge  (its  position in DigraphEdges([3XD[103X)) and the vertex it points to in that
+  order.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XOutEdgesAtVertex(D);[127X[104X
+    [4X[28X[ [ [ 1, 1 ], [ 2, 1 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[1, 1]]);[127X[104X
+    [4X[28X<immutable multidigraph with 1 vertex, 2 edges>[128X[104X
+    [4X[25Xgap>[125X [27XOutEdgesAtVertex(D);[127X[104X
+    [4X[28X[ [ [ 1, 1 ], [ 2, 1 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[2], [1]]);[127X[104X
+    [4X[28X<immutable digraph with 2 vertices, 2 edges>[128X[104X
+    [4X[25Xgap>[125X [27XOutEdgesAtVertex(D);[127X[104X
+    [4X[28X[ [ [ 1, 2 ] ], [ [ 2, 1 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[2], [1], [1]]);[127X[104X
+    [4X[28X<immutable digraph with 3 vertices, 3 edges>[128X[104X
+    [4X[25Xgap>[125X [27XOutEdgesAtVertex(D);[127X[104X
+    [4X[28X[ [ [ 1, 2 ] ], [ [ 2, 1 ] ], [ [ 3, 1 ] ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X1.3-3 IsUDAFDigraph[101X
+  
+  [33X[1;0Y[29X[2XIsUDAFDigraph[102X( [3XD[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YIf [3XD[103X is a digraph, then we say that [3XD[103X is an UDAF digraph if for all vertices
+  v of [3XD[103X we have that neither the number of infinite backwards walks ending at
+  [3XD[103X nor the number of infinite forwards walks begining at v is equal to 1.[133X
+  
+  [33X[0;0YThis property is to ensure that the "irrational" walks in [3XD[103X are "dense" this
+  property  is  desirable  as  is  allows us to prove various facts about walk
+  homomorphisms      between      these     digraphs     see     the     paper
+  https://arxiv.org/abs/2112.13359 for more details.[133X
+  
+  [33X[0;0YMoreover  some  of  the operations in this package will reject digraphs that
+  are  are not UDAF digraphs as it is not known that they will work as inteded
+  in such cases.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[1, 1]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[1]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[], []]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[2], [1]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[1, 2], [1]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[1, 1], [1]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[2, 2], [2]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XIsUDAFDigraph(Digraph([[2], [2, 2]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XD := IsUDAFDigraph(Digraph([[1, 1, 2], [3], []]));[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XD := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X1.3-4 OneSidedDigraphMinimise[101X
+  
+  [33X[1;0Y[29X[2XOneSidedDigraphMinimise[102X( [3XD[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya walk homomorphisms[133X
+  
+  [33X[0;0YIf  the  digraph  has  a  pair  of  vertices which have the same multiset of
+  outneighbours  then  one  can  naturally  form  a  quotient of the origional
+  digraph  by  identifying  only  these  vertices  and the corresponding edges
+  eminating from them.[133X
+  
+  [33X[0;0YThis  operation  reduces the digraph in this fashion as much as possible and
+  returns  a homomorphism from the given digraph to a digraph for which no two
+  vertices has the same multiset of outneighbours. The given walk homomorphism
+  is always a one-sided folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XD := Digraph([[1, 1]]);[127X[104X
+    [4X[28X<immutable multidigraph with 1 vertex, 2 edges>[128X[104X
+    [4X[25Xgap>[125X [27XD10 := LineDigraphWalkHomomorphism(D,1,0)!.DomainDigraph;[127X[104X
+    [4X[28X<immutable digraph with 2 vertices, 4 edges>[128X[104X
+    [4X[25Xgap>[125X [27XOneSidedDigraphMinimise(D10);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XD11 := LineDigraphWalkHomomorphism(D,1,1)!.DomainDigraph;[127X[104X
+    [4X[28X<immutable digraph with 4 vertices, 8 edges>[128X[104X
+    [4X[25Xgap>[125X [27XOneSidedDigraphMinimise(D11);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+  [4X[32X[104X
+  

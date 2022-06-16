@@ -1,0 +1,98 @@
+  
+  
+  [1XIndex[101X
+  
+  [2X\*[102X, for IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism 2.3-4 
+      for IsShiftIsomorphism, IsShiftIsomorphism 2.2-5 
+      for IsUDAFIsomorphism, IsUDAFIsomorphism 2.1-14 
+      for IsUDAFTransducer, IsUDAFTransducer 2.1-12 
+      for IsWalkHomomorphism, IsWalkHomomorphism 1.1-3 
+  [2X\=[102X, for IsUDAFTransducer, IsUDAFTransducer 2.1-17 
+  [2X\^[102X, for IsOneSidedShiftIsomorphism, IsInt 2.3-6 
+      for IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism 2.3-5 
+      for IsShiftIsomorphism, IsInt 2.2-8 
+      for IsShiftIsomorphism, IsShiftIsomorphism 2.2-6 
+      for IsUDAFIsomorphism, IsInt 2.1-20 
+      for IsUDAFIsomorphism, IsUDAFIsomorphism 2.1-21 
+      for IsUDAFTransducer, IsInt 2.1-15 
+  [2XAreIsomorphicLabeledUDAFTransducers[102X, for IsUDAFTransducer,IsUDAFTransducer,IsDenseList,IsDenseList 2.1-10 
+  [2XAreIsomorphicUDAFTransducers[102X, for IsUDAFTransducer,IsUDAFTransducer 2.1-11 
+  [2XBlockCodeTransducer[102X, for IsPosInt, IsInt, IsFunction 2.4-1 
+  [2XComposeOneSidedShiftIsomorphisms[102X, for IsOneSidedShiftIsomorphism,IsOneSidedShiftIsomorphism 2.3-3 
+  [2XComposeShiftIsomorphisms[102X, for IsShiftIsomorphism,IsShiftIsomorphism 2.2-4 
+  [2XComposeUDAFIsomorphisms[102X, for IsUDAFIsomorphism,IsUDAFIsomorphism 2.1-13 
+  [2XComposeUDAFTransducers[102X, for IsUDAFTransducer,IsUDAFTransducer 2.1-7 
+  [2XComposeWalkHomomorphisms[102X, for IsWalkHomomorphism, IsWalkHomomorphism 1.1-2 
+  [2XDeBruijnTransducer[102X, for IsPosInt, IsPosInt 2.4-2 
+  [2XDeterministicDomainCombineEquivalentStates[102X, for IsUDAFTransducer 2.1-19 
+  [2XDotUDAFTransducer[102X, for IsUDAFTransducer 3.1-2 
+  [2XDotUDAFTransducerWithVertexLabels[102X, for IsUDAFTransducer, IsDenseList 3.1-3 
+  [2XDotWalkHomomorphism[102X, for IsWalkHomomorphism 3.1-1 
+  [2XDraw[102X, for IsOneSidedShiftIsomorphism 3.2-4 
+      for IsShiftIsomorphism 3.2-2 
+      for IsUDAFIsomorphism 3.2-6 
+      for IsUDAFTransducer 3.2-5 
+      for IsWalkHomomorphism 3.2-1 
+  [2XDrawSynchronous[102X, for IsShiftIsomorphism 3.2-3 
+  [2XDualWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-10 
+  [2XFoldingToLineFolding[102X, for IsWalkHomomorphism 1.2-8 
+  [2XIdentityShiftIsomorphism[102X, for IsPosInt 2.2-7 
+  [2XIdentityUDAFTransducer[102X, for IsDigraph 2.1-18 
+  [2XIdentityWalkHomomorphism[102X, for IsDigraph 1.1-4 
+  [2XImageAsUnionOfCones[102X, for IsWalkHomomorphism, IsInt 1.1-11 
+  [2XImageFinderWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-9 
+  [2XImagesAsUnionsOfCones[102X, for IsWalkHomomorphism 1.1-12 
+  [2XIsAnnotatableWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-20 
+  [2XIsCoreTransducer[102X, for IsTransducer 2.4-6 
+  [2XIsDegenerateWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-5 
+  [2XIsDeterministicWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-16 
+  [2XIsLipschitzTransducer[102X, for IsTransducer 2.4-4 
+  [2XIsMinimalUDAFTransducer[102X, for IsUDAFTransducer 2.1-9 
+  [2XIsOneSidedFolding[102X, for IsWalkHomomorphism 1.2-6 
+  [2XIsSynchronousWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-18 
+  [2XIsTwoSidedFolding[102X, for IsWalkHomomorphism 1.2-7 
+  [2XIsUDAFDigraph[102X, for IsDigraph 1.3-3 
+  [2XIsUDAFFolding[102X, for IsWalkHomomorphism 1.2-5 
+  [2XLineDigraphWalkHomomorphism[102X, for IsDigraph, IsInt, IsInt 1.2-4 
+  [2XMakeSynchronousWalkHomomorphism[102X, for IsWalkHomomorphism 1.2-1 
+  [2XMaxFutureConeDepth[102X, for IsWalkHomomorphism 1.1-14 
+  [2XMaxHistoryConeDepth[102X, for IsWalkHomomorphism 1.1-15 
+  [2XMinimalUDAFTransducer[102X, for IsUDAFTransducer 2.1-8 
+  [2XOneSidedDigraphMinimise[102X, for IsDigraph 1.3-4 
+  [2XOneSidedShiftIsomorphism[102X, for IsUDAFTransducer 2.3-1 
+      for IsWalkHomomorphism,IsWalkHomomorphism 2.3-2 
+  [2XOneSidedTorsionDecomposition[102X, for IsOneSidedShiftIsomorphism 2.3-7 
+  [2XOutEdgesAtVertex[102X, for IsDigraph 1.3-2 
+  [2XPhitoR2Fold[102X 1.2-3 
+  [2XPowerSetWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-8 
+  [2XR2toPhiFold[102X 1.2-2 
+  [2XRandomOneSidedAut[102X, for IsDigraph 2.3-8 
+  [2XReduceSynchronizingLength[102X, for IsWalkHomomorphism 1.1-24 
+  [2XRemoveIncompleteResponse[102X, for IsWalkHomomorphism 1.1-17 
+  [2XResizeZeroStringTransducer[102X, for IsPosInt, IsPosInt, IsPosInt 2.4-3 
+  [2XShiftIsomorphism[102X, for IsTransducer 2.2-1 
+      for IsUDAFTransducer 2.2-2 
+      for IsUDAFTransducer, IsDenseList 2.2-3 
+  [2XSynchronizingSequence[102X, for IsWalkHomomorphism 1.1-25 
+  [2XSynchronizingSequenceConnections[102X, for IsWalkHomomorphism 1.1-26 
+  [2XSynchronousRemoveIncompleteResponse[102X, for IsWalkHomomorphism 1.1-19 
+  [2XTransducerCore[102X, for IsTransducer 2.4-5 
+  [2XTrimWalkHomomorphism[102X, for IsWalkHomomorphism 1.1-13 
+  [2XUDAFIsomorphism[102X, for IsShiftIsomorphism 2.1-4 
+      for IsTransducer 2.1-2 
+      for IsUDAFTransducer 2.1-1 
+      for IsWalkHomomorphism, IsWalkHomomorphism 2.1-3 
+  [2XUDAFNrStates[102X, for IsUDAFTransducer 2.1-16 
+  [2XUDAFTransducer[102X, for IsTransducer 2.1-5 
+      for IsWalkHomomorphism, IsWalkHomomorphism 2.1-6 
+  [2XWalkHomomorphism[102X, for IsDigraph, IsDigraph, IsDenseList, IsDenseList 1.1-1 
+  [2XWalkHomomorphismAnnotation[102X, for IsWalkHomomorphism 1.1-23 
+      for IsWalkHomomorphism, IsInt 1.1-22 
+      for IsWalkHomomorphism, IsInt, IsInt 1.1-21 
+  [2XWalkHomomorphismImageAutomaton[102X, for IsWalkHomomorphism 1.1-6 
+  [2XWalkHomomorphismInputString[102X, for IsWalkHomomorphism 1.1-27 
+  [2XWalkHomomorphismVertexImageAutomaton[102X, for IsWalkHomomorphism, IsInt 1.1-7 
+  [2XWalksOfGivenLength[102X, for IsDigraph, IsInt 1.3-1 
+  
+  
+  -------------------------------------------------------

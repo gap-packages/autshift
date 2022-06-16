@@ -1,0 +1,1246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (autshift) - Chapter 2: Transducers and isomorphisms</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap2"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap2_mj.html">[MathJax on]</a></p>
+<p><a id="X82C54324869B3C00" name="X82C54324869B3C00"></a></p>
+<div class="ChapSects"><a href="chap2.html#X82C54324869B3C00">2 <span class="Heading">Transducers and isomorphisms</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X84521F517F88F7A1">2.1 <span class="Heading">UDAF</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X84ACA6747ED53B0E">2.1-1 UDAFIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7B2C92FD86146022">2.1-2 UDAFIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X87851C0B8129CED5">2.1-3 UDAFIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7BC863C47CC1EAE3">2.1-4 UDAFIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7B54AE097F3DB259">2.1-5 UDAFTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X78412B307F522D11">2.1-6 UDAFTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8512809081BA5984">2.1-7 ComposeUDAFTransducers</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X81BB51B77D762A5C">2.1-8 MinimalUDAFTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X843A0AF07DAA2B84">2.1-9 IsMinimalUDAFTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X85D7A7E1861289E7">2.1-10 AreIsomorphicLabeledUDAFTransducers</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7E07E47E84C52A42">2.1-11 AreIsomorphicUDAFTransducers</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X86F1B52A8183660D"><code>2.1-12 \*</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7D1456EC7B2B29EB">2.1-13 ComposeUDAFIsomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8725462B80368334"><code>2.1-14 \*</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X788484227E598C38"><code>2.1-15 \^</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7E173EB7872A993B">2.1-16 UDAFNrStates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X86E63C9A79BE5E51"><code>2.1-17 \=</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7CADD9CB82611394">2.1-18 IdentityUDAFTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X86586364871AE1E5">2.1-19 DeterministicDomainCombineEquivalentStates</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X795B723679FD1FB0"><code>2.1-20 \^</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X83B4E82B85400866"><code>2.1-21 \^</code></a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X855AAD5481754970">2.2 <span class="Heading">Two-sided shift</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7E16BC7886B23E06">2.2-1 ShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X78DD11F3817731A6">2.2-2 ShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7A9493E586610616">2.2-3 ShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X87B3F9DD87346096">2.2-4 ComposeShiftIsomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C970F167C24EAF5"><code>2.2-5 \*</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7EEE246C795261A7"><code>2.2-6 \^</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X825F8E4D809D3D87">2.2-7 IdentityShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C2B06CC868361D4"><code>2.2-8 \^</code></a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X83D8749F80BA6722">2.3 <span class="Heading">One-sided shift</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X79CD06AA8045BE55">2.3-1 OneSidedShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7D70D6127F02E312">2.3-2 OneSidedShiftIsomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7DE4CD5787EA65D6">2.3-3 ComposeOneSidedShiftIsomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8081B1FE7984E052"><code>2.3-4 \*</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X79910CFC7CF26B00"><code>2.3-5 \^</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7A12482E87FEBFF5"><code>2.3-6 \^</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X82C5E38B7E0D2ADC">2.3-7 OneSidedTorsionDecomposition</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X812ED4547E474CE0">2.3-8 RandomOneSidedAut</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap2.html#X7C797F8B866C2A41">2.4 <span class="Heading">GNS transducers (from aaa).</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X850F8FCC7D65D27D">2.4-1 BlockCodeTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C74DA0C7E3A90D2">2.4-2 DeBruijnTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X865C4BC583C2993A">2.4-3 ResizeZeroStringTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7A1702A27FE1771D">2.4-4 IsLipschitzTransducer</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X85ED1D4884EE3A7D">2.4-5 TransducerCore</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C0FEEB387D5CA83">2.4-6 IsCoreTransducer</a></span>
+</div></div>
+</div>
+
+<h3>2 <span class="Heading">Transducers and isomorphisms</span></h3>
+
+<p><a id="X84521F517F88F7A1" name="X84521F517F88F7A1"></a></p>
+
+<h4>2.1 <span class="Heading">UDAF</span></h4>
+
+<p>In this section we descible methods for working with UDAF transducers and UDAF isomorphisms as described in the paper (https://arxiv.org/abs/2112.13359). Note that many of the functions here are only implemented for UDAF digraphs for the reasons discussed in the paper.</p>
+
+<p><a id="X84ACA6747ED53B0E" name="X84ACA6747ED53B0E"></a></p>
+
+<h5>2.1-1 UDAFIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism in the UDAF category</p>
+
+<p>Creates an object called an UDAF isomorphism.</p>
+
+<p>The input is an UDAF transducer, the stored isomorphism is the one obtained by composing the inverse of the induced domain map with the induced codomain map.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L01, L10);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">UDAFIsomorphism(T);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+</pre></div>
+
+<p><a id="X7B2C92FD86146022" name="X7B2C92FD86146022"></a></p>
+
+<h5>2.1-2 UDAFIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism in the UDAF category</p>
+
+<p>Creates an object called an UDAF isomorphism (seehttps://arxiv.org/abs/2112.13359).</p>
+
+<p>The input is a core synchronizing aaa transducer object which induces an UDAF isomorphism. the stored isomorphism is this induced isomorphism.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R := ResizeZeroStringTransducer(2, 2, 3);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFIsomorphism(R);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+</pre></div>
+
+<p><a id="X87851C0B8129CED5" name="X87851C0B8129CED5"></a></p>
+
+<h5>2.1-3 UDAFIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFIsomorphism</code>( <var class="Arg">W1</var>, <var class="Arg">W2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism in the UDAF category</p>
+
+<p>Same as UDAFIsomorphism(UDAFTransducer(<var class="Arg">W1</var>, <var class="Arg">W2</var>)).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">UDAFIsomorphism(L01, L10);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+</pre></div>
+
+<p><a id="X7BC863C47CC1EAE3" name="X7BC863C47CC1EAE3"></a></p>
+
+<h5>2.1-4 UDAFIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFIsomorphism</code>( <var class="Arg">S</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism in the UDAF category</p>
+
+<p>Creates an object called an UDAF isomorphism (seehttps://arxiv.org/abs/2112.13359).</p>
+
+<p>The input is a shift isomorphism. Returns the corresponding UDAF isomorphism.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ShiftIsomorphism(T);</span>
+&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">UDAFIsomorphism(S);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+</pre></div>
+
+<p><a id="X7B54AE097F3DB259" name="X7B54AE097F3DB259"></a></p>
+
+<h5>2.1-5 UDAFTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFTransducer</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>The argument is to be a core synchronizing aaa transducer which induces an UDAF isomorphism.</p>
+
+<p>The output is the corresponding UDAF transducer, where the alphabet of size n is replaces with the digraph with one vertex and n edges.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(3, 1, 2);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+</pre></div>
+
+<p><a id="X78412B307F522D11" name="X78412B307F522D11"></a></p>
+
+<h5>2.1-6 UDAFTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFTransducer</code>( <var class="Arg">W1</var>, <var class="Arg">W2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>The argument is to be a pair of UDAF foldings with the same domain digraph. The output is the corresponding UDAF transducer.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L11, L20);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 4 states.&gt;
+</pre></div>
+
+<p><a id="X8512809081BA5984" name="X8512809081BA5984"></a></p>
+
+<h5>2.1-7 ComposeUDAFTransducers</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ComposeUDAFTransducers</code>( <var class="Arg">T1</var>, <var class="Arg">T2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>The argument is to be a pair of UDAF transducers where the codomain digraph of <var class="Arg">T1</var> is the same as the domain digraph of <var class="Arg">T2</var>.</p>
+
+<p>The output is an UDAF transducer which induces the composite of the UDAF isomorphisms of the input transducers.</p>
+
+<p>This operation can also be called with *.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L11, L20);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ComposeUDAFTransducers(T, T);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 8 states.&gt;
+</pre></div>
+
+<p><a id="X81BB51B77D762A5C" name="X81BB51B77D762A5C"></a></p>
+
+<h5>2.1-8 MinimalUDAFTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MinimalUDAFTransducer</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>An UDAF transducer is called minimal if its domain is a one-sided folding, its codomain is an UDAF folding without complete responce, and no two states have both the same domain image and the same codomain image.</p>
+
+<p>The operation returns a minimal UDAF transducer which induces the same UDAF isomorphism as the given transducer.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L01, L10);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsMinimalUDAFTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M := MinimalUDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsMinimalUDAFTransducer(M);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M = IdentityUDAFTransducer(Digraph([[1, 1]]));</span>
+true
+</pre></div>
+
+<p><a id="X843A0AF07DAA2B84" name="X843A0AF07DAA2B84"></a></p>
+
+<h5>2.1-9 IsMinimalUDAFTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsMinimalUDAFTransducer</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>An UDAF transducer is called minimal if its domain is a one-sided folding, its codomain is an UDAF folding without complete responce, and no two states have both the same domain image and the same codomain image.</p>
+
+<p>The attribute returns true if and only if the given transducer is minimal.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L01, L10);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsMinimalUDAFTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M := MinimalUDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsMinimalUDAFTransducer(M);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M = IdentityUDAFTransducer(Digraph([[1, 1]]));</span>
+true
+</pre></div>
+
+<p><a id="X85D7A7E1861289E7" name="X85D7A7E1861289E7"></a></p>
+
+<h5>2.1-10 AreIsomorphicLabeledUDAFTransducers</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AreIsomorphicLabeledUDAFTransducers</code>( <var class="Arg">T1</var>, <var class="Arg">T2</var>, <var class="Arg">L1</var>, <var class="Arg">L2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>Two UDAF transducers are called isomorphic if they have the same domain and codomain digraphs, and there is an isomorphism of their underlying digraphs which converts one into the other</p>
+
+<p>Here T1, T2 are UDAF transducers and L1, L2 are lists with one entry for each state of T1 and T2 respectievly. These are intended to be thought of as labels for the states of the transdcuers.</p>
+
+<p>The attribute returns true if and only if there is an isomorphism from <var class="Arg">T1</var> to <var class="Arg">T2</var> which preserves the given labels.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(3, 1, 2);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(3, 1, 2);</span>
+&lt;transducer with input alphabet on 3 symbols, output alphabet on
+3 symbols, and 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I := U^-1;</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AreIsomorphicUDAFTransducers(I, U);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M := MinimalUDAFTransducer(I);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AreIsomorphicUDAFTransducers(M, U);</span>
+true
+</pre></div>
+
+<p><a id="X7E07E47E84C52A42" name="X7E07E47E84C52A42"></a></p>
+
+<h5>2.1-11 AreIsomorphicUDAFTransducers</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; AreIsomorphicUDAFTransducers</code>( <var class="Arg">T1</var>, <var class="Arg">T2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>Two UDAF transducers are called isomorphic if they have the same domain and codomain digraphs, and there is an isomorphism of their underlying digraphs which converts one into the other</p>
+
+<p>The attribute returns true if and only if the given transducers are isomorphic.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(3, 1, 2);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(3, 1, 2);</span>
+&lt;transducer with input alphabet on 3 symbols, output alphabet on
+3 symbols, and 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I := U^-1;</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AreIsomorphicUDAFTransducers(I, U);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M := MinimalUDAFTransducer(I);</span>
+&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has
+3 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">AreIsomorphicUDAFTransducers(M, U);</span>
+true
+</pre></div>
+
+<p><a id="X86F1B52A8183660D" name="X86F1B52A8183660D"></a></p>
+
+<h5><code>2.1-12 \*</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \*</code>( <var class="Arg">T1</var>, <var class="Arg">T2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>The argument is to be a pair of UDAF transducers where the codomain digraph of <var class="Arg">T1</var> is the same as the domain digraph of <var class="Arg">T2</var>.</p>
+
+<p>The output is an UDAF transducer which induces the composite of the UDAF isomorphisms of the input transducers.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(L11, L20);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T * T;</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 8 states.&gt;
+</pre></div>
+
+<p><a id="X7D1456EC7B2B29EB" name="X7D1456EC7B2B29EB"></a></p>
+
+<h5>2.1-13 ComposeUDAFIsomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ComposeUDAFIsomorphisms</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF isomorphism</p>
+
+<p>Returns the UDAF isomorphism obtained by composing the isomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+<p>This operation can also be called with *.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T1 := ResizeZeroStringTransducer(2, 2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 := UDAFTransducer(T1);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T2 := ResizeZeroStringTransducer(2, 2, 4);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U2 := UDAFTransducer(T2);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 * U2;</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 32 states.&gt;
+</pre></div>
+
+<p><a id="X8725462B80368334" name="X8725462B80368334"></a></p>
+
+<h5><code>2.1-14 \*</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \*</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF isomorphism</p>
+
+<p>Returns the UDAF isomorphism obtained by composing the isomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T1 := ResizeZeroStringTransducer(2, 2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 := UDAFTransducer(T1);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T2 := ResizeZeroStringTransducer(2, 2, 4);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U2 := UDAFTransducer(T2);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 * U2;</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 32 states.&gt;
+</pre></div>
+
+<p><a id="X788484227E598C38" name="X788484227E598C38"></a></p>
+
+<h5><code>2.1-15 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>Returns the product of <var class="Arg">S</var> with itself <var class="Arg">n</var> times for positive <var class="Arg">n</var>. Returns the product of the inverse of <var class="Arg">S</var> with itself |<var class="Arg">n</var>| times otherwise.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T1 := ResizeZeroStringTransducer(2, 2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 := UDAFTransducer(T1);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^2;</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 16 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^-1;</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 5 states.&gt;
+</pre></div>
+
+<p><a id="X7E173EB7872A993B" name="X7E173EB7872A993B"></a></p>
+
+<h5>2.1-16 UDAFNrStates</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; UDAFNrStates</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>Returns the number of states of an UDAF transducer <var class="Arg">T</var>. That is, the number of vertices of the shared domain of the two UDAF foldings defining <var class="Arg">T</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := ResizeZeroStringTransducer(2, 2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">UDAFNrStates(T);</span>
+5
+</pre></div>
+
+<p><a id="X86E63C9A79BE5E51" name="X86E63C9A79BE5E51"></a></p>
+
+<h5><code>2.1-17 \=</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \=</code>( <var class="Arg">arg1</var>, <var class="Arg">arg2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p><a id="X7CADD9CB82611394" name="X7CADD9CB82611394"></a></p>
+
+<h5>2.1-18 IdentityUDAFTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IdentityUDAFTransducer</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer</p>
+
+<p>Returns the UDAF transducer defined using two copies of the identity folding on the given digraph.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := IdentityUDAFTransducer(PetersenGraph());</span>
+&lt;UDAF Transducer whose domain digraph has
+30 edges, whose codomain digraph has 30 edges, and which has 10 states.&gt;
+</pre></div>
+
+<p><a id="X86586364871AE1E5" name="X86586364871AE1E5"></a></p>
+
+<h5>2.1-19 DeterministicDomainCombineEquivalentStates</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DeterministicDomainCombineEquivalentStates</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF transducer and a list of lists of integers</p>
+
+<p>It is assumed that the domain folding of <var class="Arg">T</var> is deterministic. The operation returns the transducer obtained from <var class="Arg">T</var> by quotienting the the underlying digraph of <var class="Arg">T</var> as much as possible such that the UDAF foldings of <var class="Arg">T</var> are still well defined.</p>
+
+<p>The operation also returns the list of equivalence classes of vertices of the above relation.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U := UDAFTransducer(L10, L10);</span>
+&lt;UDAF Transducer whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DeterministicDomainCombineEquivalentStates(U);</span>
+[ &lt;UDAF Transducer whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;,
+[ [ 1, 2 ] ] ]
+</pre></div>
+
+<p><a id="X795B723679FD1FB0" name="X795B723679FD1FB0"></a></p>
+
+<h5><code>2.1-20 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF isomorphism</p>
+
+<p>Returns the product of <var class="Arg">S</var> with itself <var class="Arg">n</var> times for positive <var class="Arg">n</var>. Returns the product of the inverse of <var class="Arg">S</var> with itself |<var class="Arg">n</var>| times otherwise.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T1 := ResizeZeroStringTransducer(2, 2, 3);;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^2;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^-1;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+</pre></div>
+
+<p><a id="X83B4E82B85400866" name="X83B4E82B85400866"></a></p>
+
+<h5><code>2.1-21 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an UDAF isomorphism</p>
+
+<p>Returns the conjugate of <var class="Arg">S</var> by <var class="Arg">T</var>. That is to say the product <var class="Arg">T</var>^-1 <var class="Arg">S</var> <var class="Arg">T</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T1 := ResizeZeroStringTransducer(2, 2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1 := UDAFIsomorphism(T1);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^2;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^-1;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T2 := ResizeZeroStringTransducer(2, 2, 4);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U2 := UDAFIsomorphism(T2);</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">U1^U2;</span>
+&lt;UDAF Isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 6 states.&gt;
+</pre></div>
+
+<p><a id="X855AAD5481754970" name="X855AAD5481754970"></a></p>
+
+<h4>2.2 <span class="Heading">Two-sided shift</span></h4>
+
+<p>In this section we describe methods for working with isomorphisms between subshifts of finite type. If D is a finite digraph, then the corresponding shift space is defined to be the topological space of biinfinite edge walks throught D with the product topology. We call such a space a shift space. We call the dynamical system consisting of this space and the homomorphism defined by shifting the indexing of a walk by one, a subshift of finite type. If f is any isomorphism between the subshifts of finite type corresponding to two digraphs A and B, then one can find a third digraph C and a pair of two-sided f1:C-&gt;A and f2:C-&gt;B such that f is equal to the composit of the inverse of the homeomorphism induced by f1 with the homeomorphism induced by f2. This is how shift isomorphisms are handled in this package. Many of the functions in this section use UDAF transducers as a base and hense require the given digraphs to be UDAF digraphs.</p>
+
+<p><a id="X7E16BC7886B23E06" name="X7E16BC7886B23E06"></a></p>
+
+<h5>2.2-1 ShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShiftIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism of subshifts of finite type</p>
+
+<p>Creates an object called a shift homomorphism. A shift isomorphism is a homomorphism between subshifts of finite type. This input method requires a full shift.</p>
+
+<p>This is input as synchronous transducer from the aaa package (https://github.com/gap-packages/aaa) which is strongly synchronizing and such that the map it defines on the shift space is a bijection.</p>
+
+
+<div class="example"><pre>gap&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ShiftIsomorphism(T);</span>
+&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
+</pre></div>
+
+<p><a id="X78DD11F3817731A6" name="X78DD11F3817731A6"></a></p>
+
+<h5>2.2-2 ShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShiftIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism of subshifts of finite type</p>
+
+<p>Creates an object called a shift homomorphism. A shift isomorphism is a homomorphism between subshifts of finite type.</p>
+
+<p>This is input as an UDAF transducer for which both UDAF foldings are two-sided foldings. The isomorphism is the composite of the inverse of the homeomorphism induced by the first folding with the homeomorphism induced by the second folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));</span>
+&lt;shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := BlockCodeTransducer(2, 2, x-&gt; [x[1]]);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := ShiftIsomorphism(T);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 4 states.&gt;
+</pre></div>
+
+<p><a id="X7A9493E586610616" name="X7A9493E586610616"></a></p>
+
+<h5>2.2-3 ShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ShiftIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism of subshifts of finite type</p>
+
+<p>Creates an object called a shift homomorphism. A shift isomorphism is a homomorphism between subshifts of finite type.</p>
+
+<p>This is input as a minimal UDAF transducer and a valid annotation of its codomain folding. The isomorphism is the composite of the inverse of the homeomorphism induced by the first folding with the homeomorphism induced by the second folding using the annotation.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[-1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := BlockCodeTransducer(2, 2, x-&gt; [x[1]]);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := UDAFTransducer(T);</span>
+&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has
+2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := ShiftIsomorphism(T);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S2 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [2]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 4 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S=S2;</span>
+true
+</pre></div>
+
+<p><a id="X87B3F9DD87346096" name="X87B3F9DD87346096"></a></p>
+
+<h5>2.2-4 ComposeShiftIsomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ComposeShiftIsomorphisms</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a shift isomorphism</p>
+
+<p>Returns the shift isomorphism obtained by composing the homeomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+<p>This operation can also be called with *.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SM1 * S1 = S0;</span>
+true
+</pre></div>
+
+<p><a id="X7C970F167C24EAF5" name="X7C970F167C24EAF5"></a></p>
+
+<h5><code>2.2-5 \*</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \*</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a shift isomorphism</p>
+
+<p>Returns the shift isomorphism obtained by composing the homeomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SM1 * S1 = S0;</span>
+true
+</pre></div>
+
+<p><a id="X7EEE246C795261A7" name="X7EEE246C795261A7"></a></p>
+
+<h5><code>2.2-6 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a shift isomorphism</p>
+
+<p>Returns the conjugate of <var class="Arg">S</var> by <var class="Arg">T</var>. That is to say the product <var class="Arg">T</var>^-1 <var class="Arg">S</var> <var class="Arg">T</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);</span>
+&lt;transducer with input alphabet on 3 symbols, output alphabet on
+3 symbols, and 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C:= ShiftIsomorphism(UDAFTransducer(C));</span>
+&lt;shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := ShiftIsomorphism(UDAFTransducer(Fig5L, Fig5R));</span>
+&lt;shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 3 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5^C;</span>
+&lt;shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 9 states.&gt;
+</pre></div>
+
+<p><a id="X825F8E4D809D3D87" name="X825F8E4D809D3D87"></a></p>
+
+<h5>2.2-7 IdentityShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IdentityShiftIsomorphism</code>( <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a shift isomorphism</p>
+
+<p>Returns the identity shift isomorphism on for the shift space of the digraph with one vertex and <var class="Arg">n</var> edges (for <var class="Arg">n</var> at least 2).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IdentityShiftIsomorphism(2);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IdentityShiftIsomorphism(4);</span>
+&lt;shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 1 state.&gt;
+</pre></div>
+
+<p><a id="X7C2B06CC868361D4" name="X7C2B06CC868361D4"></a></p>
+
+<h5><code>2.2-8 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a shift isomorphism</p>
+
+<p>Returns the product of <var class="Arg">S</var> with itself <var class="Arg">n</var> times for positive <var class="Arg">n</var>. Returns the product of the inverse of <var class="Arg">S</var> with itself |<var class="Arg">n</var>| times otherwise.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1]);</span>
+&lt;shift isomorphism whose domain digraph has
+2 edges, whose codomain digraph has 2 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S!.Annotation;</span>
+[ 1 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">(S^3)!.Annotation;</span>
+[ 3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">(S^-2)!.Annotation;</span>
+[ -2 ]
+</pre></div>
+
+<p><a id="X83D8749F80BA6722" name="X83D8749F80BA6722"></a></p>
+
+<h4>2.3 <span class="Heading">One-sided shift</span></h4>
+
+<p>In this section we describe methods for working with isomorphisms between one-sided subshifts of finite type. If D is a finite digraph, then the corresponding one-sided shift space is defined to be the topological space of backwards infinite edge walks throught D with the product topology. We call such a space a one-sided shift space. We call the dynamical system consisting of this space and the continuous map defined by deleting the last edge in a walk (and reindexing the remaining edges) a one-sided subshift of finite type. If f is any isomorphism between the one-sided subshifts of finite type corresponding to two digraphs A and B, then one can find a third digraph C and a pair of one-sided foldings f1:C-&gt;A and f2:C-&gt;B such that f is equal to the composit of the inverse of the homeomorphism induced by f1 with the homeomorphism induced by f2. This is how one-sided shift isomorphisms are handled in this package. Many of the functions in this section use UDAF transducers as a base and hense require the given digraphs to be UDAF digraphs.</p>
+
+<p><a id="X79CD06AA8045BE55" name="X79CD06AA8045BE55"></a></p>
+
+<h5>2.3-1 OneSidedShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OneSidedShiftIsomorphism</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism of one-sided subshifts of finite type</p>
+
+<p>Creates an object called a one-sided shift homomorphism. A one-sided shift isomorphism is a homomorphism between the backwards infinite walk spaces of domain and codomain digraph which commutes with the shift map (which removes the last edge in the walk).</p>
+
+<p>This is input as an UDAF transducer for which both UDAF foldings are one-sided foldings. The isomorphism is the composite of the inverse of the homeomorphism induced by the first folding with the homeomorphism induced by the second folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := UDAFTransducer(Fig5L, Fig5R);</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := OneSidedShiftIsomorphism(Fig5);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+</pre></div>
+
+<p><a id="X7D70D6127F02E312" name="X7D70D6127F02E312"></a></p>
+
+<h5>2.3-2 OneSidedShiftIsomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OneSidedShiftIsomorphism</code>( <var class="Arg">F1</var>, <var class="Arg">F2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an isomorphism of one-sided subshifts of finite type</p>
+
+<p>Creates an object called a one-sided shift homomorphism. A one-sided shift isomorphism is a homomorphism between the backwards infinite walk spaces of domain and codomain digraph which commutes with the shift map (which removes the last edge in the walk).</p>
+
+<p>This is input as a pair of one-sided foldings. The isomorphism is the composite of the inverse of the homeomorphism induced by the first folding with the homeomorphism induced by the second folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+</pre></div>
+
+<p><a id="X7DE4CD5787EA65D6" name="X7DE4CD5787EA65D6"></a></p>
+
+<h5>2.3-3 ComposeOneSidedShiftIsomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ComposeOneSidedShiftIsomorphisms</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a one-sided shift isomorphism</p>
+
+<p>Returns the one-sided shift isomorphism obtained by composing the homeomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+<p>This operation can also be called with *.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1 ], [ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := OneSidedShiftIsomorphism(f, g);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := OneSidedTorsionDecomposition(T);</span>
+[ &lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 3 states.&gt;,
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 5 states.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S[1] * S[2] = T;</span>
+true
+</pre></div>
+
+<p><a id="X8081B1FE7984E052" name="X8081B1FE7984E052"></a></p>
+
+<h5><code>2.3-4 \*</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \*</code>( <var class="Arg">S1</var>, <var class="Arg">S2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a one-sided shift isomorphism</p>
+
+<p>Returns the one-sided shift isomorphism obtained by composing the homeomorphisms <var class="Arg">S1</var> and <var class="Arg">S2</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1 ], [ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := OneSidedShiftIsomorphism(f, g);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := OneSidedTorsionDecomposition(T);</span>
+[ &lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 3 states.&gt;,
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 5 states.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S[1] * S[2] = T;</span>
+true
+</pre></div>
+
+<p><a id="X79910CFC7CF26B00" name="X79910CFC7CF26B00"></a></p>
+
+<h5><code>2.3-5 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a one-sided shift isomorphism</p>
+
+<p>Returns the conjugate of <var class="Arg">S</var> by <var class="Arg">T</var>. That is to say the product <var class="Arg">T</var>^-1 <var class="Arg">S</var> <var class="Arg">T</var>.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);</span>
+&lt;transducer with input alphabet on 3 symbols, output alphabet on
+3 symbols, and 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C:= OneSidedShiftIsomorphism(UDAFTransducer(C));</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 1 state.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5^C;</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+</pre></div>
+
+<p><a id="X7A12482E87FEBFF5" name="X7A12482E87FEBFF5"></a></p>
+
+<h5><code>2.3-6 \^</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \^</code>( <var class="Arg">S</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a one-sided shift isomorphism</p>
+
+<p>Returns the product of <var class="Arg">S</var> with itself <var class="Arg">n</var> times for positive <var class="Arg">n</var>. Returns the product of the inverse of <var class="Arg">S</var> with itself |<var class="Arg">n</var>| times otherwise.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">Digraph([[1, 1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5^2;</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 3 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">Fig5^-1;</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 2 states.&gt;
+</pre></div>
+
+<p><a id="X82C5E38B7E0D2ADC" name="X82C5E38B7E0D2ADC"></a></p>
+
+<h5>2.3-7 OneSidedTorsionDecomposition</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OneSidedTorsionDecomposition</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list of one-sided shift isomorphisms</p>
+
+<p>It is required that the given isomorphism have the same domain and codomain digraph. Returns a list of one-sided shift isomorphisms of finite order whose composite is the given isomorphism <var class="Arg">T</var>. This is done via an slight generalisation of the algorithm presented in https://arxiv.org/abs/2004.08478v4by.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">g := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1 ], [ 2 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := OneSidedShiftIsomorphism(f, g);</span>
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 6 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := OneSidedTorsionDecomposition(T);</span>
+[ &lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 3 states.&gt;,
+&lt;one sided shift isomorphism whose domain digraph has
+4 edges, whose codomain digraph has 4 edges, and which has 5 states.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S[1] * S[2] = T;</span>
+true
+</pre></div>
+
+<p><a id="X812ED4547E474CE0" name="X812ED4547E474CE0"></a></p>
+
+<h5>2.3-8 RandomOneSidedAut</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RandomOneSidedAut</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a one-sided shift isomorphism</p>
+
+<p>Returns a random one-sided isomorphism with <var class="Arg">D</var> as it's domain and codomain digraph.</p>
+
+<p>Warning this commant is currently very slow even on rather small examples.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RandomOneSidedAut(Digraph([[1, 1, 1]]));</span>
+&lt;one sided shift isomorphism whose domain digraph has
+3 edges, whose codomain digraph has 3 edges, and which has 3 states.&gt;
+</pre></div>
+
+<p><a id="X7C797F8B866C2A41" name="X7C797F8B866C2A41"></a></p>
+
+<h4>2.4 <span class="Heading">GNS transducers (from aaa).</span></h4>
+
+<p>By a GNS transducer we mean a transducer of the type described by Grigorchuk, Nekrashevich, and Sushchanskii as defined in the package aaa (https://github.com/gap-packages/aaa).</p>
+
+<p><a id="X850F8FCC7D65D27D" name="X850F8FCC7D65D27D"></a></p>
+
+<h5>2.4-1 BlockCodeTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; BlockCodeTransducer</code>( <var class="Arg">AlphSize</var>, <var class="Arg">History</var>, <var class="Arg">BlockMap</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an aaa transducer object</p>
+
+<p><var class="Arg">AlphSize</var> is assumed to be an integer which is at least 2. <var class="Arg">History</var> is assumed to be a non-negative integer. <var class="Arg">BlockMap</var> is a function which assigns each word over the alphabet [0, 1, ..., <var class="Arg">AlphSize</var> - 1] of length <var class="Arg">History</var> + 1 another word over the same alphbet.</p>
+
+<p>The output object is an aaa (https://github.com/gap-packages/aaa) transducer whose input and output alphabets have <var class="Arg">AlphSize</var> letters. There is a state for each word of length <var class="Arg">History</var> in the alphbet. Transitions are done as is DeBruijin graphs, that is a letter a is read from a state w by transitioning to the state which is a suffix of the word wa. In this case the word wrtten that the word objetain by applying the function <var class="Arg">BlockMap</var> to wa.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := BlockCodeTransducer(2, 2, x-&gt; [x[1]]);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 4 states.&gt;
+</pre></div>
+
+<p><a id="X7C74DA0C7E3A90D2" name="X7C74DA0C7E3A90D2"></a></p>
+
+<h5>2.4-2 DeBruijnTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DeBruijnTransducer</code>( <var class="Arg">AlphSize</var>, <var class="Arg">History</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an aaa transducer</p>
+
+<p>The output object is an aaa (https://github.com/gap-packages/aaa) transducer whose input and output alphabets have <var class="Arg">AlphSize</var> letters. There is a state for each word of length <var class="Arg">History</var> in the alphbet. Transitions are done as is DeBruijin graphs, that is a letter a is read from a state w by transitioning to the state which is a suffix of the word wa. The write function is the identity function.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">DeBruijnTransducer(2, 3);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 8 states.&gt;
+</pre></div>
+
+<p><a id="X865C4BC583C2993A" name="X865C4BC583C2993A"></a></p>
+
+<h5>2.4-3 ResizeZeroStringTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ResizeZeroStringTransducer</code>( <var class="Arg">AlphSize</var>, <var class="Arg">Len1</var>, <var class="Arg">Len2</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an aaa transducer</p>
+
+<p>It is required that <var class="Arg">AlphSize</var> is at least 2. Returns the minimal aaa transducer which defines the homeomorphism of cantor space defined by finding all maximal contiguous all zero substrings in the given input, and replacing those with length <var class="Arg">Len1</var> with those with length <var class="Arg">Len2</var> and vice versa.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ResizeZeroStringTransducer(2, 1, 3);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 5 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ResizeZeroStringTransducer(3, 2, 1);</span>
+&lt;transducer with input alphabet on 3 symbols, output alphabet on
+3 symbols, and 4 states.&gt;
+</pre></div>
+
+<p><a id="X7A1702A27FE1771D" name="X7A1702A27FE1771D"></a></p>
+
+<h5>2.4-4 IsLipschitzTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsLipschitzTransducer</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>We say that a trasducer T is Lipschitz if for each state of T defines a well-defined function from the set of forwards infinite words in the domain alphabet to the set of infinite words, and these maps are all Lipschitz continuous.</p>
+
+<p>This is done with respect to the metric:</p>
+
+<p>d(x_0x_1x_2..., y_0y_1y_2...) := inf({1/2^n|where n is such that x_i=y_i for all i &lt; n}).</p>
+
+<p>Note that it is possible for the minimal transducer of a Lipschitz function to not be Lipschitz as the minimal transducer of a map with a constant state will have states which do not give output.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := AlphabetChangeTransducer(4, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(3, 3, [[2, 2, 1], [3, 4, 3], [1, 1, 2], [2, 2, 3]],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[[1, 0, 1], [0], [2, 2, 0]], [[], [2], [0, 1, 2, 2]], [[], [0, 1], [2, 2]],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[2, 2], [0, 2], [1, 2, 2]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := AlphabetChangeTransducer(3, 4);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1]], [[0], [1]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">M := MinimalTransducer(T);</span>
+&lt;transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsLipschitzTransducer(M);</span>
+false
+</pre></div>
+
+<p><a id="X85ED1D4884EE3A7D" name="X85ED1D4884EE3A7D"></a></p>
+
+<h5>2.4-5 TransducerCore</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; TransducerCore</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an aaa transducer</p>
+
+<p>If T is a synchronizing transducer, then we define the core of T to be the smallest non-empty transducer obtainable from T by removing states from T.</p>
+
+<p>The Operation takes as input an synchronizing transducer and returns its Core</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C := TransducerCore(T);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutputFunction(C);</span>
+[ [ [ 1 ], [ 0, 1 ] ], [ [ 1 ], [ ] ], [ [ 1 ], [ 0 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">TransitionFunction(C);</span>
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1]], [[0], [1]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C := TransducerCore(T);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutputFunction(C);</span>
+[ [ [ 1, 0 ], [ ] ], [ [ 0 ], [ 1, 1 ] ], [ [ 0 ], [ 1 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">TransitionFunction(C);</span>
+[ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);</span>
+transducer with input alphabet on 2 symbols, output alphabet on
+2 symbols, and 2 states.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">TransducerCore(T);</span>
+Error, autshift: TransducerCore: usage,
+the transducer must be synchronizing
+</pre></div>
+
+<p><a id="X7C0FEEB387D5CA83" name="X7C0FEEB387D5CA83"></a></p>
+
+<h5>2.4-6 IsCoreTransducer</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsCoreTransducer</code>( <var class="Arg">T</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>If T is a synchronizing transducer, then we define the core of T to be the smallest non-empty transducer obtainable from T by removing states from T. We say that T is core if it is equal to its core.</p>
+
+<p>The attribute returns true if and only if the given transducer is core.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">C := TransducerCore(T);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(C);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1]], [[0], [1]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1]], [[0], [1]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := Transducer(2, 4, [[1, 2], [1, 3], [1, 1]], [[[0], []], [[1], []],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[2], [3]]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := DeBruijnTransducer(2, 3);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">T := DeBruijnTransducer(3, 2);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsCoreTransducer(T);</span>
+true
+</pre></div>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap1.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap3.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

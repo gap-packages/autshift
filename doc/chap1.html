@@ -1,0 +1,1119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (autshift) - Chapter 1: Walk homomorphisms and foldings</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+<script src="manual.js" type="text/javascript"></script>
+<script type="text/javascript">overwriteStyle();</script>
+</head>
+<body class="chap1"  onload="jscontent()">
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2.html">[Next Chapter]</a>&nbsp;  </div>
+
+<p id="mathjaxlink" class="pcenter"><a href="chap1_mj.html">[MathJax on]</a></p>
+<p><a id="X7A8619C2831E7495" name="X7A8619C2831E7495"></a></p>
+<div class="ChapSects"><a href="chap1.html#X7A8619C2831E7495">1 <span class="Heading">Walk homomorphisms and foldings</span></a>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X828339057DF7538F">1.1 <span class="Heading">Walk homomorphisms</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X806FFAE0865D7C98">1.1-1 WalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X86945453839AE9E6">1.1-2 ComposeWalkHomomorphisms</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X83F92B0A78FB9730"><code>1.1-3 \*</code></a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X8310C08E7E46BB06">1.1-4 IdentityWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7F787E377D42D123">1.1-5 IsDegenerateWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7886C84D8393E39A">1.1-6 WalkHomomorphismImageAutomaton</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7E5C9A8A7BBF60DD">1.1-7 WalkHomomorphismVertexImageAutomaton</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X78C885247871F9CB">1.1-8 PowerSetWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X788133B87B85A824">1.1-9 ImageFinderWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X83944E4281E9E82B">1.1-10 DualWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7821048A7A0B0F54">1.1-11 ImageAsUnionOfCones</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7AE85E567F81B215">1.1-12 ImagesAsUnionsOfCones</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7C02F0257FAC732C">1.1-13 TrimWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7FAA361284C1B79B">1.1-14 MaxFutureConeDepth</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X80B2F4687E3FFF9B">1.1-15 MaxHistoryConeDepth</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X792A01E9845F3A65">1.1-16 IsDeterministicWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7BD89A4A7AA6D8F2">1.1-17 RemoveIncompleteResponse</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7A1DA8397DDE9FAD">1.1-18 IsSynchronousWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7E315087861B7508">1.1-19 SynchronousRemoveIncompleteResponse</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7B9A525B7BB5486A">1.1-20 IsAnnotatableWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X8784608483C9DA17">1.1-21 WalkHomomorphismAnnotation</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7BC7FF847858EF19">1.1-22 WalkHomomorphismAnnotation</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7995399B7AD386F4">1.1-23 WalkHomomorphismAnnotation</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X798704BF7B35BA1A">1.1-24 ReduceSynchronizingLength</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7F00C9D37B4EE9B2">1.1-25 SynchronizingSequence</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X82B5DF4987CC2BE9">1.1-26 SynchronizingSequenceConnections</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7D67A1B984D32876">1.1-27 WalkHomomorphismInputString</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X82552DF27C354A9E">1.2 <span class="Heading">Foldings</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7E5A8653849F6D7D">1.2-1 MakeSynchronousWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X791D896C863BD034">1.2-2 R2toPhiFold</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X867C482D83F2EABE">1.2-3 PhitoR2Fold</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X785648D4793A956C">1.2-4 LineDigraphWalkHomomorphism</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X86AA5CF885D69F70">1.2-5 IsUDAFFolding</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7B23186F7CF21422">1.2-6 IsOneSidedFolding</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X8425077F7B8F30E0">1.2-7 IsTwoSidedFolding</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7989A44184BB9E8F">1.2-8 FoldingToLineFolding</a></span>
+</div></div>
+<div class="ContSect"><span class="tocline"><span class="nocss">&nbsp;</span><a href="chap1.html#X8632804D8232228D">1.3 <span class="Heading">Other</span></a>
+</span>
+<div class="ContSSBlock">
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X83D93CC57B934C84">1.3-1 WalksOfGivenLength</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X810D1A167ADCB551">1.3-2 OutEdgesAtVertex</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7A70B3C58721A624">1.3-3 IsUDAFDigraph</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7CB01D798523F882">1.3-4 OneSidedDigraphMinimise</a></span>
+</div></div>
+</div>
+
+<h3>1 <span class="Heading">Walk homomorphisms and foldings</span></h3>
+
+<p><a id="X828339057DF7538F" name="X828339057DF7538F"></a></p>
+
+<h4>1.1 <span class="Heading">Walk homomorphisms</span></h4>
+
+<p>A walk homomorphism from a digraph A to a digraph B consists of a function from the vertex set of A to the vertex set of B, and a function from the edge sets of A to the set of finite walks in B. These functions must be compatible in the sense that an edge between two vertices must be mapped to a walk between the images of those vertices. A walk homomorphism is to be thought of a generalisation of a digraph homomorphism (in the sense that a walk homomorphism which maps all edges to walks of length one is equivalent to a digraph homomorphism).</p>
+
+<p><a id="X806FFAE0865D7C98" name="X806FFAE0865D7C98"></a></p>
+
+<h5>1.1-1 WalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphism</code>( <var class="Arg">Dom</var>, <var class="Arg">CoDom</var>, <var class="Arg">VertexMap</var>, <var class="Arg">EdgeMap</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>Creates an object called a walk homomorphism. A walk homomorphism is is a generalisation of a digraph homomorphism which allows mapping edges to finite walks.</p>
+
+<p><var class="Arg">Dom</var> and <var class="Arg">CoDom</var> are both digraphs (https://www.gap-system.org/Packages/digraphs.html) <var class="Arg">VertexMap</var> is a list of vertices of CoDom with one entry for each vertex of <var class="Arg">Dom</var>. This is to be thought of as a function from the vertices of Dom to the vertices of <var class="Arg">CoDom</var>. <var class="Arg">EdgeMap</var> is a list of lists of edges of <var class="Arg">CoDom</var>, each list of edges must be a walk in <var class="Arg">CoDom</var> (this means each edge must end with the start vertex of the next edge). This is to be thought of as a map from the edges of <var class="Arg">Dom</var> to the walks in <var class="Arg">CoDom</var> where each edge of a digraph <var class="Arg">D</var> is identified by its position in the list <var class="Arg">DigraphEdges(D)</var>;</p>
+
+
+<div class="example"><pre><span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 3 edges.&gt; </pre></div>
+
+<p><a id="X86945453839AE9E6" name="X86945453839AE9E6"></a></p>
+
+<h5>1.1-2 ComposeWalkHomomorphisms</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ComposeWalkHomomorphisms</code>( <var class="Arg">A</var>, <var class="Arg">B</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>If <var class="Arg">A</var> is a walk homomorphism from D1 to D2 and <var class="Arg">B</var> is a walk homomorphism from D2 to D3, then the composite of <var class="Arg">A</var> and <strong class="button">B</strong> is a walk homomorphism from D1 to D3. The vertex map is the composite of the vertex maps of <var class="Arg">A</var> and <var class="Arg">B</var>. The edge map maps an edge e to the walk obtained by applying <var class="Arg">A</var> to e, and concatening the walks obtained by applying <var class="Arg">B</var> to the edges in this walk.</p>
+
+<p>This operation returns the composite of <var class="Arg">A</var> and <var class="Arg">B</var> if they are composable and returns fail otherwise.</p>
+
+<p>This operation and also be called using *.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I1*I2;</span>
+fail
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R2toPhiFold() * PhitoR2Fold();</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+</pre></div>
+
+<p><a id="X83F92B0A78FB9730" name="X83F92B0A78FB9730"></a></p>
+
+<h5><code>1.1-3 \*</code></h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; \*</code>( <var class="Arg">A</var>, <var class="Arg">B</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>Same as ComposeWalkHomomorphisms.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I1 := IdentityWalkHomomorphism(Digraph([[1, 1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I2 := IdentityWalkHomomorphism(Digraph([[1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I1*I2;</span>
+fail
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R2toPhiFold() * PhitoR2Fold();</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+</pre></div>
+
+<p><a id="X8310C08E7E46BB06" name="X8310C08E7E46BB06"></a></p>
+
+<h5>1.1-4 IdentityWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IdentityWalkHomomorphism</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphisms</p>
+
+<p>Returns the walk homomorphism from <var class="Arg">D</var> to <var class="Arg">D</var> which maps each edge to the walk of length 1 containing it, and fixing all vertices.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+</pre></div>
+
+<p><a id="X7F787E377D42D123" name="X7F787E377D42D123"></a></p>
+
+<h5>1.1-5 IsDegenerateWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsDegenerateWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>A walk homomorphism is called degenerate if there is a biinfinite walk through its domain which is not mapped by <var class="Arg">W</var> to a biinfinite walk in its codomain. Equivalently it is degenerate if there is a finite non-empty walk in the domain with the same start and end points which is mapped by <var class="Arg">W</var> to an empty walk.</p>
+
+<p>This attribute returns true if and only if <var class="Arg">W</var> is degenerate.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDegenerateWalkHomomorphism(PhitoR2Fold());</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDegenerateWalkHomomorphism(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1]]), [1], [[1], []]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDegenerateWalkHomomorphism(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[2], [1]]), Digraph([[1]]), [1, 1], [[], []]));</span>
+true </pre></div>
+
+<p><a id="X7886C84D8393E39A" name="X7886C84D8393E39A"></a></p>
+
+<h5>1.1-6 WalkHomomorphismImageAutomaton</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismImageAutomaton</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: an automaton</p>
+
+<p>This returns an automaton A (https://www.gap-system.org/Packages/automata.html) such that for each vertex in the domain of <var class="Arg">W</var>, the regular language of words which can be read from the corresponding state of A is equal to the set of walks in the image of the vertex.</p>
+
+<p>Here by "image of the vertex" we mean the set of finite prefixes of walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to forwards walk in the domain of <var class="Arg">W</var> starting with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismVertexImageAutomaton(R2toPhiFold(), 1);</span>
+&lt; epsilon automaton on 4 letters with 2 states &gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismVertexImageAutomaton(PhitoR2Fold(), 1);</span>
+&lt; epsilon automaton on 3 letters with 2 states &gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismVertexImageAutomaton(PhitoR2Fold(), 2);</span>
+&lt; epsilon automaton on 3 letters with 2 states &gt;
+</pre></div>
+
+<p><a id="X7E5C9A8A7BBF60DD" name="X7E5C9A8A7BBF60DD"></a></p>
+
+<h5>1.1-7 WalkHomomorphismVertexImageAutomaton</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismVertexImageAutomaton</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: an automaton</p>
+
+<p>This returns the same automaton as WalkHomomorphismImageAutomaton but with its initial state set to the specified vertex</p>
+
+<p><a id="X78C885247871F9CB" name="X78C885247871F9CB"></a></p>
+
+<h5>1.1-8 PowerSetWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PowerSetWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>This returns an walk homomorphism W2 such that each vertex in the domain of W has the same image as the corresponding vertex of the domain of W2. W2 has the additional properties that each edge is mapped to a walk of length one, and no two edges with the same start vertex are mapped to the same walk of length 1. This is done in a manner analogous to the "power set construction" for regular languages.</p>
+
+<p>As some vertices in the domain of <var class="Arg">W</var> may have the same image, we do not combine the "equivalent states" of W2 so that the above condition remains true. If the user wants a smaller output walk homomorphism they may be interested in the operation ImageFinderWalkHomomorphism instead.</p>
+
+<p>Here by "image of the vertex" we mean the set of finite prefixes of walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to forwards walk in the domain of <var class="Arg">W</var> starting with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W, 1);</span>
+[ [ [ 2, 1 ], 1 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W2 := PowerSetWalkHomomorphism(W);</span>
+&lt;walk homomorphism from a digraph with 6 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W2, 1);</span>
+[ [ [ 2, 1 ], 1 ] ]
+</pre></div>
+
+<p><a id="X788133B87B85A824" name="X788133B87B85A824"></a></p>
+
+<h5>1.1-9 ImageFinderWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ImageFinderWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism and a list of integers</p>
+
+<p>This returns an walk homomorphism W2 and a list of vertices of W2. This list of vertices has an entry for each vertex in the domain of W, and assigns each vertex a vertex in the domain of W2 with the same image.</p>
+
+<p>As is the case with PowerSetWalkHomomorphism W2 has the additional properties that each edge is mapped to a walk of length one, and no two edges with the same start vertex are mapped to the same walk of length 1.</p>
+
+<p>W2 now has the additional property that no to vertices in the domain of W2 have the same image (hense the need for the vertex list).</p>
+
+<p>Here by "image of the vertex" we mean the set of finite prefixes of walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to forwards walk in the domain of <var class="Arg">W</var> starting with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W, 1);</span>
+[ [ [ 2, 1 ], 1 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W2 := ImageFinderWalkHomomorphism(W);</span>
+[ &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;, [ 3, 2 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W2[1], 3);</span>
+[ [ [ 2, 1 ], 1 ] ]
+</pre></div>
+
+<p><a id="X83944E4281E9E82B" name="X83944E4281E9E82B"></a></p>
+
+<h5>1.1-10 DualWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; DualWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>The Dual digraph of a digraph is the digraph obtained by "reversing the arrows". That is replacing each edge with a new edge which starts where the previous one ended and ends where the previous one started. Note that this completely reoders the edges.</p>
+
+<p>If one applies this process to the domain and codomain of a walk homomorhism one naturally obtains a new walk homomorphism called its dual walk homomrphism. This Attribute returns a dual of <var class="Arg">W</var>.</p>
+
+<p>The dual while unique up to "isomorphism" is not unique due to the arbitary decisions made when reordering certain edges. So there is no guarentee that the this atribute will undo itself.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L12 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 2);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := DualWalkHomomorphism(L21);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D2 := DualWalkHomomorphism(D);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D2 = L12;</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutNeighbours(D2!.DomainDigraph);</span>
+[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ], [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutNeighbours(L12!.DomainDigraph);</span>
+[ [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ], [ 1, 2 ], [ 3, 4 ], [ 5, 6 ], [ 7, 8 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D3 := DualWalkHomomorphism(D2);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D3 = D;</span>
+true
+</pre></div>
+
+<p><a id="X7821048A7A0B0F54" name="X7821048A7A0B0F54"></a></p>
+
+<h5>1.1-11 ImageAsUnionOfCones</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ImageAsUnionOfCones</code>( <var class="Arg">W</var>, <var class="Arg">v</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a list</p>
+
+<p>A "cone" for a digraph is a set of infinite forwards walks in the digraph which is equal to the set of all infinite forwards walks which start with a fixed finite walk.</p>
+
+<p>If the image of v can be expressed as a union of cones then the operation returns a list of cones whose union is the image of v, if not then the operation returns fail. A cone is given as a pair, whose first entry is the edge walk shared by the elements of the cone, and whose second entry is the vertex at the end of the edge walk (thus we can distingish between empty walks at different vertices). In the event that there are multiple finite walks defining a cone, the shortest one is given.</p>
+
+<p>Here by "image of v" we mean the set of infinite walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to forwards infinite walk in the domain of <var class="Arg">W</var> starting with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[2, 2], [2, 2]]), Digraph([[1, 1]]), [1, 1], [[2, 1], [2, 1], [1], [2]]);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W, 1);</span>
+[ [ [ 2, 1 ], 1 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[2, 2], [2, 2, 2]]), Digraph([[1, 1, 1]]), [1, 1], [[1], [2], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W, 1);</span>
+[ [ [ 1 ], 1 ], [ [ 2 ], 1 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[2, 2], [2, 2, 2]]), Digraph([[1, 1, 1, 1]]), [1, 1], [[1], [2], [1], [2], [3]]);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ImageAsUnionOfCones(W, 1);</span>
+fail
+</pre></div>
+
+<p><a id="X7AE85E567F81B215" name="X7AE85E567F81B215"></a></p>
+
+<h5>1.1-12 ImagesAsUnionsOfCones</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ImagesAsUnionsOfCones</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list</p>
+
+<p>This attribute outputs the list whose vth entry is ImageAsUnionOfCones(<var class="Arg">W</var>, v).</p>
+
+<p><a id="X7C02F0257FAC732C" name="X7C02F0257FAC732C"></a></p>
+
+<h5>1.1-13 TrimWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; TrimWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>A walk homomorphism is called trimmed if every vertex (and hense edge) of its domain is involved in a biinfinite walk.</p>
+
+<p>This Operation returns the walk homomorphism obtained from W by restricting the domain of W to the subdigraph of the domain including precisely those vertices and edges which are involved in biinfinite walks.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(Digraph([[], [1, 3], []]), Digraph([[1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1, 1], [[1], [1]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">TrimWalkHomomorphism(W);</span>
+&lt;walk homomorphism from a digraph with 0 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">TrimWalkHomomorphism(PhitoR2Fold());</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.&gt;
+</pre></div>
+
+<p><a id="X7FAA361284C1B79B" name="X7FAA361284C1B79B"></a></p>
+
+<h5>1.1-14 MaxFutureConeDepth</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MaxFutureConeDepth</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>This attribute is primarily intended to be used with UDAF foldings. If W is an UDAF folding in which the image of every vertex of can be expressed as a union of cones, this attribute returns the longest of length of a finite walk required to define these cones. if W is not of this type then the attribute return fail, and if all vertices have empty image, then the attribute returns -1.</p>
+
+<p>A "cone" for a digraph is a set of infinite forwards walks in the digraph which is equal to the set of all infinite forwards walks which start with a fixed finite walk.</p>
+
+<p>Here by image of a vertex we mean the set of infinite walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to forwards infinite walk in the domain of <var class="Arg">W</var> starting with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxFutureConeDepth(L00);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxFutureConeDepth(L01);</span>
+1
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxFutureConeDepth(L00);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxFutureConeDepth(L10);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);</span>
+&lt;walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxFutureConeDepth(L23);</span>
+3
+</pre></div>
+
+<p><a id="X80B2F4687E3FFF9B" name="X80B2F4687E3FFF9B"></a></p>
+
+<h5>1.1-15 MaxHistoryConeDepth</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MaxHistoryConeDepth</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: an integer</p>
+
+<p>This attribute is primarily intended to be used with UDAF foldings. If W is an UDAF folding in which the backwards image of every vertex of can be expressed as a union of backwards cones, this attribute returns the longest of length of a finite walk required to define these cones. if W is not of this type then the attribute return fail, and if all vertices have empty backwards image, then the attribute returns -1.</p>
+
+<p>A "backwards cone" for a digraph is a set of infinite backwards walks in the digraph which is equal to the set of all infinite backwards walks which end with a fixed finite walk.</p>
+
+<p>Here by backwards image of a vertex we mean the set of infinite walks in the codomain of <var class="Arg">W</var> which can be obtained by applying <var class="Arg">W</var> to backwards infinite walk in the domain of <var class="Arg">W</var> ending with the given vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L00 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 0);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L00);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L01);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L00 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 0, 0);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L00);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 0);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L01);</span>
+0
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L10);</span>
+1
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);</span>
+&lt;walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MaxHistoryConeDepth(L23);</span>
+2
+</pre></div>
+
+<p><a id="X792A01E9845F3A65" name="X792A01E9845F3A65"></a></p>
+
+<h5>1.1-16 IsDeterministicWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsDeterministicWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>We say that a walk homomorphism <var class="Arg">W</var> is deterministic if and only if for all vertices v in the domain of <var class="Arg">W</var>, <var class="Arg">W</var> mapps the set of edges starting with v bijectively to the set of edges in the codomain of <var class="Arg">W</var> which begin with the vertex which <var class="Arg">W</var> maps v to.</p>
+
+<p>In particular, deterministic walk homomorphisms are always synchronous. The name deteministic comes from the observation that a walk homomorphism to the one vertex, n-edge digraph is deterministic if and only if the corresponding automaton is.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R2 := Digraph([[1, 1]]);</span>
+&lt;immutable multidigraph with 1 vertex, 2 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L01 := LineDigraphWalkHomomorphism(R2, 0, 1);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L10 := LineDigraphWalkHomomorphism(R2, 1, 0);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDeterministicWalkHomomorphism(L01);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDeterministicWalkHomomorphism(L10);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDeterministicWalkHomomorphism(R2toPhiFold());</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsDeterministicWalkHomomorphism(PhitoR2Fold());</span>
+false
+</pre></div>
+
+<p><a id="X7BD89A4A7AA6D8F2" name="X7BD89A4A7AA6D8F2"></a></p>
+
+<h5>1.1-17 RemoveIncompleteResponse</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; RemoveIncompleteResponse</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A list</p>
+
+<p>We say that a walk homomorphism <var class="Arg">W</var> has incomplete responce if there is a vertex in its domain such that all edges originating at the vertec are mapped to walks with a common initial edge. This is based on the concept of the same name from: Grigorchuk, R. I., Nekrashevych, V. V., and Sushchansky, V. I. (2000). Automata, dynamical systems, and groups. Trudy Matematicheskogo Instituta Imeni VA Steklova, 231, 134-214.</p>
+
+<p>We require the given walk homomorphism to map to an UDAF Digraph and for the image of each vertex to be a union of cones.</p>
+
+<p>This operation replaces <var class="Arg">W</var> with a new walk homomorphism by first trimming (see TrimWalkHomomorphism) <var class="Arg">W</var> and then mapping each edge in the domain of <var class="Arg">W</var> to the walk obtained by starting with the walk it is currently mapped to, and then: 1. appending the longest common prefix of the walks in the image of the target vertex. 2. removing the longest common prefix of the walks in the image of the source vertex. The vertex map is then defined in the unique possible fashion.</p>
+
+<p>The first entry of the output is the new walk homomorphism. The second entry is the list of prefixes that where removed from the starts of the walks at each vertex (given as a pair consisting of the edge sequence and the ending vertex).</p>
+
+<p>This operation is useful because of the following two observations: 1. removing incomplete responce from a trimmed UDAF folding doesn't change the induced UDAF isomorphism. 2. If f1, f2:D1 to D2 are trimmed UDAF foldings with complete responce which induce the same UDAF isomorphism then f1 = f2.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := IdentityWalkHomomorphism(Digraph([[2], [1, 2]]));</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R := RemoveIncompleteResponse(H);</span>
+[ &lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;,
+[ [ [ 1 ], 2 ], [ [ ], 2 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">R[1] = WalkHomomorphism(Digraph([[2], [1, 2]]), Digraph([[2], [1, 2]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[2, 2], [[], [2, 1], [3]]);</span>
+true
+</pre></div>
+
+<p><a id="X7A1DA8397DDE9FAD" name="X7A1DA8397DDE9FAD"></a></p>
+
+<h5>1.1-18 IsSynchronousWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsSynchronousWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>A walk homomorphism is called synchronous if it maps each edge to a walk of length 1. Hence synchronous walk homomorphisms as essentially the same as digraph homomorphisms.</p>
+
+<p>This attribute returns true if and only if <var class="Arg">W</var> is syncrhonous.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSynchronousWalkHomomorphism(PhitoR2Fold());</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">h := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[2], [2]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSynchronousWalkHomomorphism(h);</span>
+true </pre></div>
+
+<p><a id="X7E315087861B7508" name="X7E315087861B7508"></a></p>
+
+<h5>1.1-19 SynchronousRemoveIncompleteResponse</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SynchronousRemoveIncompleteResponse</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A list</p>
+
+<p>This operation functions similarly to RemoveIncompleteResponse with the difference being that it assumed that the input folding is syncrhonous and incomplete will only be removed as much as possible which remaining synchronousness of the walk homomorphism.</p>
+
+<p>As a result the second ouptut instead of a list of removed prefixes simply gives an integer corresponding to the amount of incomplete remose removed from each vertex.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L40 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 4, 0);</span>
+&lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L13 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 3);</span>
+&lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := SynchronousRemoveIncompleteResponse(L13);</span>
+[ &lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.&gt;,
+3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H[1] = L40;</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L13 = L40;</span>
+false
+</pre></div>
+
+<p><a id="X7B9A525B7BB5486A" name="X7B9A525B7BB5486A"></a></p>
+
+<h5>1.1-20 IsAnnotatableWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsAnnotatableWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>An annotation for a walk homomorphism <var class="Arg">W</var> is a function A from the vertex set of the domain of <var class="Arg">W</var> to the integers with the propery that for all edges e in the domain of <var class="Arg">W</var> from a vertex a to a vertex b, the length L of the walk <var class="Arg">W</var> maps e to satisfies (b)A - (a)A + 1 = L.</p>
+
+<p>Annotations are useful in using walk homomorphism to define continuous maps between shift space. In particular a constant annotation is always valid for synchronous walk homomorphisms.</p>
+
+<p>This attribute returns true if and only if the given walk homomorphism admits an annotation.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1], [[1], [1, 2]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsAnnotatableWalkHomomorphism(H);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1], [[2], [1]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsAnnotatableWalkHomomorphism(S);</span>
+true
+</pre></div>
+
+<p><a id="X8784608483C9DA17" name="X8784608483C9DA17"></a></p>
+
+<h5>1.1-21 WalkHomomorphismAnnotation</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismAnnotation</code>( <var class="Arg">W</var>, <var class="Arg">s</var>, <var class="Arg">p</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A list of integers</p>
+
+<p>An annotation for a walk homomorphism <var class="Arg">W</var> is a function A from the vertex set of the domain of <var class="Arg">W</var> to the integers with the propery that for all edges e in the domain of <var class="Arg">W</var> from a vertex a to a vertex b, the length l of the walk <var class="Arg">W</var> maps e to satisfies (b)A - (a)A + 1 = l.</p>
+
+<p>Annotations are useful in using walk homomorphism to define continuous maps between shift space. In particular a contstant annotation is always valid for synchronous walk homomorphisms.</p>
+
+<p>If <var class="Arg">&gt;W</var> is a walk homomorphism which admits an annotation, then this operation returns an annotation for <var class="Arg">W</var> such that the vertex s in the domain of <var class="Arg">W</var> is mapped to p. This is given as a list of integers.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[2], [2, 2, 3], [], [2]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(D, D, [1, 2, 2, 4],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1, 3], [2], [3], [3, 2], [5, 2]]);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H);</span>
+[ 0, 1, 2, 0 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 3);</span>
+[ 3, 4, 5, 3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 2, 3);</span>
+[ 0, 1, 2, 0 ]
+</pre></div>
+
+<p><a id="X7BC7FF847858EF19" name="X7BC7FF847858EF19"></a></p>
+
+<h5>1.1-22 WalkHomomorphismAnnotation</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismAnnotation</code>( <var class="Arg">W</var>, <var class="Arg">p</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A list of integers</p>
+
+<p>Same as WalkHomomorphismAnnotation(1, p).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[2], [2, 2, 3], [], [2]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(D, D, [1, 2, 2, 4],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1, 3], [2], [3], [3, 2], [5, 2]]);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H);</span>
+[ 0, 1, 2, 0 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 3);</span>
+[ 3, 4, 5, 3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 2, 3);</span>
+[ 0, 1, 2, 0 ]
+</pre></div>
+
+<p><a id="X7995399B7AD386F4" name="X7995399B7AD386F4"></a></p>
+
+<h5>1.1-23 WalkHomomorphismAnnotation</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismAnnotation</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A list of integers</p>
+
+<p>Same as WalkHomomorphismAnnotation(1, 0).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[2], [2, 2, 3], [], [2]]);;</span>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(D, D, [1, 2, 2, 4],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[[1, 3], [2], [3], [3, 2], [5, 2]]);</span>
+&lt;walk homomorphism from a digraph with 5 edges to a digraph with 5 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H);</span>
+[ 0, 1, 2, 0 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 3);</span>
+[ 3, 4, 5, 3 ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismAnnotation(H, 2, 3);</span>
+[ 0, 1, 2, 0 ]
+</pre></div>
+
+<p><a id="X798704BF7B35BA1A" name="X798704BF7B35BA1A"></a></p>
+
+<h5>1.1-24 ReduceSynchronizingLength</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; ReduceSynchronizingLength</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a pair of walk homomorphisms</p>
+
+<p>It is assummed that the given walk homomorphism is deterministic, the attribute will return fail if this is not the case.</p>
+
+<p>The attribute quotients the domain digraph by the relation that two vertices v, w are equivalent if they map to the same vertex under <var class="Arg">W</var> and if one reads an edge of the codomain digraph from either of these vertices, then the same vertex is reached. That is to say that if t is the common image of v and w, then for all edges e starting at t, there are edges ev, ew of the domain Which 1. start at v, w respectively. 2. are both mapped to e by <var class="Arg">W</var>. 3. have the same target vertex.</p>
+
+<p>the first output is the quotient homomorphism q, and the second is the walk homomorphism w2 such that <var class="Arg">W</var> is equal to the composite qw2.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ReduceSynchronizingLength(H);</span>
+[ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.&gt;,
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 1);</span>
+&lt;walk homomorphism from a digraph with 32 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">ReduceSynchronizingLength(H);</span>
+fail
+</pre></div>
+
+<p><a id="X7F00C9D37B4EE9B2" name="X7F00C9D37B4EE9B2"></a></p>
+
+<h5>1.1-25 SynchronizingSequence</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SynchronizingSequence</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list of walk homomorphisms</p>
+
+<p>It is assummed that the given walk homomorphism is deterministic, the attribute will return fail if this is not the case.</p>
+
+<p>The attribute reduces the walk homomorphism as in the second output of ReduceSynchronizingLength. This is then repeated until the walk homorphism can't be reduced further. The output is the resulting sequence of walk homomorphisms starting with the input and ending with the irreducible one at the end.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">S := SynchronizingSequence(H);</span>
+[ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt; ]
+</pre></div>
+
+<p><a id="X82B5DF4987CC2BE9" name="X82B5DF4987CC2BE9"></a></p>
+
+<h5>1.1-26 SynchronizingSequenceConnections</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; SynchronizingSequenceConnections</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list of walk homomorphisms</p>
+
+<p>It is assummed that the given walk homomorphism is deterministic, the attribute will return fail if this is not the case.</p>
+
+<p>The attribute reduces the walk homomorphism as in the second output of ReduceSynchronizingLength. This is then repeated until the walk homorphism can't be reduced further. The output is the resulting sequence of quotient maps from the first output of ReduceSynchronizingLength but ending with the irreducible output at the end.</p>
+
+<p>This is such that the nth entry of SynchronizingSequence(<var class="Arg">W</var>) is equal to the composite of the nth and later entries of SynchronizingSequenceConnections(<var class="Arg">W</var>).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 3, 0);</span>
+&lt;walk homomorphism from a digraph with 16 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">SynchronizingSequenceConnections(H);</span>
+[ &lt;walk homomorphism from a digraph with 16 edges to a digraph with 8 edges.&gt;,
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 4 edges.&gt;,
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt; ]
+</pre></div>
+
+<p><a id="X7D67A1B984D32876" name="X7D67A1B984D32876"></a></p>
+
+<h5>1.1-27 WalkHomomorphismInputString</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalkHomomorphismInputString</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a string</p>
+
+<p>This operation converts a walk homomorphism into the string the user needs to enter to instruct GAP to generate it.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalkHomomorphismInputString(R2toPhiFold());</span>
+"WalkHomomorphism(Digraph([ [ 1, 1 ] ]), Digraph([ [ 1, 2 ], [ 1 ] ]), [ 1 ],
+[ [ 1 ], [ 2, 3 ] ])"
+</pre></div>
+
+<p><a id="X82552DF27C354A9E" name="X82552DF27C354A9E"></a></p>
+
+<h4>1.2 <span class="Heading">Foldings</span></h4>
+
+<p>We use three types of folding in this package. We call these, UDAF foldings, two-sided foldings, and one-sided foldings. Each of these is a special type of walk homomorphism.</p>
+
+<p>An UDAF folding is a walk homomorphism between two finite digraphs which induces a bijection between the sets of unindexed biinfinite walks in the digraphs.</p>
+
+<p>A two-sided folding is a homomorphism between two finite digraphs which induces a bijection between the sets of indexed biinfinite walks in the digraphs (we define these as walk homomorphism).</p>
+
+<p>A one-sided folding is a homomorphism between two finite digraphs which induces a bijection between the sets of indexed backwards infinite walks in the digraphs (we define these as walk homomorphism).</p>
+
+<p><a id="X7E5A8653849F6D7D" name="X7E5A8653849F6D7D"></a></p>
+
+<h5>1.2-1 MakeSynchronousWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; MakeSynchronousWalkHomomorphism</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a pair of walk homomorphisms</p>
+
+<p>A walk homomorphism is called synchronous if it maps each edge to a walk of length 1. Hence synchronous walk homomorphisms as essentially the same as digraph homomorphisms.</p>
+
+<p>If <var class="Arg">W</var> is an UDAF folding between digraphs D1 and D2, then this operation returns a synchronous UDAF folding H from some digraph D3 to D2 and an UDAF folding f from D3-&gt; D1 such that H and the composite fW induce the same UDAF isomorphism.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MakeSynchronousWalkHomomorphism(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[]]), Digraph([[]]), [1], []));</span>
+[ &lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.&gt;,
+&lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MakeSynchronousWalkHomomorphism(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1]]), Digraph([[]]), [1], [[]]));</span>
+Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
+the given homomorphism must be non-degenerate
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">MakeSynchronousWalkHomomorphism(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[]]), Digraph([[1]]), [1], []));</span>
+Error, AutShift: MakeSynchronousWalkHomomorphism: usage,
+the target digraph must be an UDAF Digraph
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">P := MakeSynchronousWalkHomomorphism(PhitoR2Fold());</span>
+[ &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsSynchronousWalkHomomorphism(P[1]);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := P[2] * PhitoR2Fold();</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveIncompleteResponse(H)[1] = RemoveIncompleteResponse(P[1])[1];</span>
+true
+true </pre></div>
+
+<p><a id="X791D896C863BD034" name="X791D896C863BD034"></a></p>
+
+<h5>1.2-2 R2toPhiFold</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; R2toPhiFold</code>(  )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A walk homomorphism</p>
+
+<p>This returns the same output as WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);</p>
+
+<p><a id="X867C482D83F2EABE" name="X867C482D83F2EABE"></a></p>
+
+<h5>1.2-3 PhitoR2Fold</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; PhitoR2Fold</code>(  )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: A walk homomorphism</p>
+
+<p>This returns the same output as WalkHomomorphism(Digraph([[1, 2], [1]]), Digraph([[1, 1]]), [1, 1], [[1], [2], []]]);</p>
+
+<p><a id="X785648D4793A956C" name="X785648D4793A956C"></a></p>
+
+<h5>1.2-4 LineDigraphWalkHomomorphism</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; LineDigraphWalkHomomorphism</code>( <var class="Arg">D</var>, <var class="Arg">p</var>, <var class="Arg">f</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphism</p>
+
+<p>If <var class="Arg">D</var> is a digraph then one can natually contruct a new digraph from <var class="Arg">D</var> called its line digraph which has a vertex for each walk of length 1 and an edge for each walk of length 2 see https://en.wikipedia.org/wiki/Line_graph.</p>
+
+<p>There are two natural digraph hommorphisms from this new digraph to the old one. Defined by mapping each vertex to its start or end vertex in the origional digraph. These homomorphisms are the output of LineDigraphWalkHomomorphism(<var class="Arg">D</var>, 0, 1) and LineDigraphWalkHomomorphism(<var class="Arg">D</var>, 1, 0) respectively. The idea being that the vertices in the former digraph store one edge of future information and those in the latter store one edge of past information.</p>
+
+<p>A vertex of the domain of LineDigraphWalkHomomorphism(<var class="Arg">D</var>, p, f) is is a walk of length p + f and the vertex map sends such a vertex to the vertex in the origional digraph which is p edges from the front and f edges from the end.</p>
+
+<p>This construction is nice in the sense that if a, b, c, d are positive integers and D2 is the doman of LineDigraphWalkHomomorphism(<var class="Arg">D</var>, a, b), then LineDigraphWalkHomomorphism(<var class="Arg">D2</var>, c, d) * LineDigraphWalkHomomorphism(<var class="Arg">D</var>, a, b) agrees with LineDigraphWalkHomomorphism(<var class="Arg">D</var>, a + c, b + d).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L12 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 1, 2);</span>
+&lt;walk homomorphism from a digraph with 13 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">N11 := LineDigraphWalkHomomorphism(L12!.DomainDigraph, 1, 1);</span>
+&lt;walk homomorphism from a digraph with 34 edges to a digraph with 13 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">L23 := LineDigraphWalkHomomorphism(Digraph([[1, 2], [1]]), 2, 3);</span>
+&lt;walk homomorphism from a digraph with 34 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">N11 * L12 = L23;</span>
+true
+</pre></div>
+
+<p><a id="X86AA5CF885D69F70" name="X86AA5CF885D69F70"></a></p>
+
+<h5>1.2-5 IsUDAFFolding</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsUDAFFolding</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>A walk homomorphism is called an UDAF folding if it induces a bijection between the sets of shist equivalence clasees of biinfinite walks of the domain and codomain (which we require to be UDAF digraphs).</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(R2toPhiFold());</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(PhitoR2Fold());</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[], [1,3], []])));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,3], []])));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(IdentityWalkHomomorphism(Digraph([[2], [1,2, 3], []])));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 1]]), [1], [[1], []]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1, 1], [2, 2]]), Digraph([[1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1, 1], [[1], [2], [1], [2]]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">WalkHomomorphism(Digraph([[1, 1, 1]]), Digraph([[1, 1]]),</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[1], [[1], [2], [1]]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f:= WalkHomomorphism(Digraph([ [ 1, 2, 3 ], [ 1, 4, 1 ], [ 1, 2, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 1, 4, 1 ] ]), Digraph([ [ 3 ], [ 3 ], [ 3, 3, 3 ] ]), [ 3, 3, 3, 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ], [ 4 ], [ 5 ], [ 3 ],</span>
+<span class="GAPprompt">&gt;</span> <span class="GAPinput">[ 4 ], [ 5 ] ]);</span>
+&lt;walk homomorphism from a digraph with 12 edges to a digraph with 5 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFFolding(f);</span>
+true
+</pre></div>
+
+<p><a id="X7B23186F7CF21422" name="X7B23186F7CF21422"></a></p>
+
+<h5>1.2-6 IsOneSidedFolding</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsOneSidedFolding</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>We say that a walk homomorphism is a one-sided folding if it is sycnhronous and itinduces a bijection beween the set of infinite backwards walks of the domain and codomain digraphs.</p>
+
+<p>This attribute returns true if and only if the given walk homomorphism is a one-sided folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[1]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I := IdentityWalkHomomorphism(Digraph([[1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(H);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(I);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[2]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(H);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[1, 2, 2], []]);</span>
+&lt;immutable multidigraph with 2 vertices, 3 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(W);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(W);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [1, 3], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(W);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[], [1, 3], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(W);</span>
+false
+</pre></div>
+
+<p><a id="X8425077F7B8F30E0" name="X8425077F7B8F30E0"></a></p>
+
+<h5>1.2-7 IsTwoSidedFolding</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsTwoSidedFolding</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>It is assummed that the given walk homomorphisms are between UDAF digraphs and the operation will return fail if this is not the case.</p>
+
+<p>We say that a walk homomorphism is a two-sided folding if it is sycnhronous and itinduces a bijection beween the set of biinfinite walks of the domain and codomain digraphs.</p>
+
+<p>This attribute returns true if and only if the given walk homomorphism is a two-sided folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[1]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">I := IdentityWalkHomomorphism(Digraph([[1, 1]]));</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(H);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(I);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := WalkHomomorphism(Digraph([[1, 1]]),Digraph([[1,1]]),[1],[[2],[2]]);</span>
+&lt;walk homomorphism from a digraph with 2 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(H);</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[1, 2, 2], []]);</span>
+&lt;immutable multidigraph with 2 vertices, 3 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [3], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(W);</span>
+fail
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [2], [2]]);</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(W);</span>
+fail
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[1, 1, 2, 2], []]);</span>
+&lt;immutable multidigraph with 2 vertices, 4 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">W := WalkHomomorphism(D, D, [1, 2], [[1], [2], [3], [3]]);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 4 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsTwoSidedFolding(W);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsOneSidedFolding(W);</span>
+false
+</pre></div>
+
+<p><a id="X7989A44184BB9E8F" name="X7989A44184BB9E8F"></a></p>
+
+<h5>1.2-8 FoldingToLineFolding</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; FoldingToLineFolding</code>( <var class="Arg">W</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a pair of walk homomorphisms</p>
+
+<p>By a line folding we mean one of the type constructable by LineDigraphWalkHomomorphism. It is true (see https://arxiv.org/abs/2112.13359) that if <var class="Arg">W</var> is an UDAF folding then there is a line folding L and an UDAF folding f such that the composite Lf induces the same UDAF isomorphism as <var class="Arg">W</var>.</p>
+
+<p>If <var class="Arg">W</var> is an UDAF folding then the operation returns such a pair L, f in that order. Otherwise the operation returns fail.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">FoldingToLineFolding(R2toPhiFold());</span>
+[ &lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;,
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">P := FoldingToLineFolding(R2toPhiFold());</span>
+[ &lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;,
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 2 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := P[2] * R2toPhiFold();</span>
+&lt;walk homomorphism from a digraph with 3 edges to a digraph with 3 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveIncompleteResponse(P[1])[1] = RemoveIncompleteResponse(H)[1];</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">P := FoldingToLineFolding(PhitoR2Fold());</span>
+[ &lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;,
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 3 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := P[2] * PhitoR2Fold();</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">f := WalkHomomorphism(Digraph([[], []]), Digraph([[2], []]), [2, 1], []);</span>
+&lt;walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">P := FoldingToLineFolding(f);</span>
+[ &lt;walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.&gt;,
+&lt;walk homomorphism from a digraph with 0 edges to a digraph with 0 edges.&gt; ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">H := P[2] * f;</span>
+&lt;walk homomorphism from a digraph with 0 edges to a digraph with 1 edge.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">RemoveIncompleteResponse(P[1]) = RemoveIncompleteResponse(H);</span>
+true
+</pre></div>
+
+<p><a id="X8632804D8232228D" name="X8632804D8232228D"></a></p>
+
+<h4>1.3 <span class="Heading">Other</span></h4>
+
+<p><a id="X83D93CC57B934C84" name="X83D93CC57B934C84"></a></p>
+
+<h5>1.3-1 WalksOfGivenLength</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; WalksOfGivenLength</code>( <var class="Arg">D</var>, <var class="Arg">n</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a list of lists of integers</p>
+
+<p>Returns all the walks in <var class="Arg">D</var> of length <var class="Arg">n</var>. Each walk is given as a sequence of edges. If <var class="Arg">n</var> is 0 then the operation returns fail.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalksOfGivenLength(Digraph([[2], [1, 1]]), 3);</span>
+[ [ 1, 2, 1 ], [ 1, 3, 1 ], [ 2, 1, 2 ], [ 2, 1, 3 ], [ 3, 1, 2 ],
+[ 3, 1, 3 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalksOfGivenLength(Digraph([[2, 2], [1, 1]]), 3);</span>
+[ [ 1, 3, 1 ], [ 1, 3, 2 ], [ 1, 4, 1 ], [ 1, 4, 2 ], [ 2, 3, 1 ],
+[ 2, 3, 2 ], [ 2, 4, 1 ], [ 2, 4, 2 ], [ 3, 1, 3 ], [ 3, 1, 4 ],
+[ 3, 2, 3 ], [ 3, 2, 4 ], [ 4, 1, 3 ], [ 4, 1, 4 ], [ 4, 2, 3 ],
+[ 4, 2, 4 ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">WalksOfGivenLength(Digraph([[1, 1]]), 3);</span>
+[ [ 1, 1, 1 ], [ 1, 1, 2 ], [ 1, 2, 1 ], [ 1, 2, 2 ], [ 2, 1, 1 ],
+[ 2, 1, 2 ], [ 2, 2, 1 ], [ 2, 2, 2 ] ]
+</pre></div>
+
+<p><a id="X810D1A167ADCB551" name="X810D1A167ADCB551"></a></p>
+
+<h5>1.3-2 OutEdgesAtVertex</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OutEdgesAtVertex</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: a list of lists of pairs of integers</p>
+
+<p>Returns a list whose vth entry is a list of pairs. There is one pair for each edge in D starting at vertex v. The pair contains the number of the edge (its position in DigraphEdges(<var class="Arg">D</var>)) and the vertex it points to in that order.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutEdgesAtVertex(D);</span>
+[ [ [ 1, 1 ], [ 2, 1 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[1, 1]]);</span>
+&lt;immutable multidigraph with 1 vertex, 2 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutEdgesAtVertex(D);</span>
+[ [ [ 1, 1 ], [ 2, 1 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[2], [1]]);</span>
+&lt;immutable digraph with 2 vertices, 2 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutEdgesAtVertex(D);</span>
+[ [ [ 1, 2 ] ], [ [ 2, 1 ] ] ]
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[2], [1], [1]]);</span>
+&lt;immutable digraph with 3 vertices, 3 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OutEdgesAtVertex(D);</span>
+[ [ [ 1, 2 ] ], [ [ 2, 1 ] ], [ [ 3, 1 ] ] ]
+</pre></div>
+
+<p><a id="X7A70B3C58721A624" name="X7A70B3C58721A624"></a></p>
+
+<h5>1.3-3 IsUDAFDigraph</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; IsUDAFDigraph</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;attribute&nbsp;)</td></tr></table></div>
+<p>Returns: true or false</p>
+
+<p>If <var class="Arg">D</var> is a digraph, then we say that <var class="Arg">D</var> is an UDAF digraph if for all vertices v of <var class="Arg">D</var> we have that neither the number of infinite backwards walks ending at <var class="Arg">D</var> nor the number of infinite forwards walks begining at v is equal to 1.</p>
+
+<p>This property is to ensure that the "irrational" walks in <var class="Arg">D</var> are "dense" this property is desirable as is allows us to prove various facts about walk homomorphisms between these digraphs see the paper https://arxiv.org/abs/2112.13359 for more details.</p>
+
+<p>Moreover some of the operations in this package will reject digraphs that are are not UDAF digraphs as it is not known that they will work as inteded in such cases.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[1, 1]]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[1]]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[], []]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[2], [1]]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[1, 2], [1]]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[1, 1], [1]]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[2, 2], [2]]));</span>
+false
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">IsUDAFDigraph(Digraph([[2], [2, 2]]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], []]));</span>
+true
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := IsUDAFDigraph(Digraph([[1, 1, 2], [3], [2]]));</span>
+false
+</pre></div>
+
+<p><a id="X7CB01D798523F882" name="X7CB01D798523F882"></a></p>
+
+<h5>1.3-4 OneSidedDigraphMinimise</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&#8227; OneSidedDigraphMinimise</code>( <var class="Arg">D</var> )</td><td class="tdright">(&nbsp;operation&nbsp;)</td></tr></table></div>
+<p>Returns: a walk homomorphisms</p>
+
+<p>If the digraph has a pair of vertices which have the same multiset of outneighbours then one can naturally form a quotient of the origional digraph by identifying only these vertices and the corresponding edges eminating from them.</p>
+
+<p>This operation reduces the digraph in this fashion as much as possible and returns a homomorphism from the given digraph to a digraph for which no two vertices has the same multiset of outneighbours. The given walk homomorphism is always a one-sided folding.</p>
+
+
+<div class="example"><pre>
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D := Digraph([[1, 1]]);</span>
+&lt;immutable multidigraph with 1 vertex, 2 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D10 := LineDigraphWalkHomomorphism(D,1,0)!.DomainDigraph;</span>
+&lt;immutable digraph with 2 vertices, 4 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OneSidedDigraphMinimise(D10);</span>
+&lt;walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">D11 := LineDigraphWalkHomomorphism(D,1,1)!.DomainDigraph;</span>
+&lt;immutable digraph with 4 vertices, 8 edges&gt;
+<span class="GAPprompt">gap&gt;</span> <span class="GAPinput">OneSidedDigraphMinimise(D11);</span>
+&lt;walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.&gt;
+</pre></div>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">[Top of Book]</a>&nbsp;  <a href="chap0.html#contents">[Contents]</a>&nbsp;  &nbsp;<a href="chap0.html">[Previous Chapter]</a>&nbsp;  &nbsp;<a href="chap2.html">[Next Chapter]</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

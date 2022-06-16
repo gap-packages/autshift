@@ -1,0 +1,1150 @@
+  
+  [1X2 [33X[0;0YTransducers and isomorphisms[133X[101X
+  
+  
+  [1X2.1 [33X[0;0YUDAF[133X[101X
+  
+  [33X[0;0YIn  this  section  we descible methods for working with UDAF transducers and
+  UDAF       isomorphisms       as       described      in      the      paper
+  (https://arxiv.org/abs/2112.13359). Note that many of the functions here are
+  only implemented for UDAF digraphs for the reasons discussed in the paper.[133X
+  
+  [1X2.1-1 UDAFIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XUDAFIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism in the UDAF category[133X
+  
+  [33X[0;0YCreates an object called an UDAF isomorphism.[133X
+  
+  [33X[0;0YThe  input is an UDAF transducer, the stored isomorphism is the one obtained
+  by composing the inverse of the induced domain map with the induced codomain
+  map.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L01, L10);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XUDAFIsomorphism(T);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-2 UDAFIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XUDAFIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism in the UDAF category[133X
+  
+  [33X[0;0YCreates       an       object      called      an      UDAF      isomorphism
+  (seehttps://arxiv.org/abs/2112.13359).[133X
+  
+  [33X[0;0YThe  input  is  a  core synchronizing aaa transducer object which induces an
+  UDAF isomorphism. the stored isomorphism is this induced isomorphism.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XR := ResizeZeroStringTransducer(2, 2, 3);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU := UDAFIsomorphism(R);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-3 UDAFIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XUDAFIsomorphism[102X( [3XW1[103X, [3XW2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism in the UDAF category[133X
+  
+  [33X[0;0YSame as UDAFIsomorphism(UDAFTransducer([3XW1[103X, [3XW2[103X)).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XUDAFIsomorphism(L01, L10);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-4 UDAFIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XUDAFIsomorphism[102X( [3XS[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism in the UDAF category[133X
+  
+  [33X[0;0YCreates       an       object      called      an      UDAF      isomorphism
+  (seehttps://arxiv.org/abs/2112.13359).[133X
+  
+  [33X[0;0YThe   input   is   a  shift  isomorphism.  Returns  the  corresponding  UDAF
+  isomorphism.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XShiftIsomorphism(T);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[28XWalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);[128X[104X
+    [4X[25Xgap>[125X [27XUDAFIsomorphism(S);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-5 UDAFTransducer[101X
+  
+  [33X[1;0Y[29X[2XUDAFTransducer[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YThe  argument  is to be a core synchronizing aaa transducer which induces an
+  UDAF isomorphism.[133X
+  
+  [33X[0;0YThe  output is the corresponding UDAF transducer, where the alphabet of size
+  n is replaces with the digraph with one vertex and n edges.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(3, 1, 2);;[127X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-6 UDAFTransducer[101X
+  
+  [33X[1;0Y[29X[2XUDAFTransducer[102X( [3XW1[103X, [3XW2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YThe  argument is to be a pair of UDAF foldings with the same domain digraph.
+  The output is the corresponding UDAF transducer.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L11, L20);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 4 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-7 ComposeUDAFTransducers[101X
+  
+  [33X[1;0Y[29X[2XComposeUDAFTransducers[102X( [3XT1[103X, [3XT2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YThe  argument is to be a pair of UDAF transducers where the codomain digraph
+  of [3XT1[103X is the same as the domain digraph of [3XT2[103X.[133X
+  
+  [33X[0;0YThe  output  is  an  UDAF transducer which induces the composite of the UDAF
+  isomorphisms of the input transducers.[133X
+  
+  [33X[0;0YThis operation can also be called with *.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L11, L20);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XComposeUDAFTransducers(T, T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 8 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-8 MinimalUDAFTransducer[101X
+  
+  [33X[1;0Y[29X[2XMinimalUDAFTransducer[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YAn  UDAF  transducer is called minimal if its domain is a one-sided folding,
+  its codomain is an UDAF folding without complete responce, and no two states
+  have both the same domain image and the same codomain image.[133X
+  
+  [33X[0;0YThe  operation returns a minimal UDAF transducer which induces the same UDAF
+  isomorphism as the given transducer.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L01, L10);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XIsMinimalUDAFTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XM := MinimalUDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XIsMinimalUDAFTransducer(M);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XM = IdentityUDAFTransducer(Digraph([[1, 1]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-9 IsMinimalUDAFTransducer[101X
+  
+  [33X[1;0Y[29X[2XIsMinimalUDAFTransducer[102X( [3XT[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YAn  UDAF  transducer is called minimal if its domain is a one-sided folding,
+  its codomain is an UDAF folding without complete responce, and no two states
+  have both the same domain image and the same codomain image.[133X
+  
+  [33X[0;0YThe attribute returns true if and only if the given transducer is minimal.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL01 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 0, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L01, L10);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XIsMinimalUDAFTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XM := MinimalUDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XIsMinimalUDAFTransducer(M);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XM = IdentityUDAFTransducer(Digraph([[1, 1]]));[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-10 AreIsomorphicLabeledUDAFTransducers[101X
+  
+  [33X[1;0Y[29X[2XAreIsomorphicLabeledUDAFTransducers[102X( [3XT1[103X, [3XT2[103X, [3XL1[103X, [3XL2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YTwo  UDAF transducers are called isomorphic if they have the same domain and
+  codomain  digraphs, and there is an isomorphism of their underlying digraphs
+  which converts one into the other[133X
+  
+  [33X[0;0YHere  T1,  T2  are  UDAF transducers and L1, L2 are lists with one entry for
+  each state of T1 and T2 respectievly. These are intended to be thought of as
+  labels for the states of the transdcuers.[133X
+  
+  [33X[0;0YThe attribute returns true if and only if there is an isomorphism from [3XT1[103X to
+  [3XT2[103X which preserves the given labels.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(3, 1, 2);;[127X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(3, 1, 2);[127X[104X
+    [4X[28X<transducer with input alphabet on 3 symbols, output alphabet on[128X[104X
+    [4X[28X3 symbols, and 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XI := U^-1;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XAreIsomorphicUDAFTransducers(I, U);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XM := MinimalUDAFTransducer(I);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XAreIsomorphicUDAFTransducers(M, U);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-11 AreIsomorphicUDAFTransducers[101X
+  
+  [33X[1;0Y[29X[2XAreIsomorphicUDAFTransducers[102X( [3XT1[103X, [3XT2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YTwo  UDAF transducers are called isomorphic if they have the same domain and
+  codomain  digraphs, and there is an isomorphism of their underlying digraphs
+  which converts one into the other[133X
+  
+  [33X[0;0YThe  attribute  returns  true  if  and  only  if  the  given transducers are
+  isomorphic.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(3, 1, 2);;[127X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(3, 1, 2);[127X[104X
+    [4X[28X<transducer with input alphabet on 3 symbols, output alphabet on[128X[104X
+    [4X[28X3 symbols, and 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XI := U^-1;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XAreIsomorphicUDAFTransducers(I, U);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XM := MinimalUDAFTransducer(I);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has[128X[104X
+    [4X[28X3 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XAreIsomorphicUDAFTransducers(M, U);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-12 \*[101X
+  
+  [33X[1;0Y[29X[2X\*[102X( [3XT1[103X, [3XT2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YThe  argument is to be a pair of UDAF transducers where the codomain digraph
+  of [3XT1[103X is the same as the domain digraph of [3XT2[103X.[133X
+  
+  [33X[0;0YThe  output  is  an  UDAF transducer which induces the composite of the UDAF
+  isomorphisms of the input transducers.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL11 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 1);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XL20 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 2, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 8 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(L11, L20);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT * T;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 8 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-13 ComposeUDAFIsomorphisms[101X
+  
+  [33X[1;0Y[29X[2XComposeUDAFIsomorphisms[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF isomorphism[133X
+  
+  [33X[0;0YReturns  the  UDAF isomorphism obtained by composing the isomorphisms [3XS1[103X and
+  [3XS2[103X.[133X
+  
+  [33X[0;0YThis operation can also be called with *.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT1 := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XU1 := UDAFTransducer(T1);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT2 := ResizeZeroStringTransducer(2, 2, 4);;[127X[104X
+    [4X[25Xgap>[125X [27XU2 := UDAFTransducer(T2);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1 * U2;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 32 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-14 \*[101X
+  
+  [33X[1;0Y[29X[2X\*[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF isomorphism[133X
+  
+  [33X[0;0YReturns  the  UDAF isomorphism obtained by composing the isomorphisms [3XS1[103X and
+  [3XS2[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT1 := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XU1 := UDAFTransducer(T1);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT2 := ResizeZeroStringTransducer(2, 2, 4);;[127X[104X
+    [4X[25Xgap>[125X [27XU2 := UDAFTransducer(T2);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1 * U2;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 32 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-15 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YReturns  the  product  of  [3XS[103X with itself [3Xn[103X times for positive [3Xn[103X. Returns the
+  product of the inverse of [3XS[103X with itself |[3Xn[103X| times otherwise.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT1 := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XU1 := UDAFTransducer(T1);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^2;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 16 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^-1;[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 5 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-16 UDAFNrStates[101X
+  
+  [33X[1;0Y[29X[2XUDAFNrStates[102X( [3XT[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Yan integer[133X
+  
+  [33X[0;0YReturns the number of states of an UDAF transducer [3XT[103X. That is, the number of
+  vertices of the shared domain of the two UDAF foldings defining [3XT[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XUDAFNrStates(T);[127X[104X
+    [4X[28X5[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-17 \=[101X
+  
+  [33X[1;0Y[29X[2X\=[102X( [3Xarg1[103X, [3Xarg2[103X ) [32X operation[133X
+  
+  [1X2.1-18 IdentityUDAFTransducer[101X
+  
+  [33X[1;0Y[29X[2XIdentityUDAFTransducer[102X( [3XD[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer[133X
+  
+  [33X[0;0YReturns the UDAF transducer defined using two copies of the identity folding
+  on the given digraph.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := IdentityUDAFTransducer(PetersenGraph());[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has[128X[104X
+    [4X[28X30 edges, whose codomain digraph has 30 edges, and which has 10 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-19 DeterministicDomainCombineEquivalentStates[101X
+  
+  [33X[1;0Y[29X[2XDeterministicDomainCombineEquivalentStates[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF transducer and a list of lists of integers[133X
+  
+  [33X[0;0YIt  is  assumed that the domain folding of [3XT[103X is deterministic. The operation
+  returns  the  transducer  obtained  from [3XT[103X by quotienting the the underlying
+  digraph  of [3XT[103X as much as possible such that the UDAF foldings of [3XT[103X are still
+  well defined.[133X
+  
+  [33X[0;0YThe  operation  also  returns the list of equivalence classes of vertices of
+  the above relation.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XL10 := LineDigraphWalkHomomorphism(Digraph([[1, 1]]), 1, 0);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 4 edges to a digraph with 2 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XU := UDAFTransducer(L10, L10);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XDeterministicDomainCombineEquivalentStates(U);[127X[104X
+    [4X[28X[ <UDAF Transducer whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>,[128X[104X
+    [4X[28X[ [ 1, 2 ] ] ][128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-20 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF isomorphism[133X
+  
+  [33X[0;0YReturns  the  product  of  [3XS[103X with itself [3Xn[103X times for positive [3Xn[103X. Returns the
+  product of the inverse of [3XS[103X with itself |[3Xn[103X| times otherwise.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT1 := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^2;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^-1;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.1-21 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan UDAF isomorphism[133X
+  
+  [33X[0;0YReturns the conjugate of [3XS[103X by [3XT[103X. That is to say the product [3XT[103X^-1 [3XS[103X [3XT[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT1 := ResizeZeroStringTransducer(2, 2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XU1 := UDAFIsomorphism(T1);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^2;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^-1;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT2 := ResizeZeroStringTransducer(2, 2, 4);;[127X[104X
+    [4X[25Xgap>[125X [27XU2 := UDAFIsomorphism(T2);[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XU1^U2;[127X[104X
+    [4X[28X<UDAF Isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 6 states.>[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.2 [33X[0;0YTwo-sided shift[133X[101X
+  
+  [33X[0;0YIn  this  section  we describe methods for working with isomorphisms between
+  subshifts  of  finite type. If D is a finite digraph, then the corresponding
+  shift  space is defined to be the topological space of biinfinite edge walks
+  throught D with the product topology. We call such a space a shift space. We
+  call  the  dynamical  system  consisting  of this space and the homomorphism
+  defined  by  shifting  the  indexing  of a walk by one, a subshift of finite
+  type.  If  f  is  any  isomorphism  between  the  subshifts  of  finite type
+  corresponding  to  two digraphs A and B, then one can find a third digraph C
+  and  a  pair  of  two-sided  f1:C->A and f2:C->B such that f is equal to the
+  composit  of  the  inverse  of  the  homeomorphism  induced  by  f1 with the
+  homeomorphism  induced  by f2. This is how shift isomorphisms are handled in
+  this  package. Many of the functions in this section use UDAF transducers as
+  a base and hense require the given digraphs to be UDAF digraphs.[133X
+  
+  [1X2.2-1 ShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XShiftIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism of subshifts of finite type[133X
+  
+  [33X[0;0YCreates  an  object  called  a  shift homomorphism. A shift isomorphism is a
+  homomorphism  between subshifts of finite type. This input method requires a
+  full shift.[133X
+  
+  [33X[0;0YThis   is   input   as   synchronous   transducer   from   the  aaa  package
+  (https://github.com/gap-packages/aaa)  which  is  strongly synchronizing and
+  such that the map it defines on the shift space is a bijection.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28Xgap>[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XShiftIsomorphism(T);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[28XWalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-2 ShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XShiftIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism of subshifts of finite type[133X
+  
+  [33X[0;0YCreates  an  object  called  a  shift homomorphism. A shift isomorphism is a
+  homomorphism between subshifts of finite type.[133X
+  
+  [33X[0;0YThis  is  input  as  an  UDAF  transducer  for  which both UDAF foldings are
+  two-sided  foldings.  The isomorphism is the composite of the inverse of the
+  homeomorphism induced by the first folding with the homeomorphism induced by
+  the second folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XT := BlockCodeTransducer(2, 2, x-> [x[1]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS := ShiftIsomorphism(T);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 4 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-3 ShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XShiftIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism of subshifts of finite type[133X
+  
+  [33X[0;0YCreates  an  object  called  a  shift homomorphism. A shift isomorphism is a
+  homomorphism between subshifts of finite type.[133X
+  
+  [33X[0;0YThis  is  input  as  a minimal UDAF transducer and a valid annotation of its
+  codomain  folding.  The  isomorphism  is the composite of the inverse of the
+  homeomorphism induced by the first folding with the homeomorphism induced by
+  the second folding using the annotation.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),[127X[104X
+    [4X[25X>[125X [27X[-1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT := BlockCodeTransducer(2, 2, x-> [x[1]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XT := UDAFTransducer(T);[127X[104X
+    [4X[28X<UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has[128X[104X
+    [4X[28X2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS := ShiftIsomorphism(T);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS2 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [2]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 4 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS=S2;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-4 ComposeShiftIsomorphisms[101X
+  
+  [33X[1;0Y[29X[2XComposeShiftIsomorphisms[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya shift isomorphism[133X
+  
+  [33X[0;0YReturns  the  shift  isomorphism obtained by composing the homeomorphisms [3XS1[103X
+  and [3XS2[103X.[133X
+  
+  [33X[0;0YThis operation can also be called with *.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XS1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XSM1 * S1 = S0;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-5 \*[101X
+  
+  [33X[1;0Y[29X[2X\*[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya shift isomorphism[133X
+  
+  [33X[0;0YReturns  the  shift  isomorphism obtained by composing the homeomorphisms [3XS1[103X
+  and [3XS2[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XSM1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [-1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS0 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [0]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XS1 := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])), [1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XSM1 * S1 = S0;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-6 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya shift isomorphism[133X
+  
+  [33X[0;0YReturns the conjugate of [3XS[103X by [3XT[103X. That is to say the product [3XT[103X^-1 [3XS[103X [3XT[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XC := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 3 symbols, output alphabet on[128X[104X
+    [4X[28X3 symbols, and 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XC:= ShiftIsomorphism(UDAFTransducer(C));[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5 := ShiftIsomorphism(UDAFTransducer(Fig5L, Fig5R));[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 3 states.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5^C;[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 9 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-7 IdentityShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XIdentityShiftIsomorphism[102X( [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya shift isomorphism[133X
+  
+  [33X[0;0YReturns the identity shift isomorphism on for the shift space of the digraph
+  with one vertex and [3Xn[103X edges (for [3Xn[103X at least 2).[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XIdentityShiftIsomorphism(2);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XIdentityShiftIsomorphism(4);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 1 state.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.2-8 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya shift isomorphism[133X
+  
+  [33X[0;0YReturns  the  product  of  [3XS[103X with itself [3Xn[103X times for positive [3Xn[103X. Returns the
+  product of the inverse of [3XS[103X with itself |[3Xn[103X| times otherwise.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XS := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1]])),[127X[104X
+    [4X[25X>[125X [27X[1]);[127X[104X
+    [4X[28X<shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X2 edges, whose codomain digraph has 2 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS!.Annotation;[127X[104X
+    [4X[28X[ 1 ][128X[104X
+    [4X[25Xgap>[125X [27X(S^3)!.Annotation;[127X[104X
+    [4X[28X[ 3 ][128X[104X
+    [4X[25Xgap>[125X [27X(S^-2)!.Annotation;[127X[104X
+    [4X[28X[ -2 ][128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.3 [33X[0;0YOne-sided shift[133X[101X
+  
+  [33X[0;0YIn  this  section  we describe methods for working with isomorphisms between
+  one-sided  subshifts  of  finite  type.  If  D is a finite digraph, then the
+  corresponding  one-sided  shift space is defined to be the topological space
+  of  backwards  infinite  edge walks throught D with the product topology. We
+  call  such  a  space  a  one-sided shift space. We call the dynamical system
+  consisting of this space and the continuous map defined by deleting the last
+  edge  in a walk (and reindexing the remaining edges) a one-sided subshift of
+  finite  type.  If  f  is  any isomorphism between the one-sided subshifts of
+  finite type corresponding to two digraphs A and B, then one can find a third
+  digraph  C  and a pair of one-sided foldings f1:C->A and f2:C->B such that f
+  is  equal  to the composit of the inverse of the homeomorphism induced by f1
+  with   the  homeomorphism  induced  by  f2.  This  is  how  one-sided  shift
+  isomorphisms  are  handled  in  this  package. Many of the functions in this
+  section  use UDAF transducers as a base and hense require the given digraphs
+  to be UDAF digraphs.[133X
+  
+  [1X2.3-1 OneSidedShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XOneSidedShiftIsomorphism[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism of one-sided subshifts of finite type[133X
+  
+  [33X[0;0YCreates  an  object called a one-sided shift homomorphism. A one-sided shift
+  isomorphism  is a homomorphism between the backwards infinite walk spaces of
+  domain and codomain digraph which commutes with the shift map (which removes
+  the last edge in the walk).[133X
+  
+  [33X[0;0YThis  is  input  as  an  UDAF  transducer  for  which both UDAF foldings are
+  one-sided  foldings.  The isomorphism is the composite of the inverse of the
+  homeomorphism induced by the first folding with the homeomorphism induced by
+  the second folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5 := UDAFTransducer(Fig5L, Fig5R);[127X[104X
+    [4X[25Xgap>[125X [27XFig5 := OneSidedShiftIsomorphism(Fig5);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-2 OneSidedShiftIsomorphism[101X
+  
+  [33X[1;0Y[29X[2XOneSidedShiftIsomorphism[102X( [3XF1[103X, [3XF2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan isomorphism of one-sided subshifts of finite type[133X
+  
+  [33X[0;0YCreates  an  object called a one-sided shift homomorphism. A one-sided shift
+  isomorphism  is a homomorphism between the backwards infinite walk spaces of
+  domain and codomain digraph which commutes with the shift map (which removes
+  the last edge in the walk).[133X
+  
+  [33X[0;0YThis  is  input  as  a  pair  of  one-sided foldings. The isomorphism is the
+  composite  of  the inverse of the homeomorphism induced by the first folding
+  with the homeomorphism induced by the second folding.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-3 ComposeOneSidedShiftIsomorphisms[101X
+  
+  [33X[1;0Y[29X[2XComposeOneSidedShiftIsomorphisms[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya one-sided shift isomorphism[133X
+  
+  [33X[0;0YReturns   the   one-sided   shift  isomorphism  obtained  by  composing  the
+  homeomorphisms [3XS1[103X and [3XS2[103X.[133X
+  
+  [33X[0;0YThis operation can also be called with *.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],[127X[104X
+    [4X[25X>[125X [27X[ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27Xg := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],[127X[104X
+    [4X[25X>[125X [27X[ 1 ], [ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := OneSidedShiftIsomorphism(f, g);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS := OneSidedTorsionDecomposition(T);[127X[104X
+    [4X[28X[ <one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 3 states.>,[128X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ][128X[104X
+    [4X[25Xgap>[125X [27XS[1] * S[2] = T;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-4 \*[101X
+  
+  [33X[1;0Y[29X[2X\*[102X( [3XS1[103X, [3XS2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya one-sided shift isomorphism[133X
+  
+  [33X[0;0YReturns   the   one-sided   shift  isomorphism  obtained  by  composing  the
+  homeomorphisms [3XS1[103X and [3XS2[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],[127X[104X
+    [4X[25X>[125X [27X[ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27Xg := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],[127X[104X
+    [4X[25X>[125X [27X[ 1 ], [ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := OneSidedShiftIsomorphism(f, g);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS := OneSidedTorsionDecomposition(T);[127X[104X
+    [4X[28X[ <one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 3 states.>,[128X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ][128X[104X
+    [4X[25Xgap>[125X [27XS[1] * S[2] = T;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-5 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya one-sided shift isomorphism[133X
+  
+  [33X[0;0YReturns the conjugate of [3XS[103X by [3XT[103X. That is to say the product [3XT[103X^-1 [3XS[103X [3XT[103X.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XC := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 3 symbols, output alphabet on[128X[104X
+    [4X[28X3 symbols, and 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XC:= OneSidedShiftIsomorphism(UDAFTransducer(C));[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 1 state.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5^C;[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-6 \^[101X
+  
+  [33X[1;0Y[29X[2X\^[102X( [3XS[103X, [3Xn[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya one-sided shift isomorphism[133X
+  
+  [33X[0;0YReturns  the  product  of  [3XS[103X with itself [3Xn[103X times for positive [3Xn[103X. Returns the
+  product of the inverse of [3XS[103X with itself |[3Xn[103X| times otherwise.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XFig5L := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[1], [2], [3], [1], [2], [3], [1], [2], [3]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5R := WalkHomomorphism(Digraph([[1, 2, 3], [1, 2, 3], [1, 2, 3]]),[127X[104X
+    [4X[25X>[125X [27XDigraph([[1, 1, 1]]),[127X[104X
+    [4X[25X>[125X [27X[1, 1, 1],[127X[104X
+    [4X[25X>[125X [27X[[3], [1], [2], [3], [2], [1], [3], [2], [1]]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 9 edges to a digraph with 3 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5 := OneSidedShiftIsomorphism(Fig5L, Fig5R);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5^2;[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 3 states.>[128X[104X
+    [4X[25Xgap>[125X [27XFig5^-1;[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 2 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-7 OneSidedTorsionDecomposition[101X
+  
+  [33X[1;0Y[29X[2XOneSidedTorsionDecomposition[102X( [3XT[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ya list of one-sided shift isomorphisms[133X
+  
+  [33X[0;0YIt  is required that the given isomorphism have the same domain and codomain
+  digraph.  Returns  a  list  of  one-sided shift isomorphisms of finite order
+  whose  composite  is  the  given  isomorphism  [3XT[103X. This is done via an slight
+  generalisation        of        the       algorithm       presented       in
+  https://arxiv.org/abs/2004.08478v4by.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27Xf := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ], [ 1 ],[127X[104X
+    [4X[25X>[125X [27X[ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27Xg := WalkHomomorphism(Digraph([ [ 6, 3 ], [ 5, 3 ], [ 2, 1 ], [ 5, 3 ],[127X[104X
+    [4X[25X>[125X [27X[ 1, 2 ], [ 1, 4 ] ]), Digraph([ [ 2, 2 ], [ 1, 1 ] ]), [ 2, 2, 1, 2, 1, 1 ],[127X[104X
+    [4X[25X>[125X [27X[ [ 3 ], [ 4 ], [ 4 ], [ 3 ], [ 2 ], [ 1 ], [ 3 ], [ 4 ], [ 1 ], [ 2 ],[127X[104X
+    [4X[25X>[125X [27X[ 1 ], [ 2 ] ]);[127X[104X
+    [4X[28X<walk homomorphism from a digraph with 12 edges to a digraph with 4 edges.>[128X[104X
+    [4X[25Xgap>[125X [27XT := OneSidedShiftIsomorphism(f, g);[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 6 states.>[128X[104X
+    [4X[25Xgap>[125X [27XS := OneSidedTorsionDecomposition(T);[127X[104X
+    [4X[28X[ <one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 3 states.>,[128X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X4 edges, whose codomain digraph has 4 edges, and which has 5 states.> ][128X[104X
+    [4X[25Xgap>[125X [27XS[1] * S[2] = T;[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
+  [1X2.3-8 RandomOneSidedAut[101X
+  
+  [33X[1;0Y[29X[2XRandomOneSidedAut[102X( [3XD[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ya one-sided shift isomorphism[133X
+  
+  [33X[0;0YReturns  a  random  one-sided isomorphism with [3XD[103X as it's domain and codomain
+  digraph.[133X
+  
+  [33X[0;0YWarning this commant is currently very slow even on rather small examples.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XRandomOneSidedAut(Digraph([[1, 1, 1]]));[127X[104X
+    [4X[28X<one sided shift isomorphism whose domain digraph has[128X[104X
+    [4X[28X3 edges, whose codomain digraph has 3 edges, and which has 3 states.>[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.4 [33X[0;0YGNS transducers (from aaa).[133X[101X
+  
+  [33X[0;0YBy  a  GNS  transducer  we  mean  a  transducer  of  the  type  described by
+  Grigorchuk,  Nekrashevich,  and  Sushchanskii  as defined in the package aaa
+  (https://github.com/gap-packages/aaa).[133X
+  
+  [1X2.4-1 BlockCodeTransducer[101X
+  
+  [33X[1;0Y[29X[2XBlockCodeTransducer[102X( [3XAlphSize[103X, [3XHistory[103X, [3XBlockMap[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan aaa transducer object[133X
+  
+  [33X[0;0Y[3XAlphSize[103X is assumed to be an integer which is at least 2. [3XHistory[103X is assumed
+  to be a non-negative integer. [3XBlockMap[103X is a function which assigns each word
+  over  the  alphabet  [0, 1, ..., [3XAlphSize[103X - 1] of length [3XHistory[103X + 1 another
+  word over the same alphbet.[133X
+  
+  [33X[0;0YThe output object is an aaa (https://github.com/gap-packages/aaa) transducer
+  whose input and output alphabets have [3XAlphSize[103X letters. There is a state for
+  each  word  of  length  [3XHistory[103X  in  the alphbet. Transitions are done as is
+  DeBruijin graphs, that is a letter a is read from a state w by transitioning
+  to  the state which is a suffix of the word wa. In this case the word wrtten
+  that the word objetain by applying the function [3XBlockMap[103X to wa.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := BlockCodeTransducer(2, 2, x-> [x[1]]);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 4 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-2 DeBruijnTransducer[101X
+  
+  [33X[1;0Y[29X[2XDeBruijnTransducer[102X( [3XAlphSize[103X, [3XHistory[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan aaa transducer[133X
+  
+  [33X[0;0YThe output object is an aaa (https://github.com/gap-packages/aaa) transducer
+  whose input and output alphabets have [3XAlphSize[103X letters. There is a state for
+  each  word  of  length  [3XHistory[103X  in  the alphbet. Transitions are done as is
+  DeBruijin graphs, that is a letter a is read from a state w by transitioning
+  to  the  state  which  is a suffix of the word wa. The write function is the
+  identity function.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XDeBruijnTransducer(2, 3);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 8 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-3 ResizeZeroStringTransducer[101X
+  
+  [33X[1;0Y[29X[2XResizeZeroStringTransducer[102X( [3XAlphSize[103X, [3XLen1[103X, [3XLen2[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan aaa transducer[133X
+  
+  [33X[0;0YIt  is  required  that  [3XAlphSize[103X  is  at  least  2.  Returns the minimal aaa
+  transducer  which  defines  the  homeomorphism  of  cantor  space defined by
+  finding  all  maximal contiguous all zero substrings in the given input, and
+  replacing those with length [3XLen1[103X with those with length [3XLen2[103X and vice versa.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XResizeZeroStringTransducer(2, 1, 3);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 5 states.>[128X[104X
+    [4X[25Xgap>[125X [27XResizeZeroStringTransducer(3, 2, 1);[127X[104X
+    [4X[28X<transducer with input alphabet on 3 symbols, output alphabet on[128X[104X
+    [4X[28X3 symbols, and 4 states.>[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-4 IsLipschitzTransducer[101X
+  
+  [33X[1;0Y[29X[2XIsLipschitzTransducer[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YWe  say  that  a  trasducer  T is Lipschitz if for each state of T defines a
+  well-defined  function from the set of forwards infinite words in the domain
+  alphabet  to  the  set  of  infinite words, and these maps are all Lipschitz
+  continuous.[133X
+  
+  [33X[0;0YThis is done with respect to the metric:[133X
+  
+  [33X[0;0Yd(x_0x_1x_2..., y_0y_1y_2...) := inf({1/2^n|where n is such that x_i=y_i for
+  all i < n}).[133X
+  
+  [33X[0;0YNote  that it is possible for the minimal transducer of a Lipschitz function
+  to not be Lipschitz as the minimal transducer of a map with a constant state
+  will have states which do not give output.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := AlphabetChangeTransducer(4, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(3, 3, [[2, 2, 1], [3, 4, 3], [1, 1, 2], [2, 2, 3]],[127X[104X
+    [4X[25X>[125X [27X[[[1, 0, 1], [0], [2, 2, 0]], [[], [2], [0, 1, 2, 2]], [[], [0, 1], [2, 2]],[127X[104X
+    [4X[25X>[125X [27X[[2, 2], [0, 2], [1, 2, 2]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XT := AlphabetChangeTransducer(3, 4);;[127X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],[127X[104X
+    [4X[25X>[125X [27X[1, 1]], [[0], [1]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XM := MinimalTransducer(T);[127X[104X
+    [4X[28X<transducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XIsLipschitzTransducer(M);[127X[104X
+    [4X[28Xfalse[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-5 TransducerCore[101X
+  
+  [33X[1;0Y[29X[2XTransducerCore[102X( [3XT[103X ) [32X operation[133X
+  [6XReturns:[106X  [33X[0;10Yan aaa transducer[133X
+  
+  [33X[0;0YIf  T  is a synchronizing transducer, then we define the core of T to be the
+  smallest non-empty transducer obtainable from T by removing states from T.[133X
+  
+  [33X[0;0YThe  Operation  takes  as  input an synchronizing transducer and returns its
+  Core[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],[127X[104X
+    [4X[25X>[125X [27X[[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XC := TransducerCore(T);;[127X[104X
+    [4X[25Xgap>[125X [27XOutputFunction(C);[127X[104X
+    [4X[28X[ [ [ 1 ], [ 0, 1 ] ], [ [ 1 ], [ ] ], [ [ 1 ], [ 0 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XTransitionFunction(C);[127X[104X
+    [4X[28X[ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ][128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],[127X[104X
+    [4X[25X>[125X [27X[1, 1]], [[0], [1]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XC := TransducerCore(T);;[127X[104X
+    [4X[25Xgap>[125X [27XOutputFunction(C);[127X[104X
+    [4X[28X[ [ [ 1, 0 ], [ ] ], [ [ 0 ], [ 1, 1 ] ], [ [ 0 ], [ 1 ] ] ][128X[104X
+    [4X[25Xgap>[125X [27XTransitionFunction(C);[127X[104X
+    [4X[28X[ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ][128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);[127X[104X
+    [4X[28Xtransducer with input alphabet on 2 symbols, output alphabet on[128X[104X
+    [4X[28X2 symbols, and 2 states.>[128X[104X
+    [4X[25Xgap>[125X [27XTransducerCore(T);[127X[104X
+    [4X[28XError, autshift: TransducerCore: usage,[128X[104X
+    [4X[28Xthe transducer must be synchronizing[128X[104X
+  [4X[32X[104X
+  
+  [1X2.4-6 IsCoreTransducer[101X
+  
+  [33X[1;0Y[29X[2XIsCoreTransducer[102X( [3XT[103X ) [32X attribute[133X
+  [6XReturns:[106X  [33X[0;10Ytrue or false[133X
+  
+  [33X[0;0YIf  T  is a synchronizing transducer, then we define the core of T to be the
+  smallest  non-empty  transducer obtainable from T by removing states from T.
+  We say that T is core if it is equal to its core.[133X
+  
+  [33X[0;0YThe attribute returns true if and only if the given transducer is core.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],[127X[104X
+    [4X[25X>[125X [27X[[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XC := TransducerCore(T);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(C);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],[127X[104X
+    [4X[25X>[125X [27X[1, 1]], [[0], [1]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],[127X[104X
+    [4X[25X>[125X [27X[1, 1]], [[0], [1]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := Transducer(2, 4, [[1, 2], [1, 3], [1, 1]], [[[0], []], [[1], []],[127X[104X
+    [4X[25X>[125X [27X[[2], [3]]]);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xfalse[128X[104X
+    [4X[25Xgap>[125X [27XT := DeBruijnTransducer(2, 3);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+    [4X[25Xgap>[125X [27XT := DeBruijnTransducer(3, 2);;[127X[104X
+    [4X[25Xgap>[125X [27XIsCoreTransducer(T);[127X[104X
+    [4X[28Xtrue[128X[104X
+  [4X[32X[104X
+  
