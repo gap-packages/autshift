@@ -75,15 +75,11 @@ Status := "dev",
 #  be inserted on the generated title page. Using this method you can customize the following title page elements: TitleComment, Abstract, Copyright, Acknowledgements and Colophon.
 #    Note that AutoDoc.TitlePage behaves exactly the same as the scaffold.TitlePage parameter of the AutoDoc (4.1-1) function.
 
-Abstract :=  
-   "The <span class=\"pkgname\">autshift</span> package, is a package for \
-   building and using transducers as described in the paper entitled \
-   'Automata, Dynamical Systems, and Groups' of R. I. Grigorchuk, \
-   V. V. Nekrashevich, and V. I. Sushchanskii. Previous similar packages \
-   such as <span class=\"pkgname\">fr</span> and \
-   <span class=\"pkgname\">AutomGrp</span> have had a focus on synchronous \
-   transducers. Hence the name <span class=\"pkgname\">autshift</span> which \
-   stands for \"asynchronous automata algorithms\".",
+AbstractHTML :=  
+"The autshift package is a GAP package containing methods for transducers that can be used\
+  to represent isomorphisms between subshifts of finite type and related objects. It implements the\
+ some of processes described in the papers https://arxiv.org/abs/2004.08478v4by and https://arxiv.org/abs/2112.13359\
+ and builds on the existing package https://github.com/gap-packages/aaa.",
 
 PackageDoc := rec(
   BookName  := ~.PackageName,
