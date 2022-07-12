@@ -21,7 +21,7 @@ Mathematical Institute, North Haugh, St Andrews, Fife, KY16 9SS, Scotland<Br/>
 
   </Author>
   <Date>
-    16 February 2022
+    12 July 2022
   </Date>
   <Abstract>
     The autshift package is a GAP package containing methods for transducers that can be used     to represent isomorphisms between subshifts of finite type and related objects. It implements the    some of processes described in the papers https://arxiv.org/abs/2004.08478v4by and https://arxiv.org/abs/2112.13359    and builds on the existing package https://github.com/gap-packages/aaa.
