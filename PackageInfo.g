@@ -38,7 +38,6 @@ Persons := [
     FirstNames := "Luke",
     LastName := "Elliott",
     WWWHome := "https://le27.github.io/Luke-Elliott/",
-    Email := "Y",
     PostalAddress := "Mathematical Institute, North Haugh, St Andrews, Fife, KY16 9SS, Scotland",
     Place := "St Andrews",
     Institution := "University of St Andrews",
