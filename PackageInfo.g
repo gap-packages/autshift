@@ -21,7 +21,8 @@ PackageName := "autshift",
 Subtitle := "Algorithms for Automotphisms of the Shift and related objects",
 Version := "0.1.0",
 Date := "12/07/2022", # dd/mm/yyyy format
-License := "GPL-2.0-or-later",
+License := "GPL-3.0-or-later",
+
 AutoDoc := rec(TitlePage := rec(Abstract:= 
    "The autshift package is a GAP package containing methods for transducers that can be used\
      to represent isomorphisms between subshifts of finite type and related objects. It implements the\
