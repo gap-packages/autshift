@@ -18,6 +18,8 @@
 /doc/*.tex
 /doc/*.toc
 /doc/manual.pdf
+/doc/autshift.xml
+/doc/title.xml
 /doc/_*.xml
 /doc/z-autshiftbib.xml.bib
 
