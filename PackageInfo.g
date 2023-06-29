@@ -42,6 +42,11 @@ Persons := [
     PostalAddress := "Mathematical Institute, North Haugh, St Andrews, Fife, KY16 9SS, Scotland",
     Place := "St Andrews",
     Institution := "University of St Andrews",
+  ),
+rec(
+    IsAuthor := false,
+    IsMaintainer := true,
+    FirstNames := "the GAP team",
   )
 ],
 
