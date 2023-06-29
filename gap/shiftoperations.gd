@@ -11,6 +11,6 @@
 # This file contains the declaration of operations that relate to transducers.
 
 
-#DeclareOperation("ImageAsUnionOfCones", [IsTransducer]);
-#DeclareOperation("HasClopenImage", [IsTransducer]);
+#DeclareOperation("ImageAsUnionOfCones", [IsGNSTransducer]);
+#DeclareOperation("HasClopenImage", [IsGNSTransducer]);
 

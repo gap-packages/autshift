@@ -479,19 +479,19 @@
 #  return Reversed(output);
 #end);
 #
-InstallMethod(IsLipschitzTransducer, "for a transducer",
-[IsTransducer],
+InstallMethod(IsLipschitzGNSTransducer, "for a transducer",
+[IsGNSTransducer],
 function(T)
   local s, statepath, letterpath, currentstate, nonconstantstates;
   nonconstantstates := States(T);
-  SubtractSet(nonconstantstates, TransducerConstantStateOutputs(T)[1]);
+  SubtractSet(nonconstantstates, GNSTransducerConstantStateOutputs(T)[1]);
   for s in nonconstantstates do;
     statepath := [s];
     letterpath := [0];
-    currentstate :=  TransducerFunction(T, [0], s)[2];
+    currentstate :=  GNSTransducerFunction(T, [0], s)[2];
     while statepath <> [] do
       if currentstate = s and
-        Size(TransducerFunction(T, letterpath, s)[1]) < Size(letterpath) then
+        Size(GNSTransducerFunction(T, letterpath, s)[1]) < Size(letterpath) then
         return false;
       fi;
       if not currentstate in statepath then
@@ -508,30 +508,30 @@ function(T)
           fi;
         od;
       fi;
-      currentstate := TransducerFunction(T, letterpath, s)[2];
+      currentstate := GNSTransducerFunction(T, letterpath, s)[2];
     od;
   od;
   return true;
 end);
 
 
-InstallMethod(TransducerCore, "for a transducer",
-[IsTransducer],
+InstallMethod(GNSTransducerCore, "for a transducer",
+[IsGNSTransducer],
 function(T)
   local SLen;
-  SLen := TransducerSynchronizingLength(T);
+  SLen := GNSTransducerSynchronizingLength(T);
   if SLen = infinity then
-    ErrorNoReturn("autshift: TransducerCore: usage,\n",
+    ErrorNoReturn("autshift: GNSTransducerCore: usage,\n",
                   "the transducer must be synchronizing ");
   fi;
   
-  return RemoveInaccessibleStates(CopyTransducerWithInitialState(T,
-          TransducerFunction(T, ListWithIdenticalEntries(SLen, 0), 1)[2]));
+  return RemoveInaccessibleStates(CopyGNSTransducerWithInitialState(T,
+          GNSTransducerFunction(T, ListWithIdenticalEntries(SLen, 0), 1)[2]));
 end);
 
-InstallMethod(IsCoreTransducer, "for a transducer",
-[IsTransducer], T -> IsSynchronizingTransducer(T)
-and NrStates(T) = NrStates(TransducerCore(T)));
+InstallMethod(IsCoreGNSTransducer, "for a transducer",
+[IsGNSTransducer], T -> IsSynchronizingGNSTransducer(T)
+and NrStates(T) = NrStates(GNSTransducerCore(T)));
 
 
 #InstallMethod(IsCompletableCore, "for a transducer",

@@ -41,7 +41,7 @@ DeclareRepresentation("IsOneSidedShiftIsomorphism", IsComponentObjectRep and
                                                   ["Digraph",
                                                    "DomainDigraph",
                                                    "CoDomainDigraph",
-                                                   "MinimalTransducer"]);
+                                                   "MinimalOneSidedUDAFTransducer"]);
 
 #!@Chapter Transducers and isomorphisms
 
@@ -84,14 +84,14 @@ DeclareOperation("UDAFIsomorphism", [IsUDAFTransducer]);
 #!  The input is a core synchronizing aaa transducer object which induces an UDAF 
 #!  isomorphism. the stored isomorphism is this induced isomorphism.
 #! <Example> 
-#!gap> R := ResizeZeroStringTransducer(2, 2, 3);
+#!gap> R := ResizeZeroStringGNSTransducer(2, 2, 3);
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 5 states.>
 #!gap> U := UDAFIsomorphism(R);
 #!&lt;UDAF Isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
 #!</Example>
-DeclareOperation("UDAFIsomorphism", [IsTransducer]);
+DeclareOperation("UDAFIsomorphism", [IsGNSTransducer]);
 
 #! @Arguments W1, W2
 #! @Returns an isomorphism in the UDAF category
@@ -115,7 +115,7 @@ DeclareOperation("UDAFIsomorphism", [IsWalkHomomorphism, IsWalkHomomorphism]);
 #!
 #!  The input is a shift isomorphism. Returns the corresponding UDAF isomorphism.
 #! <Example> 
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>
 #!gap> ShiftIsomorphism(T);                                              
 #!&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
@@ -137,12 +137,12 @@ DeclareOperation("UDAFIsomorphism", [IsShiftIsomorphism]);
 #! The output is the corresponding UDAF transducer, where the alphabet of
 #! size n is replaces with the digraph with one vertex and n edges.
 #! <Example> 
-#!gap> T := ResizeZeroStringTransducer(3, 1, 2);;
+#!gap> T := ResizeZeroStringiGNSTransducer(3, 1, 2);;
 #!gap> U := UDAFTransducer(T);
 #!&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 #!3 edges, and which has 4 states.>
 #!</Example>
-DeclareOperation("UDAFTransducer", [IsTransducer]);
+DeclareOperation("UDAFTransducer", [IsGNSTransducer]);
 
 #! @Arguments W1, W2
 #! @Returns an UDAF transducer
@@ -214,13 +214,12 @@ DeclareOperation("ComposeUDAFTransducers", [IsUDAFTransducer,
 #!true
 #!</Example>                                
 DeclareOperation("MinimalUDAFTransducer", [IsUDAFTransducer]);
-#TODO define the following?
 
 #! @Arguments T
 #! @Returns true or false
 #! @Description
 #! An UDAF transducer is called minimal if its domain is a one-sided folding,
-#! its codomain is an UDAF folding without complete responce, and no two states
+#! its codomain is an UDAF folding with complete responce, and no two states
 #! have both the same domain image and the same codomain image. 
 #!
 #! The attribute returns true if and only if the given transducer is minimal.
@@ -264,11 +263,11 @@ DeclareSynonymAttr("IsMinimal", IsMinimalUDAFTransducer);
 #! The attribute returns true if and only if there is an isomorphism from <A>T1</A>
 #! to <A>T2</A> which preserves the given labels. 
 #! <Example>
-#!gap> T := ResizeZeroStringTransducer(3, 1, 2);;
+#!gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);;
 #!gap> U := UDAFTransducer(T);
 #!&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 #!3 edges, and which has 4 states.>
-#!gap> T := ResizeZeroStringTransducer(3, 1, 2);
+#!gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);
 #!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
 #!3 symbols, and 4 states.>
 #!gap> U := UDAFTransducer(T);
@@ -300,11 +299,11 @@ DeclareOperation("AreIsomorphicLabeledUDAFTransducers", [IsUDAFTransducer,
 #!
 #! The attribute returns true if and only if the given transducers are isomorphic.
 #! <Example>
-#!gap> T := ResizeZeroStringTransducer(3, 1, 2);;
+#!gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);;
 #!gap> U := UDAFTransducer(T);
 #!&lt;UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 #!3 edges, and which has 4 states.>
-#!gap> T := ResizeZeroStringTransducer(3, 1, 2);
+#!gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);
 #!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
 #!3 symbols, and 4 states.>
 #!gap> U := UDAFTransducer(T);
@@ -355,11 +354,11 @@ DeclareOperation("\*", [IsUDAFTransducer, IsUDAFTransducer]);
 #!
 #! This operation can also be called with *.
 #! <Example> 
-#!gap> T1 := ResizeZeroStringTransducer(2, 2, 3);;
+#!gap> T1 := ResizeZeroStringGNSTransducer(2, 2, 3);;
 #!gap> U1 := UDAFTransducer(T1);
 #!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 #!2 edges, and which has 5 states.>
-#!gap> T2 := ResizeZeroStringTransducer(2, 2, 4);;
+#!gap> T2 := ResizeZeroStringGNSTransducer(2, 2, 4);;
 #!gap> U2 := UDAFTransducer(T2);
 #!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 #!2 edges, and which has 6 states.>
@@ -376,11 +375,11 @@ DeclareOperation("ComposeUDAFIsomorphisms", [IsUDAFIsomorphism,
 #! Returns the UDAF isomorphism obtained by composing the isomorphisms 
 #! <A>S1</A> and <A>S2</A>.
 #! <Example> 
-#!gap> T1 := ResizeZeroStringTransducer(2, 2, 3);;
+#!gap> T1 := ResizeZeroStringGNSTransducer(2, 2, 3);;
 #!gap> U1 := UDAFTransducer(T1);
 #!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 #!2 edges, and which has 5 states.>
-#!gap> T2 := ResizeZeroStringTransducer(2, 2, 4);;
+#!gap> T2 := ResizeZeroStringGNSTransducer(2, 2, 4);;
 #!gap> U2 := UDAFTransducer(T2);
 #!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 #!2 edges, and which has 6 states.>
@@ -397,7 +396,7 @@ DeclareOperation("\*", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 #! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
 #! otherwise.
 #! <Example> 
-#!gap> T1 := ResizeZeroStringTransducer(2, 2, 3);;
+#!gap> T1 := ResizeZeroStringGNSTransducer(2, 2, 3);;
 #!gap> U1 := UDAFTransducer(T1);
 #!&lt;UDAF Transducer whose domain digraph has 2 edges, whose codomain digraph has 
 #!2 edges, and which has 5 states.>
@@ -417,7 +416,7 @@ DeclareOperation("\^", [IsUDAFTransducer, IsInt]);
 #! Returns the number of states of an UDAF transducer <A>T</A>. That is, the number
 #! of vertices of the shared domain of the two UDAF foldings defining <A>T</A>.
 #! <Example>
-#!gap> T := ResizeZeroStringTransducer(2, 2, 3);;
+#!gap> T := ResizeZeroStringGNSTransducer(2, 2, 3);;
 #!gap> T := UDAFTransducer(T);
 #!&lt;UDAF Transducer whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
@@ -471,7 +470,7 @@ DeclareOperation("DeterministicDomainCombineEquivalentStates", [IsUDAFTransducer
 #! Returns the product of the inverse of <A>S</A> with itself |<A>n</A>| times
 #! otherwise.
 #! <Example> 
-#!gap> T1 := ResizeZeroStringTransducer(2, 2, 3);;      
+#!gap> T1 := ResizeZeroStringGNSTransducer(2, 2, 3);;      
 #1gap> U1 := UDAFIsomorphism(T1); 
 #!&lt;UDAF Isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
@@ -489,7 +488,7 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsInt]);
 #! @Description
 #! Returns the conjugate of <A>S</A> by <A>T</A>. That is to say the product <A>T</A>^-1 <A>S</A> <A>T</A>.
 #! <Example> 
-#!gap> T1 := ResizeZeroStringTransducer(2, 2, 3);;      
+#!gap> T1 := ResizeZeroStringGNSTransducer(2, 2, 3);;      
 #!gap> U1 := UDAFIsomorphism(T1); 
 #!&lt;UDAF Isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
@@ -499,7 +498,7 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsInt]);
 #!gap> U1^-1;
 #!&lt;UDAF Isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 5 states.>
-#!gap> T2 := ResizeZeroStringTransducer(2, 2, 4);;
+#!gap> T2 := ResizeZeroStringGNSTransducer(2, 2, 4);;
 #!gap> U2 := UDAFIsomorphism(T2);
 #!&lt;UDAF Isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 6 states.>
@@ -544,21 +543,21 @@ DeclareOperation("\^", [IsUDAFIsomorphism, IsUDAFIsomorphism]);
 #! @Arguments T
 #! @Returns an isomorphism of subshifts of finite type
 #! @Description
-#!  Creates an object called a shift homomorphism. A shift isomorphism is a
-#!  homomorphism between subshifts of finite type. This input method requires
+#!  Creates an object called a shift isomorphism. A shift isomorphism is an
+#!  isomorphism between subshifts of finite type. This input method requires
 #!  a full shift.
 #!
 #!  This is input as synchronous transducer from the aaa package (https://github.com/gap-packages/aaa)
 #!  which is strongly synchronizing and such that the map it defines on the 
 #!  shift space is a bijection.
 #! <Example>gap> 
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 2]], [[[1], [1]], [[0], [0]]]);
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 2 symbols, and 2 states.>
 #!gap> ShiftIsomorphism(T);                                              
 #!&lt;shift isomorphism whose domain digraph has 2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
 #!WalkHomomorphism(Digraph([[1, 1]]), Digraph([[1, 2], [1]]), [1], [[1], [2, 3]]);
 #!</Example>
-DeclareOperation("ShiftIsomorphism", [IsTransducer]);
+DeclareOperation("ShiftIsomorphism", [IsGNSTransducer]);
 
 #! @Arguments T
 #! @Returns an isomorphism of subshifts of finite type
@@ -574,7 +573,7 @@ DeclareOperation("ShiftIsomorphism", [IsTransducer]);
 #!gap> S := ShiftIsomorphism(IdentityUDAFTransducer(Digraph([[1, 1, 1, 1]])));
 #!&lt;shift isomorphism whose domain digraph has 
 #!4 edges, whose codomain digraph has 4 edges, and which has 1 state.>
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
+#!gap> T := BlockCodeGNSTransducer(2, 2, x-> [x[1]]);              
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 4 states.>
 #!gap> T := UDAFTransducer(T);
@@ -592,8 +591,8 @@ DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
 #! @Arguments T
 #! @Returns an isomorphism of subshifts of finite type
 #! @Description
-#!  Creates an object called a shift homomorphism. A shift isomorphism is a
-#!  homomorphism between subshifts of finite type. 
+#!  Creates an object called a shift isomorphism. A shift isomorphism is an
+#!  isomorphism between subshifts of finite type. 
 #!
 #!  This is input as a minimal UDAF transducer and a valid annotation of its 
 #!  codomain folding. The isomorphism is the composite of the inverse of the
@@ -604,7 +603,7 @@ DeclareOperation("ShiftIsomorphism", [IsUDAFTransducer]);
 #!> [-1]);
 #!&lt;shift isomorphism whose domain digraph has 
 #!2 edges, whose codomain digraph has 2 edges, and which has 2 states.>
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);
+#!gap> T := BlockCodeGNSTransducer(2, 2, x-> [x[1]]);
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 4 states.>
 #!gap> T := UDAFTransducer(T);
@@ -670,7 +669,7 @@ DeclareOperation("\*", [IsShiftIsomorphism, IsShiftIsomorphism]);
 #! @Description
 #! Returns the conjugate of <A>S</A> by <A>T</A>. That is to say the product <A>T</A>^-1 <A>S</A> <A>T</A>.
 #! <Example>
-#!gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);               
+#!gap> C := GNSTransducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);               
 #!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
 #!3 symbols, and 1 state.>
 #!gap> C:= ShiftIsomorphism(UDAFTransducer(C));        
@@ -768,7 +767,7 @@ DeclareOperation("\^", [IsShiftIsomorphism, IsInt]);
 #! In this section we describe methods for working with isomorphisms
 #! between one-sided subshifts of finite type. If D is a finite digraph, then the 
 #! corresponding one-sided shift space is defined to be the topological space of 
-#! backwards infinite edge walks throught D with the product topology. We call 
+#! backwards infinite edge walks through D with the product topology. We call 
 #! such a space a one-sided shift space. We call the dynamical system consisting
 #! of this space and the continuous map defined by deleting the last edge in a walk
 #! (and reindexing the remaining edges) a one-sided subshift of finite type.
@@ -905,7 +904,7 @@ DeclareOperation("\*", [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism])
 #! @Description
 #! Returns the conjugate of <A>S</A> by <A>T</A>. That is to say the product <A>T</A>^-1 <A>S</A> <A>T</A>.
 #! <Example>
-#!gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
+#!gap> C := GNSTransducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
 #!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
 #!3 symbols, and 1 state.>
 #!gap> C:= OneSidedShiftIsomorphism(UDAFTransducer(C));
@@ -1056,11 +1055,11 @@ DeclareOperation("RandomOneSidedAut", [IsDigraph]);
 #!  to wa.
 #!
 #! <Example> 
-#!gap> T := BlockCodeTransducer(2, 2, x-> [x[1]]);              
+#!gap> T := BlockCodeGNSTransducer(2, 2, x-> [x[1]]);              
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 4 states.>
 #!</Example>
-DeclareOperation("BlockCodeTransducer", [IsPosInt, IsInt, IsFunction]);
+DeclareOperation("BlockCodeGNSTransducer", [IsPosInt, IsInt, IsFunction]);
 
 #! @Arguments AlphSize, History
 #! @Returns an aaa transducer
@@ -1072,11 +1071,11 @@ DeclareOperation("BlockCodeTransducer", [IsPosInt, IsInt, IsFunction]);
 #!  transitioning to the state which is a suffix of the word wa.
 #!  The write function is the identity function.
 #! <Example> 
-#!gap> DeBruijnTransducer(2, 3);                       
+#!gap> DeBruijnGNSTransducer(2, 3);                       
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 8 states.>
 #!</Example>
-DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
+DeclareOperation("DeBruijnGNSTransducer", [IsPosInt, IsPosInt]);
 
 
 #! @Arguments AlphSize, Len1, Len2
@@ -1088,21 +1087,21 @@ DeclareOperation("DeBruijnTransducer", [IsPosInt, IsPosInt]);
 #! given input, and replacing those with length <A>Len1</A> with those with
 #! length <A>Len2</A> and vice versa.
 #! <Example>
-#!gap> ResizeZeroStringTransducer(2, 1, 3);
+#!gap> ResizeZeroStringGNSTransducer(2, 1, 3);
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 5 states.>
-#!gap> ResizeZeroStringTransducer(3, 2, 1);
+#!gap> ResizeZeroStringGNSTransducer(3, 2, 1);
 #!&lt;transducer with input alphabet on 3 symbols, output alphabet on 
 #!3 symbols, and 4 states.>
 #!</Example>
-DeclareOperation("ResizeZeroStringTransducer", [IsPosInt, IsPosInt, IsPosInt]);
+DeclareOperation("ResizeZeroStringGNSTransducer", [IsPosInt, IsPosInt, IsPosInt]);
                           
 
 
 #! @Arguments T
 #! @Returns true or false
 #! @Description
-#!  We say that a trasducer T is Lipschitz if for each state of T defines a 
+#!  We say that a GNS trasducer T is Lipschitz if for each state of T defines a 
 #!  well-defined function from the set of forwards infinite words in the domain 
 #!  alphabet to the set of infinite words, and these maps are all Lipschitz 
 #!  continuous.
@@ -1115,33 +1114,33 @@ DeclareOperation("ResizeZeroStringTransducer", [IsPosInt, IsPosInt, IsPosInt]);
 #!  to not be Lipschitz as the minimal transducer of a map with a constant state
 #!  will have states which do not give output.
 #! <Example>
-#!gap> T := Transducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;
-#!gap> IsLipschitzTransducer(T);
+#!gap> T := GNSTransducer(2, 2, [[2, 2], [1, 1]],[[[],[]],[[1],[1]]]);;
+#!gap> IsLipschitzGNSTransducer(T);
 #!true
-#!gap> T := AlphabetChangeTransducer(4, 3);;
-#!gap> IsLipschitzTransducer(T);
+#!gap> T := AlphabetChangeGNSTransducer(4, 3);;
+#!gap> IsLipschitzGNSTransducer(T);
 #!true
-#!gap> T := Transducer(3, 3, [[2, 2, 1], [3, 4, 3], [1, 1, 2], [2, 2, 3]],
+#!gap> T := GNSTransducer(3, 3, [[2, 2, 1], [3, 4, 3], [1, 1, 2], [2, 2, 3]],
 #!> [[[1, 0, 1], [0], [2, 2, 0]], [[], [2], [0, 1, 2, 2]], [[], [0, 1], [2, 2]],
 #!> [[2, 2], [0, 2], [1, 2, 2]]]);;
-#!gap> IsLipschitzTransducer(T);
+#!gap> IsLipschitzGNSTransducer(T);
 #!false
-#!gap> T := AlphabetChangeTransducer(3, 4);;
-#!gap> IsLipschitzTransducer(T);
+#!gap> T := AlphabetChangeGNSTransducer(3, 4);;
+#!gap> IsLipschitzGNSTransducer(T);
 #!false
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
 #!> [1, 1]], [[0], [1]]]);;
-#!gap> IsLipschitzTransducer(T);
+#!gap> IsLipschitzGNSTransducer(T);
 #!false
-#!gap> M := MinimalTransducer(T);                                      
+#!gap> M := MinimalGNSTransducer(T);                                      
 #!&lt;transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 2 states.>
-#!gap> IsLipschitzTransducer(T);                                          
+#!gap> IsLipschitzGNSTransducer(T);                                          
 #!true
-#!gap> IsLipschitzTransducer(M);                                          
+#!gap> IsLipschitzGNSTransducer(M);                                          
 #!false
 #!</Example>
-DeclareOperation("IsLipschitzTransducer", [IsTransducer]);
+DeclareOperation("IsLipschitzGNSTransducer", [IsGNSTransducer]);
 
 #! @Arguments T
 #! @Returns an aaa transducer
@@ -1151,28 +1150,28 @@ DeclareOperation("IsLipschitzTransducer", [IsTransducer]);
 #!
 #!  The Operation takes as input an synchronizing transducer and returns its Core
 #! <Example>
-#!gap> T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
+#!gap> T := GNSTransducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
 #!> [[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;
-#!gap> C := TransducerCore(T);;
+#!gap> C := GNSTransducerCore(T);;
 #!gap> OutputFunction(C);
 #![ [ [ 1 ], [ 0, 1 ] ], [ [ 1 ], [  ] ], [ [ 1 ], [ 0 ] ] ]
 #!gap> TransitionFunction(C);
 #![ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
 #!> [1, 1]], [[0], [1]]]);;
-#!gap> C := TransducerCore(T);;
+#!gap> C := GNSTransducerCore(T);;
 #!gap> OutputFunction(C);
 #![ [ [ 1, 0 ], [  ] ], [ [ 0 ], [ 1, 1 ] ], [ [ 0 ], [ 1 ] ] ]
 #!gap> TransitionFunction(C);
 #![ [ 1, 2 ], [ 1, 3 ], [ 1, 3 ] ]
-#!gap> T := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);
+#!gap> T := GNSTransducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);
 #!transducer with input alphabet on 2 symbols, output alphabet on 
 #!2 symbols, and 2 states.>
-#!gap> TransducerCore(T);
-#!Error, autshift: TransducerCore: usage,
+#!gap> GNSTransducerCore(T);
+#!Error, autshift: GNSTransducerCore: usage,
 #!the transducer must be synchronizing 
 #!</Example>
-DeclareOperation("TransducerCore", [IsTransducer]);
+DeclareOperation("GNSTransducerCore", [IsGNSTransducer]);
 
 #! @Arguments T
 #! @Returns true or false
@@ -1183,30 +1182,30 @@ DeclareOperation("TransducerCore", [IsTransducer]);
 #!
 #!  The attribute returns true if and only if the given transducer is core.
 #! <Example>
-#!gap> T := Transducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
+#!gap> T := GNSTransducer(2, 2, [[2, 3], [3, 4], [3, 2], [3, 4]],
 #!> [[[1], [1, 0, 1]], [[1], []], [[1], [0, 1]], [[1], [0]]]);;
-#!gap> IsCoreTransducer(T);
+#!gap> IsCoreGNSTransducer(T);
 #!false
-#!gap> C := TransducerCore(T);;
-#!gap> IsCoreTransducer(C);
+#!gap> C := GNSTransducerCore(T);;
+#!gap> IsCoreGNSTransducer(C);
 #!true
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
 #!> [1, 1]], [[0], [1]]]);;
-#!gap> IsCoreTransducer(T);
+#!gap> IsCoreGNSTransducer(T);
 #!true
-#!gap> T := Transducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
+#!gap> T := GNSTransducer(2, 2, [[1, 2], [1, 3], [1, 3]], [[[1, 0], []], [[0],
 #!> [1, 1]], [[0], [1]]]);;
-#!gap> IsCoreTransducer(T);
+#!gap> IsCoreGNSTransducer(T);
 #!true
-#!gap> T := Transducer(2, 4, [[1, 2], [1, 3], [1, 1]], [[[0], []], [[1], []],
+#!gap> T := GNSTransducer(2, 4, [[1, 2], [1, 3], [1, 1]], [[[0], []], [[1], []],
 #!> [[2], [3]]]);;
-#!gap> IsCoreTransducer(T);
+#!gap> IsCoreGNSTransducer(T);
 #!false
-#!gap> T := DeBruijnTransducer(2, 3);;
-#!gap> IsCoreTransducer(T);
+#!gap> T := DeBruijnGNSTransducer(2, 3);;
+#!gap> IsCoreGNSTransducer(T);
 #!true
-#!gap> T := DeBruijnTransducer(3, 2);;
-#!gap> IsCoreTransducer(T);
+#!gap> T := DeBruijnGNSTransducer(3, 2);;
+#!gap> IsCoreGNSTransducer(T);
 #!true
 #!</Example>
-DeclareAttribute("IsCoreTransducer", IsTransducer);
+DeclareAttribute("IsCoreGNSTransducer", IsGNSTransducer);

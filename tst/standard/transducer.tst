@@ -14,15 +14,15 @@ gap> LoadPackage("autshift", false);;
 gap> STOP_TEST("autshift package: standard/transducer.tst");
 
 
-#T# DeBruijinTransducer
-gap> T := DeBruijnTransducer(2, 2);
+#T# DeBruijinGNSTransducer
+gap> T := DeBruijnGNSTransducer(2, 2);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 4 states.>
 gap> TransitionFunction(T);
 [ [ 1, 3 ], [ 1, 3 ], [ 2, 4 ], [ 2, 4 ] ]
 gap> OutputFunction(T);
 [ [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ] ]
-gap> T := DeBruijnTransducer(3, 4);
+gap> T := DeBruijnGNSTransducer(3, 4);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 81 states.>
 gap> TransitionFunction(T);
@@ -83,31 +83,31 @@ gap> IdentityShiftIsomorphism(2);
 2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 
 # UDAFTransducer with GNS transducer input
-gap> T := Transducer(2, 2, [[1, 1]], [[[], []]]);
+gap> T := GNSTransducer(2, 2, [[1, 1]], [[[], []]]);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 1 state.>
 gap> UDAFTransducer(T);
 Error, autshift: UDAFTransducer: usage,
 the transducer must not be degenerate,
-gap> T := Transducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);        
+gap> T := GNSTransducer(2, 2, [[2, 2], [1, 1]], [[[1], [1]], [[0], [0]]]);        
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 2 states.>
 gap> UDAFTransducer(T);                                                
 Error, autshift: UDAFTransducer: usage,
 the transducer must be sychronizing,
-gap> T := Transducer(2, 2, [[2, 2], [2, 2]], [[[1], [1]], [[0], [0]]]);
+gap> T := GNSTransducer(2, 2, [[2, 2], [2, 2]], [[[1], [1]], [[0], [0]]]);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 2 states.>
 gap> UDAFTransducer(T);
 Error, autshift: UDAFTransducer: usage,
 the transducer must be core,
-gap> T := Transducer(2, 2, [[1, 1]], [[[1], [1]]]);
+gap> T := GNSTransducer(2, 2, [[1, 1]], [[[1], [1]]]);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 1 state.>
 gap> UDAFTransducer(T);
 Error, autshift: UDAFTransducer: usage,
 the transducer must be UDAF invertible,
-gap> T := Transducer(2, 2, [[1, 1]], [[[1], [0]]]);
+gap> T := GNSTransducer(2, 2, [[1, 1]], [[[1], [0]]]);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 1 state.>
 gap> UDAFTransducer(T);
@@ -187,9 +187,9 @@ true
 gap> T^-1 = UDAFTransducer(L11, L20);
 true
 
-# ResizeZeroStringTransducer (and BlockCodeTransducer as this is used in
+# ResizeZeroStringGNSTransducer (and BlockCodeGNSTransducer as this is used in
 # zero string)
-gap> T := ResizeZeroStringTransducer(3, 1, 2);
+gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 4 states.>
 gap> TransitionFunction(T);
@@ -197,7 +197,7 @@ gap> TransitionFunction(T);
 gap> OutputFunction(T);
 [ [ [ 0 ], [ 1 ], [ 2 ] ], [ [ 0 ], [ 1 ], [ 2 ] ], [ [  ], [ 0, 1 ], [ 2 ] ],
   [ [ 0, 0 ], [ 1 ], [ 0, 2 ] ] ]
-gap> T := ResizeZeroStringTransducer(2, 2, 3);
+gap> T := ResizeZeroStringGNSTransducer(2, 2, 3);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
 gap> TransitionFunction(T);
@@ -205,8 +205,8 @@ gap> TransitionFunction(T);
 gap> OutputFunction(T);
 [ [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [ 0 ], [ 1 ] ], [ [  ], [ 0, 1 ] ], 
   [ [ 0, 0 ], [ 1 ] ] ]
-gap> ResizeZeroStringTransducer(1, 2, 3);
-Error, autshift: BlockCodeTransducer: usage,
+gap> ResizeZeroStringGNSTransducer(1, 2, 3);
+Error, autshift: BlockCodeGNSTransducer: usage,
 the alphabet must have at least two letters,
 
 #ShiftIsomorphism
@@ -256,7 +256,7 @@ gap> M := T^0;
 2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
 gap> T = M;
 true
-gap> R := ResizeZeroStringTransducer(2, 2, 3);
+gap> R := ResizeZeroStringGNSTransducer(2, 2, 3);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
 gap> U := UDAFIsomorphism(R);
@@ -265,7 +265,7 @@ gap> U := UDAFIsomorphism(R);
 gap> U^2;
 <UDAF Isomorphism whose domain digraph has 
 2 edges, whose codomain digraph has 2 edges, and which has 1 state.>
-gap> R := ResizeZeroStringTransducer(3, 1, 3);
+gap> R := ResizeZeroStringGNSTransducer(3, 1, 3);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 5 states.>
 gap> U := UDAFIsomorphism(R);                 
@@ -273,11 +273,11 @@ gap> U := UDAFIsomorphism(R);
 3 edges, whose codomain digraph has 3 edges, and which has 5 states.>
 
 #Speed
-gap> T := ResizeZeroStringTransducer(3, 1, 2);;
+gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);;
 gap> U := UDAFTransducer(T);
 <UDAF Transducer whose domain digraph has 3 edges, whose codomain digraph has 
 3 edges, and which has 4 states.>
-gap> T := ResizeZeroStringTransducer(3, 1, 2);
+gap> T := ResizeZeroStringGNSTransducer(3, 1, 2);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 4 states.>
 gap> U := UDAFTransducer(T);
@@ -293,16 +293,16 @@ gap> M := MinimalUDAFTransducer(I);
 3 edges, and which has 4 states.>
 gap> AreIsomorphicUDAFTransducers(M, U);
 true
-gap> R := ResizeZeroStringTransducer(2, 2, 3);          
+gap> R := ResizeZeroStringGNSTransducer(2, 2, 3);          
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
-gap> R := ResizeZeroStringTransducer(2, 2, 3);
+gap> R := ResizeZeroStringGNSTransducer(2, 2, 3);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
-gap> R2 := ResizeZeroStringTransducer(2, 1, 3);
+gap> R2 := ResizeZeroStringGNSTransducer(2, 1, 3);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 5 states.>
-gap> R3 := ResizeZeroStringTransducer(2, 1, 2);
+gap> R3 := ResizeZeroStringGNSTransducer(2, 1, 2);
 <transducer with input alphabet on 2 symbols, output alphabet on 
 2 symbols, and 4 states.>
 gap> U := UDAFTransducer(R);
@@ -373,7 +373,7 @@ gap> IsOneSidedFolding(W);
 false
 
 # OneSidedTorsionDecomposition
-gap> C := Transducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
+gap> C := GNSTransducer(3, 3, [[1, 1, 1]], [[[1], [2], [0]]]);
 <transducer with input alphabet on 3 symbols, output alphabet on 
 3 symbols, and 1 state.>
 gap> C:= OneSidedShiftIsomorphism(UDAFTransducer(C));

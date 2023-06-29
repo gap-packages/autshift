@@ -95,7 +95,7 @@ InstallMethod(ViewObj, "for an isomorphism of the shift",
 [IsOneSidedShiftIsomorphism],
 function(input)
   local state, sym1, sym2, T;
-  T := input!.MinimalTransducer;
+  T := input!.MinimalOneSidedUDAFTransducer;
   if DigraphNrVertices(T!.Digraph) = 1 then
     state := "state";
   else
@@ -478,7 +478,7 @@ function(T)
 end);
 
 InstallMethod(ShiftIsomorphism, "for a transducer",
-[IsTransducer],
+[IsGNSTransducer],
 function(T)
   return ShiftIsomorphism(UDAFTransducer(T));
 
@@ -591,7 +591,7 @@ function(T)
 end);
 
 InstallMethod(UDAFIsomorphism, "for a transducer",
-[IsTransducer],
+[IsGNSTransducer],
 function(T)
   return UDAFIsomorphism(UDAFTransducer(T));
 end);
@@ -609,22 +609,22 @@ function(T)
 end);
 
 InstallMethod(UDAFTransducer, "for a transducer",
-[IsTransducer],
+[IsGNSTransducer],
 function(T)
   local M, basedigraph, domdigraph, codomdigraph, domfold, codomfold, state,
         l, domedgemap, codomedgemap, temp, i;
 
-  if IsDegenerateTransducer(T) then
+  if IsDegenerateGNSTransducer(T) then
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must not be degenerate,");
   fi;
 
-  if not IsSynchronizingTransducer(T) then
+  if not IsSynchronizingGNSTransducer(T) then
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be sychronizing,");
   fi;
 
-  if not IsCoreTransducer(T) then
+  if not IsCoreGNSTransducer(T) then
   ErrorNoReturn("autshift: UDAFTransducer: usage,\n",
                   "the transducer must be core,");
   fi;
@@ -856,7 +856,7 @@ function(n)
     ErrorNoReturn("autshift: IdentityShiftIsomorphism: usage,\n",
                  "the integer must be at least 2,");
   fi;
-  return ShiftIsomorphism(IdentityTransducer(n));
+  return ShiftIsomorphism(IdentityGNSTransducer(n));
 end);
 
 InstallMethod(ComposeShiftIsomorphisms, "for a pair of Shift Isomorphisms",
@@ -891,8 +891,8 @@ InstallMethod(ComposeOneSidedShiftIsomorphisms, "for a pair of compatible one-si
 [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
 function(f, g)
   return OneSidedShiftIsomorphism(
-                COMPUDAF(f!.MinimalTransducer, 
-                                           g!.MinimalTransducer, true, false));
+                COMPUDAF(f!.MinimalOneSidedUDAFTransducer, 
+                                           g!.MinimalOneSidedUDAFTransducer, true, false));
 end);
 
 InstallMethod(\*, "for a pair of compatible UDAF Isomorphisms",
@@ -926,7 +926,7 @@ AUTSHIFT_POW := function(T, n)
     elif IsShiftIsomorphism(T) then
       return ShiftIsomorphism(T!.SynchronousUDAFTransducer^(-1));
     elif IsOneSidedShiftIsomorphism(T) then
-      return OneSidedShiftIsomorphism(T!.MinimalTransducer^(-1));
+      return OneSidedShiftIsomorphism(T!.MinimalOneSidedUDAFTransducer^(-1));
     fi;
   fi;
   if(DigraphVertices(T!.DomainDigraph) <> DigraphVertices(T!.CoDomainDigraph)) or
@@ -1021,11 +1021,11 @@ end);
 InstallMethod(\=, "for a pair of shift isomorphisms",
 [IsOneSidedShiftIsomorphism, IsOneSidedShiftIsomorphism],
 function(T1, T2)
-  return AreIsomorphicUDAFTransducers(T1!.MinimalTransducer,
-                                      T2!.MinimalTransducer);
+  return AreIsomorphicUDAFTransducers(T1!.MinimalOneSidedUDAFTransducer,
+                                      T2!.MinimalOneSidedUDAFTransducer);
 end);
 
-InstallMethod(DeBruijnTransducer, "returns a transducer",
+InstallMethod(DeBruijnGNSTransducer, "returns a transducer",
 [IsPosInt, IsPosInt],
 function(Alph, WordLen)
   local StateToLabel, LabelToState, state, letter, target, Pi, Lambda;
@@ -1046,18 +1046,18 @@ function(Alph, WordLen)
   od;
   Lambda := ListWithIdenticalEntries(Alph ^ WordLen,
                                      List([0 .. Alph - 1], x -> [x]));
-  return Transducer(Alph, Alph, Pi, Lambda);
+  return GNSTransducer(Alph, Alph, Pi, Lambda);
 end);
 
 
 
 # returns the transducer on alphabet out which reads blocks of length WordLen
 # and writes in accordence with the function f
-InstallMethod(BlockCodeTransducer, "for a positive integer and a block code function", [IsPosInt, IsInt, IsFunction],
+InstallMethod(BlockCodeGNSTransducer, "for a positive integer and a block code function", [IsPosInt, IsInt, IsFunction],
 function(Alph, WordLen, f)
   local StateToLabel, LabelToState, state, letter, target, Pi, Lambda;
   if Alph < 2 then
-     ErrorNoReturn("autshift: BlockCodeTransducer: usage,\n",
+     ErrorNoReturn("autshift: BlockCodeGNSTransducer: usage,\n",
                   "the alphabet must have at least two letters,");
   fi;
   StateToLabel := function(n)
@@ -1078,11 +1078,11 @@ function(Alph, WordLen, f)
       Add(Lambda[state], f(Concatenation(StateToLabel(state), [letter])));
     od;
   od;
-  return Transducer(Alph, Alph, Pi, Lambda);
+  return GNSTransducer(Alph, Alph, Pi, Lambda);
 end);
 
 
-InstallMethod(ResizeZeroStringTransducer, "for three two positive integers", [IsPosInt, IsPosInt, IsPosInt],
+InstallMethod(ResizeZeroStringGNSTransducer, "for three two positive integers", [IsPosInt, IsPosInt, IsPosInt],
 function(AlphSize, i, j)
   local itoj, count, B;
 
@@ -1108,8 +1108,8 @@ function(AlphSize, i, j)
     fi;
   end;
 
-  B := BlockCodeTransducer(AlphSize, Maximum(i, j) + 1, itoj);
-  return TransducerCore(MinimalTransducer(B));
+  B := BlockCodeGNSTransducer(AlphSize, Maximum(i, j) + 1, itoj);
+  return GNSTransducerCore(MinimalGNSTransducer(B));
 end);
 
 
@@ -1144,7 +1144,7 @@ function(f, g)
                    IsAttributeStoringRep), rec(Digraph:= T!.Digraph,
                                                DomainDigraph := T!.DomainDigraph,
                                                CoDomainDigraph := T!.CoDomainDigraph,
-                                               MinimalTransducer := T));
+                                               MinimalOneSidedUDAFTransducer := T));
   return M;
 end);
 
@@ -1155,8 +1155,8 @@ NICE_TARGET_ONESIDED_TORSION := function(T0)
   local A, B, Bsync, A1, p, q, lambdap, lambdaq, alpha, e, temp, notdone, 
       edge1, edge2, i, h, newedgemap, j, newe, taualpha, R, HBiTA, nexth;
   #A1 Let T0 ∈ Hn. Let A and B be the underlying automata of T0 and T −10 respectively.
-  A := (T0!.MinimalTransducer)!.DomainFolding;
-  B := (T0!.MinimalTransducer)!.CoDomainFolding;
+  A := (T0!.MinimalOneSidedUDAFTransducer)!.DomainFolding;
+  B := (T0!.MinimalOneSidedUDAFTransducer)!.CoDomainFolding;
   
   #A2 If T0 has only one state, then it represents a permutation, and so there is a finite order single state
   #transducer that we can multiply against T0 to produce the identity element (in this case, go to the
