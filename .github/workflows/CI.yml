@@ -36,7 +36,7 @@ jobs:
           gap-version: ${{ matrix.gap-version }}
       - uses: gap-actions/install-pkg@v1
         with:
-          packages: "gap-packages/aaa"
+          packages: "gap-packages/aaa@devel"
       - uses: gap-actions/build-pkg@v3
       - uses: gap-actions/run-pkg-tests@v4
       - uses: gap-actions/run-pkg-tests@v4
