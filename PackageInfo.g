@@ -11,7 +11,7 @@
 SetPackageInfo( rec(
 
 PackageName := "autshift",
-Subtitle := "Algorithms for Automotphisms of the Shift and related objects",
+Subtitle := "Algorithms for Automorphisms of the Shift and related objects",
 Version := "0.1.0",
 Date := "12/07/2022", # dd/mm/yyyy format
 License := "GPL-3.0-or-later",
